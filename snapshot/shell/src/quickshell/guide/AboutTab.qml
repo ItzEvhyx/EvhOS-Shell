@@ -280,7 +280,7 @@ GuideTab {
                     accentColor: ThemeBackend.surface0
                     textColor: ThemeBackend.text
 
-                    onTriggered: Quickshell.execDetached(["xdg-open", "https://github.com/ilyamiro/serpantinum"])
+                    onTriggered: Quickshell.execDetached(["xdg-open", "https://github.com/ItzEvhyx/EvhOS-Shell"])
                 }
             }
         }

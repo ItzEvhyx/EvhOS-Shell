@@ -29,6 +29,7 @@ Item {
         visible: !popup.searchActive
         Text {
             Layout.fillWidth: true
+            visible: !(popup.currentTabModel && popup.currentTabModel.key === "welcome")
             text: popup.tabsModel[popup.currentTab] ? popup.resolveTabTitle(popup.tabsModel[popup.currentTab].key || popup.tabsModel[popup.currentTab].id) : ""
             color: ThemeBackend.text
             font.family: ThemeBackend.fontFamily
