@@ -1,56 +1,141 @@
-# EvhOS Shell
+<div align="center">
+  <img src="docs/icons/header.svg" alt="EvhOS — a personal Wayland desktop built with Hyprland and Quickshell" width="100%">
+  <p><strong>A monochrome desktop, made personal.</strong><br>Built around Hyprland, Quickshell, and a customized Serpantinum shell.</p>
+  <p><a href="#preview">Preview</a> &nbsp; / &nbsp; <a href="#features">Features</a> &nbsp; / &nbsp; <a href="#installation">Installation</a> &nbsp; / &nbsp; <a href="#configuration">Configuration</a> &nbsp; / &nbsp; <a href="#recovery">Recovery</a></p>
+</div>
 
-A private, point-in-time snapshot of the EvhOS desktop as used on CachyOS: a customized Serpantinum 2.3.1 Quickshell shell, Hyprland configuration, local helpers and services, appearance state, wallpapers, and the Torii SDDM theme. It is based on [Serpantinum](https://github.com/ilyamiro/serpantinum), by ilyamiro, distributed under AGPL-3.0; see `LICENSE`. This is a personal fork/snapshot, not a new Linux distribution.
+---
 
-## Before restoring
+<img src="docs/icons/overview.svg" width="24" height="24" alt="">  **A desktop shaped around the details**
 
-- Install a compatible Hyprland, Quickshell with Qt 6, Python 3, and a working Wayland session first. The Hyprland configuration here uses its Lua configuration API, which is version-sensitive. Match the original versions where possible; see `docs/COMPATIBILITY.md`.
-- This snapshot was made on one laptop. Monitor names (`eDP-1`), keyboard bindings, hardware, application paths, fonts, and system service locations must be reviewed for the target machine.
-- `restore.py` does **not** install packages, activate services, modify SDDM, remove unrelated files, or restart your session. The separate `install.sh` can install packages and optionally enable services and configure SDDM. Restore backs up each file it replaces.
-- Private runtime data is intentionally excluded: clipboard history, calendars, notes, usage databases, browser/app data and credentials. Sign-ins and integrations need to be configured again.
-- Apple SF and TT Commons font files were excluded pending redistribution rights. Install fonts you are licensed to use. The shell's `mtx` font came from CachyOS's `cmatrix` package; install that font on the new system. Third-party assets and fonts in this private snapshot may have separate terms; audit their rights before publishing it.
+EvhOS is a personal Wayland desktop setup with a dark, restrained visual language. It brings a customized status bar, dock, launcher, settings panels, notifications, media controls, lock screen, and login theme together into one configuration. This repository captures the current CachyOS setup so it can be adapted to another machine.
 
-## Guided installation (Arch/CachyOS and Fedora)
+EvhOS is a **shell configuration and fork**, not a Linux distribution. It builds on [Serpantinum](https://github.com/ilyamiro/serpantinum), Hyprland, and Quickshell. Internal paths and commands still use `serpantinum` because the components rely on those names.
 
-After installing Hyprland and cloning this private repository, run:
+## Preview
+
+<img src="docs/icons/gallery.svg" width="24" height="24" alt=""> &nbsp; Four views of the setup
+
+| Desktop and settings | Welcome screen |
+| :---: | :---: |
+| <img src="docs/images/desktop.png" alt="EvhOS desktop with its About settings panel, top bar, and dock" width="100%"> | <img src="docs/images/welcome.png" alt="EvhOS Welcome settings screen with ASCII avatar" width="100%"> |
+| The desktop, bar, dock, and settings panel. | The EvhOS welcome screen and branding. |
+| **Lock screen editor** | **SDDM login** |
+| <img src="docs/images/lockscreen-editor.png" alt="EvhOS lock screen layout shown in the editor" width="100%"> | <img src="docs/images/sddm.png" alt="Torii SDDM theme shown in test mode" width="100%"> |
+| The lock-screen layout shown in its editor. | Torii Minimal, shown in SDDM test mode. |
+
+The login preview uses test-mode session information; available sessions on a real machine depend on what is installed.
+
+## Features
+
+| Component | Included in the snapshot |
+| :--- | :--- |
+| **Desktop shell** | A customized Quickshell interface, with a floating top bar, dock, launcher, and pop-up panels. |
+| **Controls** | Notifications, media, audio, networking, power controls, clipboard and quick actions. Some integrations require optional dependencies. |
+| **Appearance** | A monochrome theme, wallpapers, fonts, icons, and the EvhOS avatar and branding. |
+| **Lock screen** | A customizable layout with clock, media and other widgets. |
+| **Login screen** | A separate Torii-themed SDDM greeter, including wallpaper and profile image. |
+| **Recovery** | A restore script that previews its actions and backs up files it replaces. |
+
+## Installation
+
+<img src="docs/icons/install.svg" width="24" height="24" alt=""> &nbsp; Start with an existing Hyprland installation
+
+> **Current status:** The file restore and installer logic have been tested in a disposable directory and with simulated package managers. A complete installation has **not** yet been validated on a fresh Arch, Fedora, or NixOS system. Test on a VM or a spare account before replacing a working desktop.
+
+### 01 / Before you begin
+
+- Install and verify a working **Hyprland session**, with a way to return to a TTY or another desktop if needed.
+- Install **Git**, authenticate with the GitHub account that can access this private repository, and clone it.
+- Check versions. The snapshot was captured with Hyprland **0.57.0**, Qt **6.12.0**, and the **noctalia-qs 0.0.12** Quickshell fork. The Hyprland configuration uses its Lua API; compatibility with other versions or Quickshell builds is not guaranteed.
+- Review the monitor name, app shortcuts, fonts, and hardware-specific paths before logging out. The saved layout targets `eDP-1`.
+
+```sh
+git clone https://github.com/ItzEvhyx/EvhOS-Shell.git
+cd EvhOS-Shell
+```
+
+### 02 / Arch, CachyOS, or Fedora
 
 ```sh
 ./install.sh --plan
 ./install.sh --enable-services
 ```
 
-The installer installs available dependencies with the distro package manager and restores the snapshot with backups. Add `--sddm` to configure the included login theme on mutable Arch/Fedora systems. Unavailable optional packages are reported; no external repository is enabled automatically. NixOS uses the included declarative module first. See [installation details](docs/INSTALL.md). None of these paths has yet been validated on a fresh distribution install.
+The first command shows the plan and changes nothing. The second checks the packages in enabled repositories, asks for confirmation, installs available dependencies with `pacman` or `dnf`, restores the files, and enables the included user services. Package installation uses `sudo`; run the script as your **normal desktop user**.
 
-## Manual restore to your account
-
-```sh
-git clone https://github.com/ItzEvhyx/EvhOS-Shell.git
-cd EvhOS-Shell
-python3 restore.py              # preview only
-python3 restore.py --apply      # backs up and restores to your home
-```
-
-The script rewrites the original `/home/yhvhan` prefix in UTF-8 files to the destination home. Existing files are saved in `~/.local/state/evhos-backups/`. Use `python3 restore.py --home /tmp/evhos-test --apply` to test in an empty disposable home. The `serpantinum` and `serpantinumd` commands are linked into `~/.local/bin`, which must be on `PATH`.
-
-After reviewing the restored configuration, optionally enable the user services you want:
+To include the SDDM theme on a mutable Arch or Fedora installation, first install SDDM, then add `--sddm`:
 
 ```sh
-systemctl --user daemon-reload
-systemctl --user enable --now serp-bar-auto.service
-systemctl --user enable --now serp-customizations.timer
-systemctl --user enable --now charger-notifications.service
-systemctl --user enable --now low-battery-alarm.service full-charge-alarm.service
+./install.sh --enable-services --sddm
 ```
 
-The customization timer runs restoration scripts and may overwrite later manual changes to their target files. Review those scripts before enabling. Log out and select Hyprland only after confirming that your distribution supports this config. Keep an alternative session and a backup available.
+The installer reports optional packages it cannot find; the corresponding features may need manual setup. It stops if a required package is unavailable and does not automatically enable third-party repositories or AUR helpers. SDDM is not restarted or enabled automatically.
 
-## Login theme
+| Option | Purpose |
+| :--- | :--- |
+| `--plan` | Preview the selected distro and package lists without making changes. |
+| `--enable-services` | Enable the included EvhOS user services after restoration. |
+| `--sddm` | Install and configure the Torii SDDM theme on supported mutable systems. |
+| `--yes` | Skip the installer confirmation; the package manager may still prompt. |
+| `--help` | Show all installer options. |
 
-`snapshot/system/sddm-theme/` contains the tested Torii theme, including its wallpaper and portrait. SDDM is system-wide and requires administrator access. The installer can optionally configure it with `--sddm`; alternatively: first test with `sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-theme"`; then follow your distribution's SDDM theme instructions and preserve the previous theme/configuration. Preview mode doesn't prove real authentication. NixOS users should package and configure the theme declaratively rather than writing into `/usr/share`.
+### 03 / NixOS
 
-## What may need adjustment
+NixOS manages system packages declaratively. Import [`nix/evhos-dependencies.nix`](nix/evhos-dependencies.nix) into your existing system configuration and rebuild using your normal NixOS workflow. Then, once Hyprland and the required tools are available to your user, run:
 
-- User-specific widget layouts are saved under the original monitor name `eDP-1`; choose an appropriate output on a new system. The wallpaper snapshot and selection for `eDP-1` are included; select `~/Pictures/Wallpapers/EvhOS-current.png` in the wallpaper picker if your output has a different name.
-- The main configuration uses legacy paths named `serpantinum`; those are intentionally retained because the shell and its services depend on them.
-- Optional integrations such as Codex usage, media controls, notifications, clipboard shelf, screenshots, location/weather and power controls need their own dependencies and permissions. No access tokens or calendars are included.
-- The snapshot hasn't been verified on Fedora, NixOS, or a fresh Arch installation. It is a portable starting point, not a guarantee of identical behavior across distributions. See `docs/COMPATIBILITY.md`.
+```sh
+./install.sh --plan
+./install.sh --enable-services
+```
+
+The installer does not install NixOS packages imperatively. The dependency module is a best-effort starting point and has not been validated against a fresh NixOS installation. Configure SDDM declaratively instead of using `--sddm`; review any conflicts with Home Manager before restoring files.
+
+### 04 / Review and start
+
+1. Review `~/.config/hypr/`, especially monitor settings, keybindings and paths to local applications.
+2. If your monitor is not named `eDP-1`, adjust the saved wallpaper and widget layouts for the new output.
+3. Make sure `~/.local/bin` is on your `PATH`, then log in to a Hyprland session. Keep your previous session available until the setup has been checked.
+4. Reconnect optional integrations and accounts as needed. Credentials, clipboard history, notes, calendar events and browser data are deliberately excluded.
+
+For distro details, service behavior, and SDDM recovery, see the [installation guide](docs/INSTALL.md) and [compatibility notes](docs/COMPATIBILITY.md).
+
+## Configuration
+
+<img src="docs/icons/config.svg" width="24" height="24" alt=""> &nbsp; Where the pieces live
+
+| Path in this repository | Purpose |
+| :--- | :--- |
+| `snapshot/shell/src/` | Customized Quickshell source, scripts, and assets. |
+| `snapshot/home/.config/hypr/` | Hyprland configuration, shortcuts, and local scripts. |
+| `snapshot/home/.config/serpantinum/` | Shell settings and EvhOS branding assets. |
+| `snapshot/home/.local/state/serpantinum/` | Selected theme, widget, and lock-screen layout state. |
+| `snapshot/system/sddm-theme/` | Torii SDDM greeter and its assets. |
+| `install.sh` / `restore.py` | Dependency setup and backup-aware home restoration. |
+
+The included `serp-customizations.timer` periodically reapplies local patches and can overwrite later edits to its target files. Review it before enabling or changing the shell. The repository is a **snapshot**: changes made on your desktop are not uploaded automatically and must be copied back, committed, and pushed.
+
+## Manual restoration
+
+If dependencies are already installed and you only want the saved files:
+
+```sh
+python3 restore.py          # preview
+python3 restore.py --apply  # restore with backups
+```
+
+The restore rewrites the original home path in UTF-8 configuration files and saves replaced files under `~/.local/state/evhos-backups/`. It does not remove unrelated files or restart the session. You can test it in a disposable directory with `python3 restore.py --home /tmp/evhos-test --apply`.
+
+## Recovery
+
+If a new desktop or login screen doesn't work, use your existing alternate session or a TTY to inspect the configuration. User-file backups are in `~/.local/state/evhos-backups/`. The optional SDDM installer keeps a backup when replacing its own existing theme or configuration; other SDDM configuration files may still take precedence. Preview the greeter before enabling it:
+
+```sh
+sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-theme"
+```
+
+Preview mode checks appearance; it does not prove a real login will succeed.
+
+## Attribution and assets
+
+EvhOS is based on [Serpantinum](https://github.com/ilyamiro/serpantinum) by ilyamiro and is distributed under the [GNU Affero General Public License v3.0](LICENSE). Some fonts, wallpapers, sounds, and personal artwork may have separate terms. Apple SF and TT Commons fonts were excluded pending redistribution rights; review all assets before making this private repository public.
