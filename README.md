@@ -6,11 +6,22 @@ A private, point-in-time snapshot of the EvhOS desktop as used on CachyOS: a cus
 
 - Install a compatible Hyprland, Quickshell with Qt 6, Python 3, and a working Wayland session first. The Hyprland configuration here uses its Lua configuration API, which is version-sensitive. Match the original versions where possible; see `docs/COMPATIBILITY.md`.
 - This snapshot was made on one laptop. Monitor names (`eDP-1`), keyboard bindings, hardware, application paths, fonts, and system service locations must be reviewed for the target machine.
-- The restore does **not** install packages, activate services, modify SDDM, remove existing files that aren't in the snapshot, or restart your session. It backs up each file it replaces.
+- `restore.py` does **not** install packages, activate services, modify SDDM, remove unrelated files, or restart your session. The separate `install.sh` can install packages and optionally enable services and configure SDDM. Restore backs up each file it replaces.
 - Private runtime data is intentionally excluded: clipboard history, calendars, notes, usage databases, browser/app data and credentials. Sign-ins and integrations need to be configured again.
 - Apple SF and TT Commons font files were excluded pending redistribution rights. Install fonts you are licensed to use. The shell's `mtx` font came from CachyOS's `cmatrix` package; install that font on the new system. Third-party assets and fonts in this private snapshot may have separate terms; audit their rights before publishing it.
 
-## Restore to your account
+## Guided installation (Arch/CachyOS and Fedora)
+
+After installing Hyprland and cloning this private repository, run:
+
+```sh
+./install.sh --plan
+./install.sh --enable-services
+```
+
+The installer installs available dependencies with the distro package manager and restores the snapshot with backups. Add `--sddm` to configure the included login theme on mutable Arch/Fedora systems. Unavailable optional packages are reported; no external repository is enabled automatically. NixOS uses the included declarative module first. See [installation details](docs/INSTALL.md). None of these paths has yet been validated on a fresh distribution install.
+
+## Manual restore to your account
 
 ```sh
 git clone https://github.com/ItzEvhyx/EvhOS-Shell.git
@@ -35,7 +46,7 @@ The customization timer runs restoration scripts and may overwrite later manual 
 
 ## Login theme
 
-`snapshot/system/sddm-theme/` contains the tested Torii theme, including its wallpaper and portrait. SDDM is system-wide and requires administrator access. This repository does not automatically install or activate it: first test with `sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-theme"`; then follow your distribution's SDDM theme instructions and preserve the previous theme/configuration. Preview mode doesn't prove real authentication. NixOS users should package and configure the theme declaratively rather than writing into `/usr/share`.
+`snapshot/system/sddm-theme/` contains the tested Torii theme, including its wallpaper and portrait. SDDM is system-wide and requires administrator access. The installer can optionally configure it with `--sddm`; alternatively: first test with `sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-theme"`; then follow your distribution's SDDM theme instructions and preserve the previous theme/configuration. Preview mode doesn't prove real authentication. NixOS users should package and configure the theme declaratively rather than writing into `/usr/share`.
 
 ## What may need adjustment
 
