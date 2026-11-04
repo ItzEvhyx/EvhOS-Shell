@@ -1,0 +1,11 @@
+[Unit]
+Description=Charger connection notifications
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/python3 %h/.config/hypr/scripts/charger-notifications.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

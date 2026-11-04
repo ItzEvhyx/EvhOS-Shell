@@ -1,0 +1,10 @@
+[SddmGreeterTheme]
+Name=EvhOS Torii
+Description=Torii minimal login for EvhOS
+Author=EvhOS
+License=MIT
+Type=sddm-theme
+Version=1.0
+MainScript=Main.qml
+ConfigFile=theme.conf
+QtVersion=6

@@ -1,0 +1,6 @@
+[Unit]
+Description=Restore local Serpantinum notification customizations
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/hypr/scripts/restore-serp-customizations.sh

@@ -1,0 +1,13 @@
+[Unit]
+Description=Show the Serpantinum bar on empty workspaces
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/serp-bar-auto
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

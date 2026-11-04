@@ -1,0 +1,106 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "source": "/home/yhvhan/Documents/OS_Images/avatar_laptop.png",
+    "type": "sixel",
+    "width": 32,
+    "padding": {
+      "top": 1,
+      "left": 2,
+      "right": 3
+    }
+  },
+  "display": {
+    "separator": "› "
+  },
+  "modules": [
+    "break",
+    {
+      "type": "custom",
+      "format": "System",
+      "outputColor": "#d0d0d0"
+    },
+    {
+      "type": "os",
+      "key": "├─ os       ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "kernel",
+      "key": "├─ kernel   ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "packages",
+      "key": "├─ packages ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "uptime",
+      "key": "╰─ uptime   ",
+      "keyColor": "#ffffff"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "Hardware",
+      "outputColor": "#d0d0d0"
+    },
+    {
+      "type": "cpu",
+      "key": "├─ cpu      ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "gpu",
+      "key": "├─ gpu      ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "memory",
+      "key": "├─ memory   ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "disk",
+      "key": "╰─ disk     ",
+      "keyColor": "#ffffff"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "Desktop",
+      "outputColor": "#d0d0d0"
+    },
+    {
+      "type": "wm",
+      "key": "├─ wm       ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "shell",
+      "key": "├─ shell    ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "terminal",
+      "key": "├─ terminal ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "battery",
+      "key": "├─ battery  ",
+      "keyColor": "#ffffff"
+    },
+    {
+      "type": "localip",
+      "key": "╰─ ip       ",
+      "keyColor": "#ffffff"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;160;160;160m● \u001b[38;2;204;204;204m● \u001b[38;2;255;255;255m● \u001b[38;2;255;255;255m● \u001b[38;2;192;192;192m● \u001b[38;2;255;255;255m● \u001b[38;2;208;208;208m● \u001b[38;2;224;224;224m● \u001b[0m"
+    }
+  ]
+}

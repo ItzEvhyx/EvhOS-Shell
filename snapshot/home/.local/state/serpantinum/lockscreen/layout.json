@@ -1,0 +1,163 @@
+{
+  "version": 3,
+  "ref": {
+    "w": 1920,
+    "h": 1080
+  },
+  "panel": {
+    "x": -1,
+    "y": -1,
+    "w": 1280,
+    "h": 780,
+    "opacity": 1
+  },
+  "screen": [
+    {
+      "objectName": "",
+      "ih": 180,
+      "iid": "i_1793444240217_57813",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "widget:visualizer",
+      "ivariant": "bars",
+      "iw": 960,
+      "ix": 480,
+      "iy": 900
+    },
+    {
+      "objectName": "",
+      "ih": 200,
+      "iid": "i_1793444119703_20896",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "clock",
+      "ivariant": "stretched",
+      "iw": 420,
+      "ix": 750,
+      "iy": 92.97131696428573
+    },
+    {
+      "objectName": "",
+      "ih": 220.9016393442623,
+      "iid": "i_1793444255076_29797",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "widget:music",
+      "ivariant": "simpleLyrics",
+      "iw": 265.08196721311475,
+      "ix": 850.6593512148711,
+      "iy": 319.09836065573774,
+      "lyricsAlignment": "center"
+    }
+  ],
+  "items": [
+    {
+      "objectName": "",
+      "ih": 740,
+      "iid": "open_lock_music",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "lockmusic",
+      "ivariant": "open",
+      "iw": 510,
+      "ix": 740,
+      "iy": 20
+    },
+    {
+      "objectName": "",
+      "ih": 160,
+      "iid": "i_1793444119973_77320",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "avatar",
+      "ivariant": "round",
+      "iw": 160,
+      "ix": 205,
+      "iy": 25
+    },
+    {
+      "objectName": "",
+      "ih": 40,
+      "iid": "i_1793444119973_11362",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "user",
+      "ivariant": "plain",
+      "iw": 380,
+      "ix": 95,
+      "iy": 198
+    },
+    {
+      "objectName": "",
+      "ih": 48,
+      "iid": "i_1793444119973_43930",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "password",
+      "ivariant": "filled",
+      "iw": 380,
+      "ix": 95,
+      "iy": 249
+    },
+    {
+      "objectName": "",
+      "ih": 34,
+      "iid": "i_1793444119973_30711",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "keyboard",
+      "ivariant": "button",
+      "iw": 76,
+      "ix": 206,
+      "iy": 318
+    },
+    {
+      "objectName": "",
+      "ih": 34,
+      "iid": "i_1793444119973_91821",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "battery",
+      "ivariant": "button",
+      "iw": 95,
+      "ix": 290,
+      "iy": 318
+    },
+    {
+      "objectName": "",
+      "ih": 60,
+      "iid": "i_1793444119973_2419",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "fingerprint",
+      "ivariant": "classic",
+      "iw": 200,
+      "ix": 185,
+      "iy": 340,
+      "showText": true
+    },
+    {
+      "objectName": "",
+      "ih": 355,
+      "iid": "i_1793444119973_91052",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "notifications",
+      "ivariant": "plain",
+      "iw": 500,
+      "ix": 35,
+      "iy": 405
+    }
+  ]
+}

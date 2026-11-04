@@ -1,0 +1,6 @@
+[Unit]
+Description=Show today's Serpantinum calendar reminder
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.local/share/serpantinum-calendar/remind.py

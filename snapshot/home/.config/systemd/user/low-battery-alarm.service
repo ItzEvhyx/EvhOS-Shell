@@ -1,0 +1,14 @@
+[Unit]
+Description=Low battery alarm (sticky notification + sound)
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/hypr/scripts/low-battery-alarm.sh
+Restart=always
+RestartSec=3
+SuccessExitStatus=143 15 SIGTERM
+
+[Install]
+WantedBy=default.target

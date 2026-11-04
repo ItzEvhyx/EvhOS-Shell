@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Show the bar on empty workspaces; otherwise reveal it on hover.
+exec 9>/tmp/serp-bar-auto.lock
+flock -n 9 || exit 0
+
+SETTINGS="$HOME/.config/serpantinum/settings.json"
+SOCK="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+last_requested=
+
+check() {
+  pgrep -f '[s]erpantinumd' >/dev/null || return
+  local windows current want
+  windows=$(hyprctl activeworkspace -j 2>/dev/null | jq -r '.windows // empty')
+  current=$(jq -r 'if .bar.autohide == true then "true" else "false" end' "$SETTINGS" 2>/dev/null)
+  [[ "$windows" =~ ^[0-9]+$ ]] || return
+  [[ "$current" == true || "$current" == false ]] || return
+  if (( windows == 0 )); then want=false; else want=true; fi
+  # Track successful requests while settings are being written, so bursts of
+  # Hyprland events do not send duplicate toggle commands.
+  if [[ -z "$last_requested" || "$current" == "$last_requested" ]]; then
+    last_requested=$current
+  fi
+  if [[ "$last_requested" != "$want" ]]; then
+    if quickshell -p "$HOME/.local/share/serpantinum/src/quickshell/Shell.qml" ipc call main handleCommand toggle autohide >/dev/null 2>&1; then
+      last_requested=$want
+    fi
+  fi
+}
+
+while true; do
+  check
+  socat -u "UNIX-CONNECT:$SOCK" - 2>/dev/null | while true; do
+    read -r -t 2 line
+    rc=$?
+    if (( rc == 0 || rc > 128 )); then
+      check
+    else
+      break
+    fi
+  done
+  sleep 1
+done

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+f="$HOME/.local/state/active-shell"
+s=$(cat "$f" 2>/dev/null)
+[ -z "$s" ] && s=caelestia
+qs list --all 2>/dev/null | grep -qi "$s" && exit 0
+exec "$HOME/.local/bin/switch-shell" "$s"

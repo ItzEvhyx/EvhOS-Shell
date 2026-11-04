@@ -1,0 +1,14 @@
+[Unit]
+Description=Full battery charge alarm (sticky notification + sound)
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/hypr/scripts/full-charge-alarm.sh
+Restart=always
+RestartSec=3
+SuccessExitStatus=143 15 SIGTERM
+
+[Install]
+WantedBy=default.target

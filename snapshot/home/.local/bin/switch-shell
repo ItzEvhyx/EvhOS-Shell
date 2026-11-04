@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# usage: switch-shell serpantinum | caelestia
+
+stop_serp() {
+  serpantinumd stop >/dev/null 2>&1
+  if pgrep -f 'quickshell -p .*serpantinum' >/dev/null; then
+    pkill -f 'quickshell -p .*serpantinum' 2>/dev/null
+    sleep 0.3
+    rm -f /tmp/serpantinumd.pid /tmp/serpantinumd.lock
+  fi
+}
+
+stop_cael() {
+  qs kill -c caelestia >/dev/null 2>&1
+}
+
+case "$1" in
+  serpantinum)
+    echo serpantinum > "$HOME/.local/state/active-shell"
+    stop_cael; stop_serp; sleep 0.5
+    setsid serpantinumd start >/dev/null 2>&1 &
+    ;;
+  caelestia)
+    echo caelestia > "$HOME/.local/state/active-shell"
+    stop_serp; stop_cael; sleep 0.5
+    deps="$HOME/.local/share/caelestia-deps/usr/lib"
+    setsid env QML_IMPORT_PATH="$deps/qt6/qml${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}" LD_LIBRARY_PATH="$deps${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" qs -c caelestia -n -d >>"$HOME/.local/state/caelestia-switch.log" 2>&1 &
+    ;;
+  *)
+    echo "usage: switch-shell serpantinum|caelestia"; exit 1 ;;
+esac

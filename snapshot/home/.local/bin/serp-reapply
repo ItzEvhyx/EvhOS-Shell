@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Re-apply custom notification-center avatar after a Serpantinum update
+
+QML="$HOME/.local/share/serpantinum/src/quickshell/reusables/display/NotificationBox.qml"
+IMG="file:///home/yhvhan/Documents/OS_Images/notif_center_avatar.png"
+
+if [ ! -f "$QML" ]; then
+  echo "NotificationBox.qml not found at $QML"; exit 1
+fi
+if [ ! -f "$HOME/Documents/OS_Images/notif_center_avatar.png" ]; then
+  echo "Avatar image not found in ~/Documents/OS_Images"; exit 1
+fi
+
+# Keep one backup of whatever version is currently installed
+[ -f "$QML.orig" ] || cp "$QML" "$QML.orig"
+
+sed -i '/id: pushyImg/,/visible: root.showEmptyGraphic/{
+s|^\( *source: \).*|\1"'"$IMG"'"|
+s|isGif: true|isGif: false|
+}' "$QML"
+
+if grep -q 'notif_center_avatar.png' "$QML"; then
+  echo "Avatar applied."
+  serpantinum reload
+else
+  echo "Edit did not apply. The QML may have changed in the update."
+  exit 1
+fi
