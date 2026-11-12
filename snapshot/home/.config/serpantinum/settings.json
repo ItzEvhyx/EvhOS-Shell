@@ -187,7 +187,7 @@
   },
   "idle": {
     "enabled": true,
-    "manualInhibit": false,
+    "manualInhibit": true,
     "actions": {
       "dim": {
         "id": "dim",
@@ -241,8 +241,8 @@
       }
     },
     "customActions": [],
-    "caffeineStartTime": 0,
-    "caffeineEndTime": 0
+    "caffeineStartTime": 1794469698725,
+    "caffeineEndTime": 1794480498725
   },
   "display": {
     "monitors": {
@@ -260,6 +260,14 @@
     "sound": true,
     "soundFile": "/home/yhvhan/.local/share/serpantinum/src/assets/sounds/notifications/Progress.wav",
     "showEmptyGraphic": true
+  },
+  "lockscreen": {
+    "fingerprintEnabled": true,
+    "attemptLimitEnabled": false,
+    "passwordMaxAttempts": 5,
+    "fingerprintMaxAttempts": 5,
+    "backgroundMode": "follow",
+    "customBackground": ""
   }
 }
 

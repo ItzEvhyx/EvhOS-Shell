@@ -220,6 +220,36 @@ FocusScope {
 
     property bool powerMenuOpen: false
     property bool inputActive: false
+    property bool passwordSubmissionPending: false
+
+    function submitPassword() {
+        if (!rootLock.locked || isUnlocking || lockUI.lockedOut || lockUI.authenticating || !passwordInput.text.length) return;
+        passwordSubmissionPending = true;
+        if (pam.responseRequired) {
+            sendPendingPassword();
+        } else {
+            root.startPassword(true);
+        }
+    }
+
+    function sendPendingPassword() {
+        if (!passwordSubmissionPending || !rootLock.locked || isUnlocking || lockUI.lockedOut || lockUI.authenticating || !pam.responseRequired || !passwordInput.text.length) return;
+        passwordSubmissionPending = false;
+        lockUI.authenticating = true;
+        lockUI.statusText = I18n.t("lock.status.authenticating");
+        lockUI.failed = false;
+        pam.respond(passwordInput.text);
+    }
+
+    Connections {
+        target: pam
+        function onPamMessage() { lockScreenRoot.sendPendingPassword(); }
+    }
+
+    Connections {
+        target: lockScreenRoot.passwordInput
+        function onTextChanged() { lockScreenRoot.passwordSubmissionPending = false; }
+    }
     property bool isPlayingIntro: !root.staticLock
 
     property real centerReveal: 0.0
@@ -270,12 +300,7 @@ FocusScope {
                     passwordInput.clear();
                     event.accepted = true;
                 } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                    if (passwordInput.text.length > 0 && pam.responseRequired && !lockUI.authenticating) {
-                        lockUI.authenticating = true;
-                        lockUI.statusText = I18n.t("lock.status.authenticating");
-                        lockUI.failed = false;
-                        pam.respond(passwordInput.text);
-                    }
+                    lockScreenRoot.submitPassword();
                     event.accepted = true;
                 } else if (event.key === Qt.Key_Tab || event.key === Qt.Key_Backtab) {
                     event.accepted = true;
@@ -402,6 +427,7 @@ FocusScope {
     }
 
     onInputActiveChanged: {
+        if (!inputActive) passwordSubmissionPending = false;
         if (lockScreenRoot.isUnlocking) return;
         if (inputActive) {
             closeDashboardAnim.stop();
@@ -520,6 +546,7 @@ FocusScope {
     Connections {
         target: rootLock
         function onLockedChanged() {
+            lockScreenRoot.passwordSubmissionPending = false;
             if (rootLock.locked) {
                 lockScreenRoot.restoreFocus();
             }

@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import "../"
 
 DockWindowApps {
@@ -25,9 +26,24 @@ DockWindowApps {
         onTriggered: dockWindowRoot.initialized = true
     }
 
-    onEffectiveAutohideChanged: hideTimer.stop()
-    onActiveIndexChanged: {
+    // local double-click reveal v1
+    property bool localEdgeRevealed: false
+    function localResetReveal() {
+        localEdgeRevealed = false;
         hideTimer.stop();
+    }
+    onEffectiveAutohideChanged: localResetReveal()
+    onIsWorkspaceBusyChanged: localResetReveal()
+    onIsFullscreenActiveChanged: localResetReveal()
+    Connections {
+        target: dockWindowRoot.isHyprland ? Hyprland : null
+        function onRawEvent(event) {
+            if (event && ["workspace", "workspacev2", "focusedmon", "focusedmonv2", "activespecial", "activespecialv2"].includes(event.name))
+                dockWindowRoot.localResetReveal();
+        }
+    }
+    onActiveIndexChanged: {
+        localResetReveal();
         if (typeof DockAppMenuController !== "undefined" && DockAppMenuController.isVisible) {
             DockAppMenuController.hide();
         }
@@ -76,7 +92,7 @@ DockWindowApps {
     }
 
     property int autohideTimeout: rawDockSettings.autohideTimeout !== undefined ? rawDockSettings.autohideTimeout : 1000
-    property real autohideHitSize: s(18)
+    property real autohideHitSize: s(4) // thin double-click strip
 
     property real editMargin: (editMode && !dockFloating) ? s(20) : 0
     Behavior on editMargin {
@@ -120,11 +136,12 @@ DockWindowApps {
     Timer {
         id: hideTimer
         interval: dockWindowRoot.autohideTimeout
+        onTriggered: dockWindowRoot.localEdgeRevealed = false
     }
 
     function checkHideTimer() {
         let isMenuOpen = (typeof DockAppMenuController !== "undefined" && DockAppMenuController.isVisible && (!DockAppMenuController.screen || !dockWindowRoot.screen || DockAppMenuController.screen.name === dockWindowRoot.screen.name));
-        if (!dockHover.hovered && !edgeHover.hovered && dockWindowRoot.effectiveAutohide && !dockWindowRoot.editMode && !isMenuOpen) {
+        if (localEdgeRevealed && !dockHover.hovered && !edgeHover.hovered && dockWindowRoot.effectiveAutohide && !dockWindowRoot.editMode && !isMenuOpen) {
             hideTimer.restart();
         } else {
             hideTimer.stop();
@@ -139,11 +156,9 @@ DockWindowApps {
     property bool isRevealed: {
         if (isFullscreenActive) return false;
         if (editMode) return true;
-        if (!effectiveAutohide) return true;
+        if (!isWorkspaceBusy || !effectiveAutohide) return true;
         if (typeof DockAppMenuController !== "undefined" && DockAppMenuController.isVisible && (!DockAppMenuController.screen || !dockWindowRoot.screen || DockAppMenuController.screen.name === dockWindowRoot.screen.name)) return true;
-        if (dockHover.hovered) return true;
-        if (edgeHover.hovered) return true;
-        if (hideTimer.running) return true;
+        if (localEdgeRevealed) return true;
         return false;
     }
 
@@ -343,6 +358,18 @@ DockWindowApps {
         }
         width: dockWindowRoot.isVertical ? dockWindowRoot.autohideHitSize : Math.min(dockWindowRoot.effectiveWindowWidth, dockWindowRoot.dockTotalLength)
         height: dockWindowRoot.isVertical ? Math.min(dockWindowRoot.effectiveWindowHeight, dockWindowRoot.dockTotalLength) : dockWindowRoot.autohideHitSize
+
+        MouseArea {
+            anchors.fill: parent
+            enabled: !dockWindowRoot.isRevealed
+            acceptedButtons: Qt.LeftButton
+            onDoubleClicked: function(mouse) {
+                dockWindowRoot.localEdgeRevealed = true;
+                hideTimer.stop();
+                dockWindowRoot.checkHideTimer();
+                mouse.accepted = true;
+            }
+        }
 
         HoverHandler {
             id: edgeHover

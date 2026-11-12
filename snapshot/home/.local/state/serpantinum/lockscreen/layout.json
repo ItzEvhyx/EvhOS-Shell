@@ -27,19 +27,6 @@
     },
     {
       "objectName": "",
-      "ih": 200,
-      "iid": "i_1793444119703_20896",
-      "iimage": "",
-      "iopacity": 1,
-      "irotation": 0,
-      "itype": "clock",
-      "ivariant": "stretched",
-      "iw": 420,
-      "ix": 750,
-      "iy": 92.97131696428573
-    },
-    {
-      "objectName": "",
       "ih": 220.9016393442623,
       "iid": "i_1793444255076_29797",
       "iimage": "",
@@ -51,6 +38,19 @@
       "ix": 850.6593512148711,
       "iy": 319.09836065573774,
       "lyricsAlignment": "center"
+    },
+    {
+      "objectName": "",
+      "ih": 200,
+      "iid": "i_1793444119703_20896",
+      "iimage": "",
+      "iopacity": 1,
+      "irotation": 0,
+      "itype": "clock",
+      "ivariant": "stretched",
+      "iw": 420,
+      "ix": 750,
+      "iy": 92.97131696428573
     }
   ],
   "items": [

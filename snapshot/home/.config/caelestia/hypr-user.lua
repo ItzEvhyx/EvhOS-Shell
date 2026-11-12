@@ -53,3 +53,20 @@ hl.layer_rule({ name = "serp-glass-launcher", match = { namespace = "^qs-applaun
 
 -- Make Flatpak application entries and icons available to the desktop shell.
 hl.env("XDG_DATA_DIRS", os.getenv("HOME") .. "/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share")
+
+-- Give HyprMod the same floating glass treatment as the shell settings.
+hl.window_rule({
+    name = "hyprmod-glass",
+    match = { class = "^io\\.github\\.bluemancz\\.hyprmod$" },
+    float = true,
+    size = "1200 750",
+    center = true,
+    rounding = 20,
+    opacity = "1.0 override",
+})
+
+-- Replacement shortcuts for the 1 and 2 keys
+hl.bind("ALT + Q", hl.dsp.send_shortcut({ mods = "", key = "1" }))
+hl.bind("ALT + W", hl.dsp.send_shortcut({ mods = "", key = "2" }))
+hl.bind("SHIFT + Q", hl.dsp.send_shortcut({ mods = "SHIFT", key = "1" }))
+hl.bind("SHIFT + W", hl.dsp.send_shortcut({ mods = "SHIFT", key = "2" }))

@@ -4,6 +4,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import Quickshell.Wayland
 import "../reusables"
 import "../"
@@ -105,7 +106,67 @@ Variants {
                 return true;
             }
 
+            // local double-click reveal v1
+            readonly property bool localUsesHyprland: Boolean(Quickshell.env("HYPRLAND_INSTANCE_SIGNATURE"))
+            property bool localWorkspaceBusy: true
+            property string localWorkspaceKey: ""
+            property bool localEdgeRevealed: false
+
+            function localResetReveal() {
+                localEdgeRevealed = false;
+                hideTimer.stop();
+            }
+            onLocalWorkspaceBusyChanged: localResetReveal()
+            onLocalWorkspaceKeyChanged: localResetReveal()
+            onAutohideChanged: localResetReveal()
+
+            Timer {
+                id: localWorkspaceRefresh
+                interval: 20
+                onTriggered: {
+                    if (localWorkspacePoller.running) restart();
+                    else localWorkspacePoller.running = true;
+                }
+            }
+            Connections {
+                target: barWindowRoot.localUsesHyprland ? Hyprland : null
+                function onRawEvent(event) {
+                    if (!event || !event.name) return;
+                    if (["workspace", "workspacev2", "focusedmon", "focusedmonv2", "activespecial", "activespecialv2"].includes(event.name))
+                        barWindowRoot.localResetReveal();
+                    if (["workspace", "workspacev2", "focusedmon", "focusedmonv2", "openwindow", "closewindow", "movewindow", "movewindowv2", "activespecial", "activespecialv2", "fullscreen"].includes(event.name))
+                        localWorkspaceRefresh.restart();
+                }
+            }
+            Timer {
+                interval: 750
+                repeat: true
+                running: barWindowRoot.localUsesHyprland
+                triggeredOnStart: true
+                onTriggered: if (!localWorkspacePoller.running) localWorkspacePoller.running = true
+            }
+            Process {
+                id: localWorkspacePoller
+                command: ["bash", "-c", "{ hyprctl -j monitors && hyprctl -j workspaces; } | jq -s ."]
+                stdout: StdioCollector {
+                    onStreamFinished: {
+                        try {
+                            let data = JSON.parse(this.text);
+                            let mon = data[0].find(m => barWindowRoot.screen && m.name === barWindowRoot.screen.name);
+                            if (!mon) return;
+                            let ws = data[1].find(w => w.id === mon.activeWorkspace.id);
+                            let special = mon.specialWorkspace && mon.specialWorkspace.id
+                                ? data[1].find(w => w.id === mon.specialWorkspace.id) : null;
+                            if (!ws) return;
+                            barWindowRoot.localWorkspaceKey = String(ws.id) + ":" + (special ? special.id : 0);
+                            barWindowRoot.localWorkspaceBusy = ws.windows > 0 || !!(special && special.windows > 0);
+                        } catch (e) {}
+                    }
+                }
+            }
+
             property bool autohide: {
+                if (localUsesHyprland) return localWorkspaceBusy;
                 let dummy = configRevision;
                 return (typeof Config !== "undefined" && Config.rawSettings && Config.rawSettings.bar && Config.rawSettings.bar.autohide !== undefined) ? Config.rawSettings.bar.autohide : false;
             }
@@ -125,10 +186,11 @@ Variants {
             Timer {
                 id: hideTimer
                 interval: barWindowRoot.autohideTimeout
+                onTriggered: barWindowRoot.localEdgeRevealed = false
             }
 
             function checkHideTimer() {
-                if (!barHover.hovered && barWindowRoot.autohide) {
+                if (localEdgeRevealed && !barHover.hovered && barWindowRoot.autohide && !localPanelOpen) {
                     hideTimer.restart();
                 } else {
                     hideTimer.stop();
@@ -140,11 +202,29 @@ Variants {
                 function onHoveredChanged() { barWindowRoot.checkHideTimer(); }
             }
 
+            readonly property bool localPanelOpen: isNotifOpen || isSysOpen || (TrayMenuController.isVisible && TrayMenuController.screen === barWindowRoot.screen)
+            onLocalPanelOpenChanged: checkHideTimer()
+
+            // Only the hidden panel's thin input strip catches the double-click.
+            // Visible controls keep their normal click behavior.
+            MouseArea {
+                anchors.fill: parent
+                z: 100000
+                enabled: barWindowRoot.autohide && !barWindowRoot.isRevealed && !barWindowRoot.shouldHideForRedact
+                acceptedButtons: Qt.LeftButton
+                onDoubleClicked: function(mouse) {
+                    barWindowRoot.localEdgeRevealed = true;
+                    hideTimer.stop();
+                    barWindowRoot.checkHideTimer();
+                    mouse.accepted = true;
+                }
+            }
+
             property bool isRevealed: {
                 if (shouldHideForRedact) return false;
                 if (!autohide) return true;
-                if (barHover.hovered) return true;
-                if (hideTimer.running) return true;
+                if (localPanelOpen) return true;
+                if (localEdgeRevealed) return true;
                 return false;
             }
 
