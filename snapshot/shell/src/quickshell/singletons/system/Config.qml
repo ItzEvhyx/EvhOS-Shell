@@ -187,6 +187,28 @@ Item {
         }
     }
 
+    // Desktop presets must update the live configuration, not just replace its file.
+    IpcHandler {
+        target: "desktopPresetConfig"
+        function get(): string {
+            return config.dataReady ? JSON.stringify(config.rawSettings) : "";
+        }
+        function apply(payload: string): string {
+            if (!config.dataReady) return "Configuration is not ready";
+            try {
+                let data = JSON.parse(payload);
+                if (!data || typeof data !== "object" || Array.isArray(data)) return "Invalid settings";
+                for (let key of ["theme", "bar", "dock"]) {
+                    if (!data[key] || typeof data[key] !== "object" || Array.isArray(data[key])) return "Invalid " + key;
+                }
+                config.updateJsonBulk({ theme: data.theme, bar: data.bar, dock: data.dock });
+                return "ok";
+            } catch (e) {
+                return "Invalid settings: " + e;
+            }
+        }
+    }
+
     Component.onCompleted: {
         if (settingsWatcher.path) {
             settingsWatcher.reload();

@@ -65,11 +65,25 @@ class DesktopPresetsTest(unittest.TestCase):
         bindir = self.home / 'bin'
         bindir.mkdir()
         fake = bindir / 'quickshell'
-        fake.write_text('#!/bin/sh\ncase "$*" in *"widgets-eDP-1 reload"*) exit 1;; esac\nexit 0\n')
+        fake.write_text("""#!/usr/bin/env python3
+import json, os, pathlib, sys
+args = sys.argv
+path = pathlib.Path(os.environ['HOME']) / '.config/serpantinum/settings.json'
+settings = json.loads(path.read_text())
+if 'desktopPresetConfig' in args:
+    if 'get' in args:
+        print(json.dumps(settings))
+    else:
+        settings.update(json.loads(args[-1]))
+        path.write_text(json.dumps(settings))
+        print('ok')
+elif 'widgets-eDP-1' in args:
+    sys.exit(1)
+""")
         fake.chmod(0o755)
         self.env['PATH'] = str(bindir) + os.pathsep + self.env['PATH']
         self.run_cli('apply', 'Safe', ok=False)
-        self.assertEqual(self.settings.read_bytes(), before_settings)
+        self.assertEqual(json.loads(self.settings.read_bytes()), json.loads(before_settings))
         self.assertEqual(self.layout.read_bytes(), before_layout)
 
     def test_bad_name(self):

@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 NAME = re.compile(r'^[A-Za-z0-9][A-Za-z0-9 _-]{0,63}$')
 MONITOR = re.compile(r'^[A-Za-z0-9_-]+$')
@@ -73,7 +74,7 @@ def capture():
 
 
 def ipc(*args):
-    subprocess.run(['quickshell', '-p', str(MAIN), 'ipc', 'call', *args], check=True, capture_output=True, text=True, timeout=15)
+    return subprocess.run(['quickshell', '-p', str(MAIN), 'ipc', 'call', *args], check=True, capture_output=True, text=True, timeout=15).stdout.strip()
 
 
 def apply(data, offline=False):
@@ -88,8 +89,10 @@ def apply(data, offline=False):
     if any(p.is_symlink() or (p.exists() and not p.is_file()) for p in targets):
         raise ValueError('Refusing to overwrite a symlink or non-file')
     if not offline:
-        # Verify the running shell before writing anything.
-        ipc('wallpaper', 'getWallpaperPath', next(iter(data['wallpapers']), ''))
+        # Use the live configuration as the source of truth, including unsaved UI changes.
+        live = json.loads(ipc('desktopPresetConfig', 'get'))
+        if not isinstance(live, dict) or any(not isinstance(live.get(k), dict) for k in SECTIONS):
+            raise ValueError('Running shell configuration is not ready')
     backup = STATE / 'desktop-preset-backups' / datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
     backup.mkdir(parents=True)
     atomic_write(backup / 'previous-desktop.json', capture())
@@ -98,8 +101,22 @@ def apply(data, offline=False):
             shutil.copy2(target, backup / f'{i}.bak')
     atomic_write(backup / 'manifest.json', {'targets': [str(p) for p in targets], 'existed': [(backup / f'{i}.bak').exists() for i in range(len(targets))]})
     try:
-        settings.update(data['settings'])
-        atomic_write(SETTINGS, settings)
+        if offline:
+            settings.update(data['settings'])
+            atomic_write(SETTINGS, settings)
+        else:
+            result = ipc('desktopPresetConfig', 'apply', json.dumps(data['settings']))
+            if result != 'ok':
+                raise ValueError('Shell rejected preset: ' + result)
+            # Config persists asynchronously; do not report success until it reaches disk.
+            deadline = time.monotonic() + 5
+            while time.monotonic() < deadline:
+                current = read_json(SETTINGS)
+                if all(current.get(k) == data['settings'][k] for k in SECTIONS):
+                    break
+                time.sleep(0.05)
+            else:
+                raise ValueError('Shell did not save the preset settings')
         for monitor, layout in data['widgets'].items():
             atomic_write(STATE / 'widgets' / monitor / 'layout.json', layout)
         if not offline:
@@ -109,12 +126,19 @@ def apply(data, offline=False):
                 ipc('wallpaper', 'setWallpaper', monitor, path, 'fade')
     except Exception:
         for i, target in enumerate(targets):
+            if i == 0 and not offline:
+                continue
             saved = backup / f'{i}.bak'
             if saved.exists():
                 shutil.copy2(saved, target)
             elif target.exists():
                 target.unlink()
         if not offline:
+            try:
+                if ipc('desktopPresetConfig', 'apply', json.dumps({k: live[k] for k in SECTIONS})) != 'ok':
+                    raise ValueError('Shell rejected rollback')
+            except Exception:
+                shutil.copy2(backup / '0.bak', SETTINGS)
             previous = read_json(backup / 'previous-desktop.json')
             for monitor in data['widgets']:
                 try: ipc('widgets-' + monitor, 'reload')
