@@ -115,6 +115,14 @@ For distro details, service behavior, and SDDM recovery, see the [installation g
 
 The included `serp-customizations.timer` periodically reapplies local patches and can overwrite later edits to its target files. Review it before enabling or changing the shell. The repository is a **snapshot**: changes made on your desktop are not uploaded automatically and must be copied back, committed, and pushed.
 
+## Desktop presets
+
+Use `serpantinum desktop-preset save "My desktop"` to capture the current theme, topbar, dock (including pinned apps), wallpaper paths, and per-monitor widget layouts. Create as many named presets as you need, list them with `serpantinum desktop-preset list`, and switch with `serpantinum desktop-preset apply "My desktop"`. Names use letters, numbers, spaces, hyphens, and underscores. Saving never overwrites an existing preset.
+
+Presets are stored in `~/.local/state/serpantinum/desktop-presets/`. Wallpaper files are referenced by path, not copied; keep them available and use the same monitor names when switching. Layouts for monitors absent from a preset are left alone. Applying validates the preset and wallpaper files first, backs up affected settings and widget files under `~/.local/state/serpantinum/desktop-preset-backups/`, and reloads widgets and wallpapers through the running shell. The backup includes `previous-desktop.json` and a manifest mapping numbered `.bak` files to their original paths. If applying fails, the tool attempts to restore the files and previous wallpapers. For manual recovery, close the shell and copy the numbered files back according to the manifest, then restart the shell. The saved desktop JSON can also be copied into the presets directory under a new name and applied normally.
+
+`--offline` on `apply` is intended for testing or recovery while the shell is stopped; it writes settings and widget files but does not switch the wallpaper. Shell-specific `QS_SETTINGS`, `QS_STATE_DIR`, and `QS_CACHE_DIR` overrides are respected.
+
 ## Manual restoration
 
 If dependencies are already installed and you only want the saved files:

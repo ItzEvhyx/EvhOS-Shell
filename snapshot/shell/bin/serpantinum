@@ -5,6 +5,11 @@ if [ -z "$SERPANTINUM_DIR" ]; then
     export SERPANTINUM_DIR="$(dirname "$BIN_DIR")/src"
 fi
 
+if [[ "${1:-}" == "desktop-preset" ]]; then
+    shift
+    exec python3 "$SERPANTINUM_DIR/scripts/desktop-presets.py" "$@"
+fi
+
 source "$SERPANTINUM_DIR/scripts/caching.sh"
 source "$SERPANTINUM_DIR/scripts/config.sh"
 source "$SERPANTINUM_DIR/scripts/i18n.sh"
@@ -85,6 +90,7 @@ show_help() {
     echo ""
     echo "$(t "cli.commands")"
     echo "  launch <target> [args...]   $(t "cli.launch_desc")"
+    echo "  desktop-preset <save|list|apply> [name]  Save and restore desktop layouts"
     echo "  settings [tab]               $(t "cli.settings_desc")"
     echo "  msg <action|workspace> ...  $(t "cli.msg_desc")"
     echo "  ipc ...                      $(t "cli.ipc_desc")"
