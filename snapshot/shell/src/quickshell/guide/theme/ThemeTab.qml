@@ -48,6 +48,8 @@ ThemeTabState {
             width: parent.width
             spacing: rootObj.s(6)
 
+            DesktopPresetsSection { tab: themeTabRoot }
+
             ThemeWallpaperPreview { tab: themeTabRoot }
 
             ThemeWallpaperDirRow { id: wallpaperDirRow; tab: themeTabRoot }
