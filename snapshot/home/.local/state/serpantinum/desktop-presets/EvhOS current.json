@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "settings": {
+    "theme": {
+      "fontFamily": "mtx",
+      "borderRadius": 10,
+      "activePreset": "Obsidian",
+      "matugen": false,
+      "colors": {
+        "base": "#000000",
+        "blue": "#ffffff",
+        "crust": "#000000",
+        "green": "#ffffff",
+        "mantle": "#050505",
+        "maroon": "#808080",
+        "mauve": "#d0d0d0",
+        "overlay0": "#5a5a5a",
+        "overlay1": "#7a7a7a",
+        "overlay2": "#9a9a9a",
+        "peach": "#cccccc",
+        "pink": "#e0e0e0",
+        "red": "#a0a0a0",
+        "sapphire": "#e0e0e0",
+        "subtext0": "#a0a0a0",
+        "subtext1": "#c0c0c0",
+        "surface0": "#1a1a1a",
+        "surface1": "#2a2a2a",
+        "surface2": "#3a3a3a",
+        "teal": "#c0c0c0",
+        "text": "#ffffff",
+        "yellow": "#ffffff"
+      },
+      "blurBackground": false,
+      "blurStyle": "blur"
+    },
+    "bar": {
+      "workspacesStyle": "numbers",
+      "wifiStyle": "text",
+      "position": "top",
+      "width": 52,
+      "opacity": 70,
+      "style": "solid",
+      "distinctPills": false,
+      "autohide": true,
+      "autohideTimeout": 1000,
+      "modules": {
+        "left": [
+          "left",
+          "media",
+          "tray"
+        ],
+        "center": [
+          "info",
+          "timedate"
+        ],
+        "right": [
+          [
+            "wifi",
+            "bt",
+            "vol",
+            "bat"
+          ]
+        ]
+      },
+      "groupColors": {
+        "g_kb": "#d0d0d0",
+        "g_wifi": "#e0e0e0",
+        "g_bt": "#ffffff"
+      },
+      "hideEmptyWorkspaces": false,
+      "timeStyle": "badge",
+      "sysmonStyle": "wave",
+      "batShowPercent": true,
+      "batShowIcon": true,
+      "batStyle": "text",
+      "btStyle": "text",
+      "volStyle": "text",
+      "kbStyle": "button",
+      "timeShowDate": false,
+      "time": {
+        "format": "hh:mm AP"
+      },
+      "menuStyle": "icon",
+      "menuShowSettings": true,
+      "menuShowLauncher": false
+    },
+    "dock": {
+      "enabled": true,
+      "position": "bottom",
+      "onTop": true,
+      "elementSize": 50,
+      "floating": true,
+      "opacity": 95,
+      "exclusive": false,
+      "autohide": false,
+      "smartAutohide": true,
+      "autohideTimeout": 1000,
+      "editing": false,
+      "apps": [
+        {
+          "name": "Cursor",
+          "comment": "The AI Code Editor.",
+          "desktop_id": "cursor",
+          "icon": "co.anysphere.cursor"
+        },
+        {
+          "name": "Files",
+          "comment": "Access and organize files",
+          "desktop_id": "ski",
+          "icon": "ski"
+        },
+        {
+          "name": "Brave",
+          "comment": "Access the Internet",
+          "desktop_id": "brave-browser",
+          "icon": "brave-desktop"
+        },
+        {
+          "name": "Microsoft Teams (PWA)",
+          "comment": "",
+          "desktop_id": "brave-cifhbcnohmdccbgoicgdjpfamggdegmo-Default",
+          "icon": "/home/yhvhan/.local/share/icons/hicolor/512x512/apps/brave-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.png"
+        },
+        {
+          "name": "Resources",
+          "comment": "Keep an eye on system resources",
+          "desktop_id": "org.gnome.Resources",
+          "icon": "org.gnome.Resources"
+        },
+        {
+          "name": "ChatGPT",
+          "comment": "ChatGPT by OpenAI",
+          "desktop_id": "chatgpt",
+          "icon": "chatgpt"
+        },
+        {
+          "name": "Slack",
+          "comment": "Slack Desktop",
+          "desktop_id": "slack",
+          "icon": "slack"
+        }
+      ],
+      "overrideBoundsCorrection": false,
+      "enableScrolling": false,
+      "visibleElements": 7,
+      "hoverScale": 130,
+      "cascadeScale": false,
+      "focusRunning": true,
+      "showRunningIndicators": true,
+      "showRunningApps": true,
+      "runningScope": "auto"
+    }
+  },
+  "widgets": {
+    "eDP-1": []
+  },
+  "wallpapers": {
+    "eDP-1": "/home/yhvhan/Pictures/Wallpapers/tyler-lastovich-ddLiNMqWAOM-unsplash.jpg"
+  }
+}
