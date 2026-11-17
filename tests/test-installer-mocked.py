@@ -35,8 +35,18 @@ exit 0
     }
     for name,content in mocks.items():
         p=binary/name;p.write_text(content);p.chmod(0o755)
+    # Exercise Arch using a disposable installer copy, independent of host distro.
+    release=base/'os-release';release.write_text('ID=arch\nID_LIKE=arch\n')
+    installer=base/'install.sh'
+    original=(root/'install.sh').read_text()
+    assert '. /etc/os-release' in original
+    installer.write_text(original.replace('. /etc/os-release', '. "'+str(release)+'"'))
+    installer.chmod(0o755)
+    (base/'restore.py').touch()
+    shell=base/'snapshot/shell/src/quickshell/Shell.qml'
+    shell.parent.mkdir(parents=True);shell.write_text('import QtQuick\nItem {}\n')
     env=os.environ.copy();env.update(PATH=str(binary)+os.pathsep+env['PATH'],EVHOS_TEST_LOG=str(log),EVHOS_MISSING='wl-gammarelay-rs')
-    result=subprocess.run([str(root/'install.sh'),'--yes','--enable-services','--sddm'],env=env,text=True,capture_output=True)
+    result=subprocess.run([str(installer),'--yes','--enable-services','--sddm'],env=env,text=True,capture_output=True)
     assert result.returncode==0, result.stdout+result.stderr
     assert 'wl-gammarelay-rs' in result.stdout
     calls=log.read_text();assert 'sudo pacman -S --needed' in calls
@@ -44,7 +54,7 @@ exit 0
     assert 'restore.py --apply' in calls and 'systemctl --user enable --now' in calls
     assert 'sudo tee /etc/sddm.conf.d/zzzzzzz-evhos.conf' in calls
     log.unlink();env['EVHOS_MISSING']='qt6-svg'
-    result=subprocess.run([str(root/'install.sh'),'--yes'],env=env,text=True,capture_output=True)
+    result=subprocess.run([str(installer),'--yes'],env=env,text=True,capture_output=True)
     assert result.returncode!=0 and 'qt6-svg' in result.stderr
     assert not log.exists(), 'missing core dependency must fail before changes'
 print('Mocked installer checks passed; no packages or system settings changed.')
