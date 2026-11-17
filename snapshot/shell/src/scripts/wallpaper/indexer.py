@@ -8,6 +8,41 @@ import subprocess
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 
+MEDIA_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".mp4", ".mkv", ".mov", ".webm"}
+
+
+def library_signature(src_dir):
+    entries = []
+    for folder in [os.path.join(src_dir, "Pictures"), os.path.join(src_dir, "Videos"), src_dir]:
+        try:
+            with os.scandir(folder) as files:
+                for entry in files:
+                    try:
+                        if not entry.is_file() or os.path.splitext(entry.name)[1].lower() not in MEDIA_EXTENSIONS:
+                            continue
+                        stat = entry.stat()
+                        entries.append((entry.path, stat.st_size, stat.st_mtime_ns))
+                    except OSError:
+                        continue
+        except OSError:
+            continue
+    return hashlib.sha256(json.dumps(sorted(entries)).encode()).hexdigest()
+
+
+def watch_library(src_dir, interval=0.5, settle=0.5):
+    """Watch metadata only; emit after writes settle, without decoding media."""
+    observed = emitted = None
+    changed_at = 0.0
+    while True:
+        signature = library_signature(src_dir)
+        now = time.monotonic()
+        if signature != observed:
+            observed, changed_at = signature, now
+        if signature != emitted and now - changed_at >= settle:
+            print(json.dumps({"srcDir": os.path.abspath(src_dir), "signature": signature}), flush=True)
+            emitted = signature
+        time.sleep(interval)
+
 try:
     from PIL import Image
     HAS_PIL = True
@@ -89,8 +124,8 @@ def extract_color(filepath):
             continue
     return "#808080"
 
-def generate_video_poster(video_path, poster_path):
-    if os.path.exists(poster_path) and os.path.getsize(poster_path) > 1024:
+def generate_video_poster(video_path, poster_path, force=False):
+    if not force and os.path.exists(poster_path) and os.path.getsize(poster_path) > 1024:
         return True
     os.makedirs(os.path.dirname(poster_path), exist_ok=True)
     tmp_poster = f"{poster_path}.tmp.jpg"
@@ -127,10 +162,13 @@ def generate_video_poster(video_path, poster_path):
 
 def process_entry(entry_tuple, poster_dir, cached_items):
     fname, fpath, mtime, size, is_video = entry_tuple
-    furl = f"file://{fpath}"
+    version = f"?v={mtime}-{size}"
+    furl = "file://" + urllib.parse.quote(fpath) + ("" if is_video else version)
 
     existing = cached_items.get(fname)
     if existing and existing.get("mtime") == mtime and existing.get("size") == size:
+        # A folder move does not change the file's timestamp or size.
+        existing = dict(existing, filePath=fpath, fileUrl=furl)
         if is_video:
             p_path = existing.get("posterPath", "")
             if p_path and os.path.exists(p_path) and os.path.getsize(p_path) > 512:
@@ -141,8 +179,8 @@ def process_entry(entry_tuple, poster_dir, cached_items):
     if is_video:
         poster_name = f"{hashlib.sha256(fname.encode('utf-8')).hexdigest()[:16]}.jpg"
         poster_path = os.path.join(poster_dir, poster_name)
-        generate_video_poster(fpath, poster_path)
-        poster_url = f"file://{poster_path}"
+        generate_video_poster(fpath, poster_path, force=existing is not None)
+        poster_url = "file://" + urllib.parse.quote(poster_path) + version
         hex_color = extract_color(poster_path) if os.path.exists(poster_path) else "#808080"
         return {
             "fileName": fname,
@@ -193,10 +231,14 @@ def run_indexing(src_dir, per_dir_cache, index_file, poster_dir):
     entries_to_process = []
     seen_entry_names = set()
     seen_entry_paths = set()
-    try:
-        dir_entries = list(os.scandir(src_dir))
-    except Exception:
-        dir_entries = []
+    # Prefer the new split layout, while retaining loose-file compatibility.
+    dir_entries = []
+    for folder in [os.path.join(src_dir, "Pictures"), os.path.join(src_dir, "Videos"), src_dir]:
+        try:
+            with os.scandir(folder) as entries:
+                dir_entries.extend(entries)
+        except OSError:
+            continue
 
     for entry in dir_entries:
         try:
@@ -218,7 +260,7 @@ def run_indexing(src_dir, per_dir_cache, index_file, poster_dir):
             if real_path in seen_entry_paths:
                 continue
             st = entry.stat()
-            mtime = int(st.st_mtime)
+            mtime = st.st_mtime
             size = int(st.st_size)
         except Exception:
             continue
@@ -246,6 +288,7 @@ def run_indexing(src_dir, per_dir_cache, index_file, poster_dir):
     items = [items_map[k] for k in sorted(items_map.keys())]
 
     output_data = {
+        "layoutVersion": 2,
         "srcDir": os.path.abspath(src_dir),
         "dirHash": get_dir_hash(src_dir),
         "updatedAt": int(time.time()),
@@ -267,6 +310,14 @@ def run_indexing(src_dir, per_dir_cache, index_file, poster_dir):
 
 def main():
     if len(sys.argv) < 2:
+        return
+    if sys.argv[1] == "--watch":
+        if len(sys.argv) < 3:
+            raise SystemExit("--watch requires a wallpaper library directory")
+        directory = sys.argv[2]
+        if directory.startswith("file://"):
+            directory = urllib.parse.unquote(directory[7:])
+        watch_library(directory)
         return
     src_dir = sys.argv[1]
     if src_dir.startswith("file://"):
@@ -294,10 +345,15 @@ def main():
             if os.path.exists(index_file):
                 try:
                     with open(index_file, "r") as f:
-                        sys.stdout.write(f.read())
-                        sys.stdout.flush()
+                        pending_data = json.load(f)
+                    pending_data["indexingPending"] = True
+                    sys.stdout.write(json.dumps(pending_data))
+                    sys.stdout.flush()
                 except Exception:
                     pass
+            else:
+                sys.stdout.write(json.dumps({"srcDir": os.path.abspath(src_dir), "layoutVersion": 2, "items": [], "indexingPending": True}))
+                sys.stdout.flush()
             sys.exit(0)
 
         result_data = None

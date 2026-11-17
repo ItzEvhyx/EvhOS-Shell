@@ -150,20 +150,55 @@ Item {
         return o;
     }
 
-    function saveNow() {
-        saveTimer.stop();
+    property int layoutGeneration: 0
+    property bool transactionPaused: false
+    property var pendingLayout: null
+    property string saveError: ""
+    readonly property string widgetWriterScript: "import json, os, pathlib, sys, tempfile\np = pathlib.Path(sys.argv[1]); p.parent.mkdir(parents=True, exist_ok=True)\nif p.is_symlink(): raise ValueError(\"Widget layout may not be a symlink\")\ndata = json.loads(sys.argv[2])\nfd, temp = tempfile.mkstemp(prefix=\".layout-\", dir=p.parent)\ntry:\n    with os.fdopen(fd, \"w\") as f:\n        json.dump(data, f, ensure_ascii=False, allow_nan=False); f.write(\"\\n\"); f.flush(); os.fsync(f.fileno())\n    os.replace(temp, p)\nfinally:\n    if os.path.exists(temp): os.unlink(temp)\n"
+
+    function parseWidgetLayout(payload) {
+        let request = JSON.parse(payload);
+        if (!request || Array.isArray(request) || !Array.isArray(request.widgets))
+            throw new Error("Expected an object containing a widgets array");
+        return request.widgets;
+    }
+
+    function exportLayout() {
         let data = [];
         for (let i = 0; i < widgetsModel.count; i++) {
             let item = widgetsModel.get(i);
-            if (item.isRemoving) continue;
-            data.push(toJson(item));
+            if (!item.isRemoving) data.push(toJson(item));
         }
-        let jsonStr = JSON.stringify(data);
-        let b64Data = toBase64(jsonStr);
-        let targetDir = Caching.getStateDir("widgets/" + loaderRoot.safeMonitorName);
-        let targetFile = targetDir + "/layout.json";
-        let saveScript = "mkdir -p '" + targetDir + "' && printf '%s' '" + b64Data + "' | base64 -d > '" + targetFile + "'";
-        Quickshell.execDetached(["bash", "-c", saveScript]);
+        return data;
+    }
+
+    function startWrite(data) {
+        saveError = "";
+        widgetWriter.command = ["python3", "-c", widgetWriterScript,
+            Caching.getStateDir("widgets/" + safeMonitorName) + "/layout.json", JSON.stringify(data)];
+        widgetWriter.running = true;
+    }
+
+    function saveNow() {
+        saveTimer.stop();
+        let data = exportLayout();
+        if (transactionPaused || widgetWriter.running) {
+            pendingLayout = data;
+            return;
+        }
+        startWrite(data);
+    }
+
+    Process {
+        id: widgetWriter
+        onExited: function(code) {
+            loaderRoot.saveError = code === 0 ? "" : "Could not save widget layout";
+            if (!loaderRoot.transactionPaused && loaderRoot.pendingLayout !== null) {
+                let data = loaderRoot.pendingLayout;
+                loaderRoot.pendingLayout = null;
+                loaderRoot.startWrite(data);
+            }
+        }
     }
 
     Timer {
@@ -176,11 +211,14 @@ Item {
         id: loadProcess
         command: ["bash", "-c", "cat '" + Caching.getStateDir("widgets/" + loaderRoot.safeMonitorName) + "/layout.json' 2>/dev/null || echo '[]'"]
         property string output: ""
+        property int generation: 0
+        onRunningChanged: if (running) generation = loaderRoot.layoutGeneration
         stdout: SplitParser {
             splitMarker: ""
             onRead: data => loadProcess.output += data
         }
         onExited: {
+            if (loaderRoot.transactionPaused || generation !== loaderRoot.layoutGeneration) return;
             let trimmed = output.trim();
             if (trimmed !== "") {
                 try {
@@ -333,6 +371,7 @@ Item {
         }
 
         function onPositionChanged(monitor, widgetId, x, y) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -348,6 +387,7 @@ Item {
         }
 
         function onGeometryChanged(monitor, widgetId, x, y, w, h, opacity, rotation) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -367,6 +407,7 @@ Item {
         }
 
         function onOpacityChanged(monitor, widgetId, opacity) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -379,6 +420,7 @@ Item {
         }
 
         function onRotationChanged(monitor, widgetId, rotation) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -391,6 +433,7 @@ Item {
         }
 
         function onVariantChanged(monitor, widgetId, variant) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -403,6 +446,7 @@ Item {
         }
 
         function onImagePathChanged(monitor, widgetId, imagePath) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -415,6 +459,7 @@ Item {
         }
 
         function onPropertyChanged(monitor, widgetId, propName, val) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             if (WidgetRegistry.standardKeys.includes(propName)) return;
             let target = String(widgetId).trim();
@@ -431,6 +476,7 @@ Item {
         }
 
         function onWidgetAdded(monitor, widgetId, type, x, y, w, h, opacity, imagePath, rotation, variant) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -458,6 +504,7 @@ Item {
         }
 
         function onWidgetRemoved(monitor, widgetId) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -471,6 +518,7 @@ Item {
         }
 
         function onWidgetsByTypeRemoved(monitor, type) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let matched = false;
             for (let i = widgetsModel.count - 1; i >= 0; i--) {
@@ -486,12 +534,14 @@ Item {
         }
 
         function onWidgetsCleared(monitor) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             widgetsModel.clear();
             loaderRoot.saveNow();
         }
 
         function onBringToFrontRequested(monitor, widgetId) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             let target = String(widgetId).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
@@ -509,6 +559,7 @@ Item {
         }
 
         function onRedactModeChanged(monitor, active) {
+            if (Config.desktopPresetApplying) return;
             if (!loaderRoot.isTargetMonitor(monitor)) return;
             if (!active && loaderRoot.isRedacting) {
                 loaderRoot.saveNow();
@@ -519,6 +570,45 @@ Item {
 
     IpcHandler {
         target: "widgets-" + loaderRoot.safeMonitorName
+
+        function ready(): string {
+            if (loaderRoot.saveError) return loaderRoot.saveError;
+            return widgetWriter.running ? "busy" : "ok";
+        }
+        function beginTransaction(): string {
+            loaderRoot.transactionPaused = true;
+            loaderRoot.layoutGeneration++;
+            saveTimer.stop();
+            loadProcess.running = false;
+            return "ok";
+        }
+        function protocolVersion(): string { return "4"; }
+        function inspectLayout(payload: string): string {
+            try { return JSON.stringify(loaderRoot.parseWidgetLayout(payload)); }
+            catch (e) { return "Invalid widget layout: " + e; }
+        }
+        function stageLayout(payload: string): string {
+            if (!loaderRoot.transactionPaused) return "Widget transaction is not open";
+            try {
+                let items = loaderRoot.parseWidgetLayout(payload);
+                WidgetSync.applyPreset(loaderRoot.safeMonitorName, items, true);
+                return "ok";
+            } catch (e) { return "Invalid widget layout: " + e; }
+        }
+        function commitTransaction(): string {
+            loaderRoot.pendingLayout = null;
+            loaderRoot.transactionPaused = false;
+            loaderRoot.saveNow();
+            return "ok";
+        }
+        function endTransaction(): string {
+            loaderRoot.transactionPaused = false;
+            if (loaderRoot.pendingLayout !== null) {
+                loaderRoot.pendingLayout = null;
+                loaderRoot.saveNow();
+            }
+            return "ok";
+        }
 
         function setRedactMode(active: string): string {
             let flag = (active === "true" || active === "1");
@@ -535,8 +625,9 @@ Item {
         }
 
         function applyPreset(widgetsJson: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             try {
-                WidgetSync.applyPreset(loaderRoot.safeMonitorName, JSON.parse(widgetsJson), true);
+                WidgetSync.applyPreset(loaderRoot.safeMonitorName, loaderRoot.parseWidgetLayout(widgetsJson), true);
             } catch (e) {
                 return "invalid";
             }
@@ -552,6 +643,7 @@ Item {
         }
 
         function add(id: string, type: string, x: string, y: string, w: string, h: string, op: string, imgPath: string, rot: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let defSize = WidgetRegistry.defaultSize(type);
             let variant = WidgetRegistry.defaultVariant(type);
             let rotVal = (rot !== undefined && rot !== "") ? parseFloat(rot) : 0;
@@ -616,6 +708,7 @@ Item {
         }
 
         function opacity(id: string, op: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let target = String(id).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
                 let item = widgetsModel.get(i);
@@ -629,6 +722,7 @@ Item {
         }
 
         function imagePath(id: string, path: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let target = String(id).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
                 let item = widgetsModel.get(i);
@@ -642,6 +736,7 @@ Item {
         }
 
         function move(id: string, x: string, y: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let target = String(id).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
                 if (String(widgetsModel.get(i).wId).trim() === target) {
@@ -655,6 +750,7 @@ Item {
         }
 
         function resize(id: string, w: string, h: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let target = String(id).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
                 let item = widgetsModel.get(i);
@@ -669,6 +765,7 @@ Item {
         }
 
         function variant(id: string, variant: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let target = String(id).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
                 let item = widgetsModel.get(i);
@@ -682,6 +779,7 @@ Item {
         }
 
         function remove(id: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let target = String(id).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
                 let item = widgetsModel.get(i);
@@ -695,6 +793,7 @@ Item {
         }
 
         function bringToFront(id: string): string {
+            if (Config.desktopPresetApplying) return "busy";
             let target = String(id).trim();
             for (let i = 0; i < widgetsModel.count; i++) {
                 let item = widgetsModel.get(i);
@@ -712,6 +811,7 @@ Item {
         }
 
         function clear(): string {
+            if (Config.desktopPresetApplying) return "busy";
             widgetsModel.clear();
             loaderRoot.saveNow();
             return "ok";

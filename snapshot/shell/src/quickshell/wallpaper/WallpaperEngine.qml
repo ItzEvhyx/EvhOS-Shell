@@ -43,6 +43,10 @@ ShellRoot {
                 property string pathB: ""
                 property bool isVideoB: false
                 property bool playbackPaused: false
+                // local active wallpaper previews v1
+                readonly property var overviewVideoPlayer: activeLayer === 0
+                    ? (isVideoA && videoLoaderA.item ? videoLoaderA.item.overviewPlayer : null)
+                    : (isVideoB && videoLoaderB.item ? videoLoaderB.item.overviewPlayer : null)
                 property bool snapReadyA: false
                 property bool snapReadyB: false
                 property int snapRevA: 0
@@ -477,6 +481,7 @@ ShellRoot {
                     id: videoLayerCompA
                     Item {
                         anchors.fill: parent
+                        property alias overviewPlayer: playerA
                         function play() { playerA.play(); }
                         function stop() { playerA.stop(); }
 
@@ -504,6 +509,7 @@ ShellRoot {
                     id: videoLayerCompB
                     Item {
                         anchors.fill: parent
+                        property alias overviewPlayer: playerB
                         function play() { playerB.play(); }
                         function stop() { playerB.stop(); }
 

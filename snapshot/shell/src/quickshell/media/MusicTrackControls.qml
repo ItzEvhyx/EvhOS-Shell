@@ -11,109 +11,76 @@ ColumnLayout {
     Layout.fillWidth: true
     Layout.minimumWidth: 0
     Layout.alignment: Qt.AlignVCenter
-    Layout.topMargin: -root.s(14)
-    spacing: root.s(12)
+    Layout.topMargin: 0
+    spacing: root.s(4)
 
-    ColumnLayout {
-        Layout.fillWidth: true
-        Layout.minimumWidth: 0
-        z: 1
-        spacing: root.s(6)
-        opacity: root.introText
-        transform: Translate { x: root.s(25) * (1 - root.introText) }
-        
-        MarqueeText {
-            Layout.fillWidth: true
-            Layout.preferredHeight: root.s(25)
-            text: (root.targetPlayer && root.targetPlayer.trackTitle !== "") ? root.targetPlayer.trackTitle : I18n.t("music.nothing_playing")
-            color: root.dynamicTextColor
-            font.family: ThemeBackend.fontFamily
-            font.pixelSize: root.s(19)
-            font.bold: true
-            marqueeSpacing: root.s(50)
-            speed: 25
-            active: root.active
+    RowLayout {
+        Layout.alignment: Qt.AlignHCenter
+        spacing: root.s(20)
+        opacity: root.introControls
+        transform: Translate { y: root.s(18) * (1 - root.introControls) }
 
-            Behavior on color { ColorAnimation { duration: 600 } }
+        IconButton {
+            id: prevMediaBtn
+            Layout.preferredWidth: root.s(32)
+            Layout.preferredHeight: root.s(32)
+            cornerRadius: root.s(16)
+            buttonIcon: "󰒮"
+            iconFontSize: root.s(16)
+            accentColor: ThemeBackend.text
+            bgOpacity: isHoveredOrHighlighted ? 0.25 : 0.0
+            textColor: isHoveredOrHighlighted ? ThemeBackend.text : Qt.alpha(ThemeBackend.text, 0.78)
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: if (root.targetPlayer && root.targetPlayer.canGoPrevious) root.targetPlayer.previous()
         }
 
-        Text {
-            text: root.targetPlayer && root.targetPlayer.trackArtist ? I18n.t("music.by_artist", { "artist": root.targetPlayer.trackArtist }) : I18n.t("music.by_artist", { "artist": I18n.t("music.unknown_artist") })
-            color: root.dynamicTextColor
-            font.family: ThemeBackend.fontFamily
-            font.pixelSize: root.s(13.5)
-            font.bold: true
-            elide: Text.ElideRight
-            maximumLineCount: 1
-            Layout.fillWidth: true
-            Layout.preferredHeight: root.s(18)
+        IconButton {
+            id: playPauseBtn
+            Layout.preferredWidth: root.s(43)
+            Layout.preferredHeight: root.s(43)
+            cornerRadius: root.s(22)
+            buttonIcon: (root.targetPlayer && root.targetPlayer.isPlaying) ? "󰏤" : "󰐊"
+            iconFontSize: root.s(20)
+            accentColor: ThemeBackend.text
+            bgOpacity: isHoveredOrHighlighted ? 0.38 : 0.25
+            textColor: ThemeBackend.text
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: if (root.targetPlayer && root.targetPlayer.canTogglePlaying) root.targetPlayer.togglePlaying()
         }
-        RowLayout {
-            spacing: root.s(9)
-            ClickButton {
-                id: devicePill
-                Layout.preferredHeight: root.s(22)
-                cornerRadius: root.s(11)
-                horizontalPadding: root.s(10)
-                buttonText: (root.activeDeviceIcon || "󰓃") + " " + (root.activeDeviceName || I18n.t("music.speaker"))
-                textFontSize: root.s(11.5)
-                accentColor: ThemeBackend.surface0 || "#313244"
-                bgOpacity: 0.42
-                textColor: ThemeBackend.text || "#cdd6f4"
-            }
-            Dropdown {
-                id: sourceDropdown
-                visible: root.playerList.length >= 2
-                Layout.preferredHeight: root.s(22)
-                implicitHeight: root.s(22)
-                implicitWidth: root.s(140)
-                cornerRadius: root.s(11)
-                options: root.playerOptions
-                currentIndex: root.currentPlayerIndex
-                fontPixelSize: root.s(11.5)
-                iconSize: root.s(12)
-                accentColor: ThemeBackend.mauve || "#cba6f7"
-                baseColor: Qt.alpha(ThemeBackend.surface0 || "#313244", ThemeBackend.elementOpacity)
-                hoverColor: ThemeBackend.surface1 || "#45475a"
-                dropdownColor: ThemeBackend.surface0
-                borderColor: Qt.alpha(ThemeBackend.surface2 || "#585b70", 0.6)
-                textColor: ThemeBackend.text || "#cdd6f4"
-                activeTextColor: ThemeBackend.crust || "#11111b"
-                onValueChanged: (index, value) => {
-                    root.selectPlayerByIndex(index);
-                }
-            }
-            ClickButton {
-                id: sourcePill
-                visible: root.playerList.length < 2
-                Layout.preferredHeight: root.s(22)
-                cornerRadius: root.s(11)
-                horizontalPadding: root.s(10)
-                buttonText: I18n.t("music.via_source", { "source": root.targetPlayer ? (root.targetPlayer.identity || root.targetPlayer.desktopEntry || "Media") : I18n.t("music.offline") })
-                textFontSize: root.s(11.5)
-                accentColor: ThemeBackend.surface0 || "#313244"
-                bgOpacity: 0.42
-                textColor: ThemeBackend.subtext0 || "#9399b2"
-            }
+
+        IconButton {
+            id: nextMediaBtn
+            Layout.preferredWidth: root.s(32)
+            Layout.preferredHeight: root.s(32)
+            cornerRadius: root.s(16)
+            buttonIcon: "󰒭"
+            iconFontSize: root.s(16)
+            accentColor: ThemeBackend.text
+            bgOpacity: isHoveredOrHighlighted ? 0.25 : 0.0
+            textColor: isHoveredOrHighlighted ? ThemeBackend.text : Qt.alpha(ThemeBackend.text, 0.78)
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: if (root.targetPlayer && root.targetPlayer.canGoNext) root.targetPlayer.next()
         }
     }
-
     ColumnLayout {
         Layout.fillWidth: true
-        Layout.topMargin: -root.s(6)
+        Layout.topMargin: 0
         spacing: root.s(2)
         opacity: root.introControls
         transform: Translate { x: root.s(18) * (1 - root.introControls); y: root.s(9) * (1 - root.introControls) }
 
         WavySeekBar {
             id: progBar
+            objectName: "playerSeekBar"
             Layout.fillWidth: true
             Layout.preferredHeight: root.s(50)
-            Layout.topMargin: -root.s(16)
+            Layout.topMargin: -root.s(5)
             Layout.bottomMargin: -root.s(2)
             Layout.alignment: Qt.AlignVCenter
             from: 0.0
-            to: root.targetPlayer ? root.targetPlayer.length : 100.0
+            to: root.targetPlayer ? Math.max(0, root.targetPlayer.length) : 0.0
+            enabled: !!root.targetPlayer && root.targetPlayer.canSeek && to > 0
+            Binding { target: progBar; property: "value"; value: root.currentLivePosition; when: !progBar.isDragging && !progBar.seekPending; restoreMode: Binding.RestoreBindingOrValue }
             value: root.currentLivePosition
             playing: root.targetPlayer ? root.targetPlayer.isPlaying : false
             waveColor: ThemeBackend.mauve || "#cba6f7"
@@ -168,52 +135,4 @@ ColumnLayout {
         }
     }
 
-    RowLayout {
-        Layout.alignment: Qt.AlignHCenter
-        spacing: root.s(20)
-        opacity: root.introControls
-        transform: Translate { y: root.s(18) * (1 - root.introControls) }
-
-        IconButton {
-            id: prevMediaBtn
-            Layout.preferredWidth: root.s(32)
-            Layout.preferredHeight: root.s(32)
-            cornerRadius: root.s(16)
-            buttonIcon: "󰒮"
-            iconFontSize: root.s(16)
-            accentColor: ThemeBackend.text
-            bgOpacity: isHoveredOrHighlighted ? 0.25 : 0.0
-            textColor: isHoveredOrHighlighted ? ThemeBackend.text : Qt.alpha(ThemeBackend.text, 0.78)
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: if (root.targetPlayer && root.targetPlayer.canGoPrevious) root.targetPlayer.previous()
-        }
-
-        IconButton {
-            id: playPauseBtn
-            Layout.preferredWidth: root.s(43)
-            Layout.preferredHeight: root.s(43)
-            cornerRadius: root.s(22)
-            buttonIcon: (root.targetPlayer && root.targetPlayer.isPlaying) ? "󰏤" : "󰐊"
-            iconFontSize: root.s(20)
-            accentColor: ThemeBackend.text
-            bgOpacity: isHoveredOrHighlighted ? 0.38 : 0.25
-            textColor: ThemeBackend.text
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: if (root.targetPlayer && root.targetPlayer.canTogglePlaying) root.targetPlayer.togglePlaying()
-        }
-
-        IconButton {
-            id: nextMediaBtn
-            Layout.preferredWidth: root.s(32)
-            Layout.preferredHeight: root.s(32)
-            cornerRadius: root.s(16)
-            buttonIcon: "󰒭"
-            iconFontSize: root.s(16)
-            accentColor: ThemeBackend.text
-            bgOpacity: isHoveredOrHighlighted ? 0.25 : 0.0
-            textColor: isHoveredOrHighlighted ? ThemeBackend.text : Qt.alpha(ThemeBackend.text, 0.78)
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: if (root.targetPlayer && root.targetPlayer.canGoNext) root.targetPlayer.next()
-        }
-    }
 }

@@ -193,7 +193,7 @@ PanelWindow {
     property real osdHeight: isVerticalLayout ? s(296) : s(58)
     property real collapsedWidth: s(58)
 
-    visible: isVisible || osdContainer.animProgress > 0.001
+    visible: !PrivacyMode.active && (isVisible || osdContainer.animProgress > 0.001)
 
     property real clampedX: {
         if (isAttached) {

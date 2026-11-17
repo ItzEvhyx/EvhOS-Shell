@@ -162,9 +162,7 @@ QtObject {
 
     function applyPreset(monitor: string, widgetsList: var, clearFirst: bool): void {
         let len = (widgetsList && widgetsList.length !== undefined) ? widgetsList.length : 0;
-        if (!widgetsList || len === 0) {
-            return;
-        }
+        if (!Array.isArray(widgetsList)) return;
         root.presetApplied(monitor, widgetsList);
     }
 

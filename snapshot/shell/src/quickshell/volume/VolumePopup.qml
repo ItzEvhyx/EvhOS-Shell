@@ -81,6 +81,7 @@ Item {
         }
     }
 
+    // Volume cards: usage dashboard styling v1
     property string activeTab: "outputs"
 
 
@@ -196,7 +197,7 @@ Item {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: window.s(20)
-            spacing: window.s(14)
+            spacing: window.s(12)
 
             RowLayout {
                 Layout.fillWidth: true
@@ -219,9 +220,11 @@ Item {
 
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: window.s(114)
-                radius: window.s(16)
-                color: Qt.alpha(ThemeBackend.surface0, 0.8)
+                Layout.preferredHeight: window.s(156)
+                radius: window.s(15)
+                color: Qt.alpha(window.tabColor, 0.065)
+                border.width: 1
+                border.color: Qt.alpha(window.tabColor, 0.15)
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: window.s(14)
@@ -230,10 +233,10 @@ Item {
                         Layout.fillWidth: true
                         spacing: window.s(10)
                         Rectangle {
-                            Layout.preferredWidth: window.s(38)
-                            Layout.preferredHeight: window.s(38)
-                            radius: window.s(12)
-                            color: Qt.alpha(window.tabColor, 0.18)
+                            Layout.preferredWidth: window.s(32)
+                            Layout.preferredHeight: window.s(32)
+                            radius: window.s(10)
+                            color: Qt.alpha(window.tabColor, 0.10)
                             Text { anchors.centerIn: parent; text: window.activeIcon; font.family: ThemeBackend.iconFont; font.pixelSize: window.s(20); color: "white" }
                         }
                         ColumnLayout {
@@ -242,6 +245,24 @@ Item {
                             Text { Layout.fillWidth: true; text: window.activeName; elide: Text.ElideRight; font.family: ThemeBackend.fontFamily; font.weight: Font.DemiBold; font.pixelSize: window.s(13); color: ThemeBackend.text }
                             Text { Layout.fillWidth: true; text: window.activeDesc; elide: Text.ElideRight; font.family: ThemeBackend.fontFamily; font.pixelSize: window.s(10); color: ThemeBackend.subtext0 }
                         }
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: window.s(7)
+                        Text {
+                            text: window.activeVol + "%"
+                            font.pixelSize: window.s(32)
+                            font.weight: Font.DemiBold
+                            color: ThemeBackend.text
+                        }
+                        Text {
+                            text: window.activeMute ? "muted" : "volume"
+                            font.pixelSize: window.s(11)
+                            color: ThemeBackend.subtext0
+                            Layout.alignment: Qt.AlignBottom
+                            Layout.bottomMargin: window.s(6)
+                        }
+                        Item { Layout.fillWidth: true }
                     }
                     RowLayout {
                         Layout.fillWidth: true
@@ -255,8 +276,8 @@ Item {
                         Draggable {
                             Layout.fillWidth: true; Layout.preferredHeight: window.s(14)
                             from: 0; to: 100; value: window.activeVol
-                            backgroundColor: ThemeBackend.surface1
-                            accentColor: window.activeMute ? ThemeBackend.surface2 : window.tabColor
+                            backgroundColor: Qt.alpha(window.tabColor, 0.15)
+                            accentColor: window.activeMute ? Qt.alpha(window.tabColor, 0.35) : window.tabColor
                             gradColor1: accentColor; gradColor2: accentColor; gradColor3: accentColor
                             cornerRadius: window.s(7); handleSize: window.s(16)
                             onMoved: (val) => {
@@ -317,7 +338,7 @@ Item {
             ListView {
                 id: contentList
                 Layout.fillWidth: true; Layout.fillHeight: true
-                clip: true; spacing: window.s(6); boundsBehavior: Flickable.StopAtBounds
+                clip: true; spacing: window.s(12); boundsBehavior: Flickable.StopAtBounds
                 model: window.activeTab === "outputs" ? Audio.outputs : (window.activeTab === "inputs" ? Audio.inputs : Audio.apps)
                 Text {
                     anchors.centerIn: parent; visible: contentList.count === 0
@@ -331,8 +352,12 @@ Item {
                     readonly property bool selected: node && (window.activeTab === "outputs" ? node.name === window.activeOutputName : (window.activeTab === "inputs" && node.name === window.activeInputName))
                     readonly property int volume: node && node.audio ? Math.round(node.audio.volume * 100) : 0
                     readonly property bool muted: node && node.audio ? node.audio.muted : false
-                    width: contentList.width; height: window.s(84); radius: window.s(12)
-                    color: deviceMouse.containsMouse ? ThemeBackend.surface1 : Qt.alpha(ThemeBackend.surface0, 0.62)
+                    width: contentList.width; height: window.s(112); radius: window.s(15)
+                    color: Qt.alpha(window.tabColor, deviceMouse.containsMouse ? 0.10 : 0.065)
+                    border.width: 1
+                    border.color: Qt.alpha(window.tabColor, device.selected ? 0.24 : 0.15)
+                    Behavior on color { ColorAnimation { duration: 150 } }
+                    Behavior on border.color { ColorAnimation { duration: 150 } }
                     MouseArea {
                         id: deviceMouse; anchors.fill: parent; hoverEnabled: true
                         cursorShape: window.activeTab === "apps" ? Qt.ArrowCursor : Qt.PointingHandCursor
@@ -343,7 +368,7 @@ Item {
                         }
                     }
                     ColumnLayout {
-                        anchors.fill: parent; anchors.margins: window.s(10); spacing: window.s(5)
+                        anchors.fill: parent; anchors.margins: window.s(14); spacing: window.s(8)
                         RowLayout {
                             Layout.fillWidth: true; spacing: window.s(9)
                             Text { text: window.activeTab === "inputs" ? "󰍬" : (window.activeTab === "apps" ? "󰎆" : "󰓃"); font.family: ThemeBackend.iconFont; font.pixelSize: window.s(17); color: "white" }
@@ -365,8 +390,8 @@ Item {
                             Draggable {
                                 Layout.fillWidth: true; Layout.preferredHeight: window.s(12)
                                 from: 0; to: 100; value: device.volume
-                                backgroundColor: ThemeBackend.surface1
-                                accentColor: device.muted ? ThemeBackend.surface2 : window.tabColor
+                                backgroundColor: Qt.alpha(window.tabColor, 0.15)
+                                accentColor: device.muted ? Qt.alpha(window.tabColor, 0.35) : window.tabColor
                                 gradColor1: accentColor; gradColor2: accentColor; gradColor3: accentColor
                                 cornerRadius: window.s(6); handleSize: window.s(14)
                                 onMoved: (val) => {
@@ -376,7 +401,7 @@ Item {
                                     Audio.setVolume(device.node, pct);
                                 }
                             }
-                            Text { Layout.preferredWidth: window.s(32); horizontalAlignment: Text.AlignRight; text: device.volume + "%"; font.family: ThemeBackend.fontFamily; font.pixelSize: window.s(10); color: ThemeBackend.subtext0 }
+                            Text { Layout.preferredWidth: window.s(58); horizontalAlignment: Text.AlignRight; text: device.volume + "%"; font.pixelSize: window.s(20); font.weight: Font.DemiBold; color: ThemeBackend.text }
                         }
                     }
                 }

@@ -8,11 +8,13 @@ import Quickshell.Io
 import "../"
 import "../reusables"
 import "faces"
+import "../desktop"
 
 Scope {
     id: root
 
     property bool isActive: false
+    onIsActiveChanged: BarGeometry.widgetEditorOpen = isActive
     property string targetMonitorName: ""
     property string targetSelectedWidgetId: ""
     readonly property var activeWidgetsModel: (redactorWindowLoader.item && redactorWindowLoader.item.activeWidgetsModel) ? redactorWindowLoader.item.activeWidgetsModel : null
@@ -38,7 +40,17 @@ Scope {
         }
     }
 
+    function flush() {
+        if (redactorWindowLoader.item && redactorWindowLoader.item.redactorMode) {
+            redactorWindowLoader.item.redactorMode.saveConfig();
+        }
+    }
+    Connections {
+        target: Config
+        function onDesktopPresetTransactionStarted() { root.close(); }
+    }
     function close() {
+        root.flush();
         if (redactorWindowLoader.item && redactorWindowLoader.item.redactorMode) {
             redactorWindowLoader.item.redactorMode.selectedId = "";
         }
@@ -61,6 +73,7 @@ Scope {
 
     IpcHandler {
         target: "redactor"
+        function flush(): string { root.flush(); return "ok"; }
 
         function activate(): void {
             root.open("", "");
@@ -143,6 +156,17 @@ Scope {
                 margins.top: 0
 
                 function s(val) { return Scaler.s(val); }
+
+                DesktopPresetSessionBar {
+                    width: Math.max(1, Math.min(redactorWindow.width - redactorWindow.s(24), redactorWindow.s(780)))
+                    x: (redactorWindow.width - width) / 2
+                    y: redactorWindow.s(12)
+                    height: implicitHeight
+                    desktop: true
+                    widgetEditor: true
+                    z: 1000000
+                    onNavigate: tab => { root.close(); DesktopPresets.openSettings(tab); }
+                }
 
                 function sendIpc(funcName, args) {
                     let cmd = ["quickshell", "-p", Caching.mainQml, "ipc", "call", "widgets-" + redactorWindow.safeMonitorName, funcName];

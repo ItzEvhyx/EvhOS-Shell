@@ -101,7 +101,7 @@ Item {
 
     property bool idleEnabled: idleSettings && idleSettings.enabled !== undefined ? idleSettings.enabled : false
     property bool manualInhibit: idleSettings && idleSettings.manualInhibit !== undefined ? idleSettings.manualInhibit : false
-    property bool isIdleSystemActive: idleEnabled && !manualInhibit
+    property bool isIdleSystemActive: idleEnabled && !manualInhibit && !PrivacyMode.active
     property bool lockOnSleep: idleSettings && idleSettings.lockOnSleep !== undefined ? idleSettings.lockOnSleep : true
     property bool isDimmed: false
     property bool isLocked: false
@@ -201,6 +201,18 @@ Item {
         return true;
     }
 
+    Connections {
+        target: PrivacyMode
+        function onActiveChanged() {
+            if (PrivacyMode.active) {
+                frameSettleTimer.stop();
+                frameSettleTimer.pendingCallback = null;
+                suspendTimer.stop();
+                idleRoot.teardownVisualStates();
+            }
+        }
+    }
+
     Timer {
         id: frameSettleTimer
         interval: 100
@@ -271,6 +283,7 @@ Item {
     }
 
     function triggerWarning(actionObj) {
+        if (PrivacyMode.active) return;
         if (!actionObj || !idleRoot.isActionPipelineValid(actionObj)) return;
         if (actionObj.warningCommand && actionObj.warningCommand.trim().length > 0) {
             idleRoot.runCmd(actionObj.warningCommand);
@@ -278,6 +291,7 @@ Item {
     }
 
     function triggerAction(actionObj) {
+        if (PrivacyMode.active) return;
         if (!actionObj || !idleRoot.isActionPipelineValid(actionObj)) return;
 
         let id = (actionObj.id || "").toLowerCase();
@@ -342,6 +356,7 @@ Item {
     }
 
     function resumeAction(actionObj) {
+        if (PrivacyMode.active) return;
         if (!actionObj) return;
 
         let id = (actionObj.id || "").toLowerCase();

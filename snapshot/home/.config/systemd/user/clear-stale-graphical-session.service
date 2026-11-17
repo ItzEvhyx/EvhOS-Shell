@@ -1,0 +1,14 @@
+[Unit]
+Description=Clear stale graphical-session if Hyprland is not running
+Documentation=man:uwsm(1)
+# Run early on user manager start; no-op if a real Hyprland session is up.
+Before=default.target
+After=basic.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/hypr/scripts/ensure-clean-graphical-session.sh
+RemainAfterExit=no
+
+[Install]
+WantedBy=default.target

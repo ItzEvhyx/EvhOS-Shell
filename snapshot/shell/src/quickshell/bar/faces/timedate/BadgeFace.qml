@@ -95,115 +95,77 @@ Item {
 
     Component {
         id: topBodyComponent
-
         Row {
-            id: badgeRow
-            spacing: widget ? widget.s(widget.isCompact ? 6 : 8.5) : 8.5
-
-            Row {
-                id: timeRow
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: widget ? widget.s(widget.isCompact ? 2 : 2.5) : 2.5
-
-                Repeater {
-                    model: badgeFaceRoot.timeStr.length
-
-                    Grid {
-                        id: charGrid
-                        property int charIndex: index
-                        property string character: badgeFaceRoot.timeStr.charAt(charIndex)
-                        property var pattern: matrixFont.getPattern(character)
-                        property int colonIndex: badgeFaceRoot.timeStr.indexOf(":")
-                        property color activeColor: character === ":"
-                            ? ThemeBackend.subtext0
-                            : (colonIndex === -1 || charIndex < colonIndex ? ThemeBackend.blue : ThemeBackend.text)
-
-                        columns: 3
-                        rows: 5
-                        spacing: badgeFaceRoot.dotSpacing
-
-                        Repeater {
-                            model: 15
-
-                            Rectangle {
-                                property int dotIndex: index
-                                property bool isLit: charGrid.pattern && charGrid.pattern[dotIndex] === 1
-
-                                width: badgeFaceRoot.dotSize
-                                height: badgeFaceRoot.dotSize
-                                radius: badgeFaceRoot.dotSize / 2
-                                color: isLit ? charGrid.activeColor : Qt.alpha(charGrid.activeColor, 0.1)
-                            }
-                        }
+            id: clockBody
+            objectName: "splitClockBody"
+            spacing: widget ? widget.s(5) : 5
+            readonly property string meridiem: {
+                let match = badgeFaceRoot.timeStr.match(/\b(AM|PM)\s*$/i);
+                return match ? match[1].toUpperCase() : "";
+            }
+            Text {
+                text: clockBody.meridiem
+                visible: text.length > 0
+                anchors.top: parent.top
+                anchors.topMargin: widget ? widget.s(3) : 3
+                color: ThemeBackend.subtext0
+                font.family: "Noto Sans"
+                font.weight: Font.Black
+                font.pixelSize: widget ? widget.s(widget.isCompact ? 7 : 8) : 8
+                renderType: Text.NativeRendering
+            }
+            Item {
+                id: splitDigits
+                objectName: "splitClockDigits"
+                implicitWidth: digitMeasure.implicitWidth
+                implicitHeight: digitMeasure.implicitHeight
+                readonly property real gap: Math.max(1, widget ? widget.s(1.1) : 1.1)
+                readonly property real splitY: Math.round(digitMeasure.baselineOffset - digitMeasure.font.pixelSize * 0.36)
+                Text {
+                    id: digitMeasure
+                    visible: false
+                    text: badgeFaceRoot.timeStr.replace(/\s*(AM|PM)\s*$/i, "")
+                    font.family: "Noto Sans"
+                    font.weight: Font.Black
+                    font.pixelSize: widget ? widget.s(widget.isCompact ? 23 : 26) : 26
+                    font.letterSpacing: widget ? -widget.s(0.6) : -0.6
+                    font.kerning: false
+                    renderType: Text.NativeRendering
+                }
+                // Two clipped halves leave a real transparent cut through the digits.
+                Item {
+                    width: parent.width
+                    height: splitDigits.splitY
+                    clip: true
+                    Text {
+                        text: digitMeasure.text
+                        font: digitMeasure.font
+                        color: ThemeBackend.text
+                        renderType: Text.NativeRendering
+                    }
+                }
+                Item {
+                    id: lowerHalf
+                    y: splitDigits.splitY + splitDigits.gap
+                    width: parent.width
+                    height: Math.max(0, parent.height-y)
+                    clip: true
+                    Text {
+                        y: -lowerHalf.y
+                        text: digitMeasure.text
+                        font: digitMeasure.font
+                        color: ThemeBackend.text
+                        renderType: Text.NativeRendering
                     }
                 }
             }
-
-            Grid {
-                id: matrixDivider
-                visible: widget ? widget.showDate : true
-                columns: 1
-                rows: 5
-                spacing: badgeFaceRoot.dotSpacing
+            Text {
+                visible: widget ? widget.showDate : false
+                text: badgeFaceRoot.dateStr
                 anchors.verticalCenter: parent.verticalCenter
-
-                Repeater {
-                    model: 5
-
-                    Rectangle {
-                        width: badgeFaceRoot.dotSize
-                        height: badgeFaceRoot.dotSize
-                        radius: badgeFaceRoot.dotSize / 2
-                        color: (index === 1 || index === 3)
-                            ? Qt.alpha(ThemeBackend.surface2, 0.8)
-                            : Qt.alpha(ThemeBackend.surface2, 0.15)
-                    }
-                }
-            }
-
-            Row {
-                id: dateRow
-                visible: widget ? widget.showDate : true
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: widget ? widget.s(widget.isCompact ? 2 : 2.5) : 2.5
-
-                Repeater {
-                    model: badgeFaceRoot.dateStr.length
-
-                    Grid {
-                        id: dateCharGrid
-                        property int charIndex: index
-                        property string character: badgeFaceRoot.dateStr.charAt(charIndex)
-                        property var pattern: matrixFont.getPattern(character)
-                        property color activeColor: {
-                            if (/[0-9]/.test(character)) {
-                                return (widget && widget.isCompact) ? Qt.lighter(ThemeBackend.peach, 1.08) : ThemeBackend.peach
-                            }
-                            if (/[\.\-\/\,]/.test(character)) {
-                                return ThemeBackend.surface2
-                            }
-                            return ThemeBackend.subtext0
-                        }
-
-                        columns: 3
-                        rows: 5
-                        spacing: badgeFaceRoot.dotSpacing
-
-                        Repeater {
-                            model: 15
-
-                            Rectangle {
-                                property int dotIndex: index
-                                property bool isLit: dateCharGrid.pattern && dateCharGrid.pattern[dotIndex] === 1
-
-                                width: badgeFaceRoot.dotSize
-                                height: badgeFaceRoot.dotSize
-                                radius: badgeFaceRoot.dotSize / 2
-                                color: isLit ? dateCharGrid.activeColor : Qt.alpha(dateCharGrid.activeColor, 0.1)
-                            }
-                        }
-                    }
-                }
+                color: ThemeBackend.subtext0
+                font.family: ThemeBackend.fontFamily
+                font.pixelSize: widget ? widget.s(10) : 10
             }
         }
     }

@@ -13,11 +13,26 @@ hl.config({
 })
 
 hl.gesture({ fingers = vars.workspaceSwipeFingers, direction = "horizontal", action = "workspace" })
-hl.gesture({ fingers = vars.gestureFingers, direction = "up", action = "special", workspace_name = "special" })
+-- Native overview swipe: respond when the gesture starts, once per swipe.
 hl.gesture({
-    fingers   = vars.gestureFingers,
+    fingers = 3,
+    direction = "up",
+    disable_inhibit = true,
+    action = {
+        start = function()
+            hl.exec_cmd("/usr/bin/qs -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call workspaceOverview openOverview")
+        end,
+    },
+})
+hl.gesture({
+    fingers = 3,
     direction = "down",
-    action    = fn.toggle("specialws"),
+    disable_inhibit = true,
+    action = {
+        start = function()
+            hl.exec_cmd("/usr/bin/qs -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call workspaceOverview closeOverview")
+        end,
+    },
 })
 hl.gesture({
     fingers   = vars.gestureFingersMore,

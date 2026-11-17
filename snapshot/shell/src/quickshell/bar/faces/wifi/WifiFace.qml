@@ -100,6 +100,13 @@ Item {
     property string wifiStatus: isPreview ? "Enabled" : "Off"
     property string wifiIcon: isPreview ? "󰤨" : "󰤮"
     property string wifiSsid: isPreview ? "Home-WiFi" : ""
+    property int wifiSignalPercent: -1
+    function signalPercent(value) {
+        if (value === undefined || value === null) return -1;
+        let strength = Number(value);
+        if (!Number.isFinite(strength)) return -1;
+        return Math.max(0, Math.min(100, Math.round(strength <= 1 ? strength * 100 : strength)));
+    }
     property bool isWifiOn: isPreview ? true : Networking.wifiEnabled
     property bool showEthernet: !isPreview && (ethStatus === "Connected" || (isDesktop && !isWifiOn))
     property bool showLayout: (!barWindow || isPreview) ? true : ((!module || module.moduleActive) && barWindow.isStartupReady && barWindow.isDataReady)
@@ -201,6 +208,7 @@ Item {
 
         if (!isWifiEnabled) {
             wifiSsid = "";
+            wifiSignalPercent = -1;
             wifiIcon = "󰤮";
             return;
         }
@@ -217,7 +225,8 @@ Item {
 
         if (connectedNet) {
             wifiSsid = connectedNet.name || connectedNet.ssid || "";
-            let sig = connectedNet.signalStrength !== undefined ? Math.round(connectedNet.signalStrength * (connectedNet.signalStrength <= 1 ? 100 : 1)) : 100;
+            let sig = signalPercent(connectedNet.signalStrength);
+            wifiSignalPercent = sig;
             if (sig >= 80) wifiIcon = "󰤨";
             else if (sig >= 60) wifiIcon = "󰤥";
             else if (sig >= 40) wifiIcon = "󰤢";
@@ -225,6 +234,7 @@ Item {
             else wifiIcon = "󰤯";
         } else {
             wifiSsid = "";
+            wifiSignalPercent = -1;
             wifiIcon = "󰤯";
         }
     }
@@ -326,7 +336,9 @@ Item {
     }
 
     property string effectiveIcon: root.showEthernet ? "󰈀" : root.wifiIcon
-    property string effectiveName: root.showEthernet ? root.ethStatus : ((root.isWifiOn ? (root.wifiSsid !== "" ? root.wifiSsid : "On") : "Off"))
+    property string effectiveName: root.showEthernet ? root.ethStatus
+        : (!root.isWifiOn ? "Off" : (root.wifiSignalPercent >= 0
+            ? root.wifiSignalPercent + "% Signal" : (root.wifiDevice && root.wifiDevice.connected ? "—% Signal" : "Disconnected")))
     readonly property bool isActive: root.showEthernet ? (root.ethStatus === "Connected") : root.isWifiOn
 
     readonly property real pillLength: pillLoader.item ? (isVertical ? pillLoader.item.height : pillLoader.item.width) : 0
@@ -385,7 +397,7 @@ Item {
         Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
 
         Item {
-            visible: root.showIcon
+            visible: true
             width: root.isVertical ? textIcon.implicitWidth : s(root.isCompact ? 18 : 20)
             height: root.isVertical ? textIcon.implicitHeight : width
 
@@ -403,7 +415,7 @@ Item {
         }
 
         Text {
-            visible: root.showName
+            visible: true
             text: root.isVertical ? (root.effectiveName.length > 6 ? (root.effectiveName.substring(0, 5) + "…") : root.effectiveName) : root.effectiveName
             font.family: ThemeBackend.fontFamily
             font.pixelSize: root.isVertical ? s(root.isCompact ? 9 : 10) : s(root.isCompact ? 11 : 12)
@@ -429,12 +441,12 @@ Item {
             property bool isActive: root.isActive
 
             height: s(root.isCompact ? 28 : 30)
-            maxWidth: s(root.isCompact ? 156 : 160)
+            maxWidth: s(root.isCompact ? 170 : 190)
             cornerRadius: Math.max(0, ThemeBackend.borderRadius - s(2))
             horizontalPadding: s(root.isCompact ? 10 : 12)
-            buttonIcon: root.showIcon ? root.effectiveIcon : ""
+            buttonIcon: root.effectiveIcon
             iconFontSize: s(root.isCompact ? 14 : 15)
-            buttonText: root.showName ? root.effectiveName : ""
+            buttonText: root.effectiveName
             textFontSize: s(root.isCompact ? 11 : 12)
             accentColor: isActive ? (root.isCompact ? Qt.lighter(ThemeBackend.blue, 1.08) : ThemeBackend.blue) : (root.isCompact ? Qt.lighter(ThemeBackend.surface0, 1.18) : ThemeBackend.surface0)
             textColor: isActive ? ThemeBackend.base : (root.isCompact ? Qt.lighter(ThemeBackend.text, 1.05) : ThemeBackend.text)
@@ -461,7 +473,7 @@ Item {
             height: (root.showIcon || root.showName) ? s(root.isCompact ? 28 : 30) : 0
             cornerRadius: Math.max(0, ThemeBackend.borderRadius - s(2))
             horizontalPadding: 0
-            buttonIcon: root.showIcon ? root.effectiveIcon : ""
+            buttonIcon: root.effectiveIcon
             iconFontSize: s(root.isCompact ? 14 : 15)
             buttonText: (!root.showIcon && root.showName) ? (root.effectiveName.length > 3 ? root.effectiveName.substring(0, 3) : root.effectiveName) : ""
             textFontSize: s(root.isCompact ? 9 : 10)

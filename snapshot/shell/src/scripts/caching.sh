@@ -20,7 +20,13 @@ export QS_SETTINGS="$HOME/.config/serpantinum/settings.json"
 qs_ensure_cache() {
     local WIDGET_NAME="$1"
     
+    # Backups are not shell modules and do not need runtime directories.
+    case "$WIDGET_NAME" in
+        *-backup-*) return 0 ;;
+    esac
     local WIDGET_UPPER="${WIDGET_NAME^^}"
+    # Environment-variable names cannot contain hyphens or other punctuation.
+    WIDGET_UPPER="${WIDGET_UPPER//[^A-Z0-9_]/_}"
     
     local WIDGET_CACHE="$QS_CACHE_DIR/$WIDGET_NAME"
     local WIDGET_STATE="$QS_STATE_DIR/$WIDGET_NAME"

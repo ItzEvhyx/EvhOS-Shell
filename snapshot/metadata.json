@@ -1,0 +1,23 @@
+{
+  "captured_at": "2026-11-17T02:57:01.788311+00:00",
+  "source_home": "/home/yhvhan",
+  "wallpaper_assets": [
+    "Pictures/Wallpapers/Pictures/wallpaper_imagepack5_13.png"
+  ],
+  "missing_wallpaper_fallbacks": {
+    "/home/yhvhan/Pictures/Wallpapers/tyler-lastovich-ddLiNMqWAOM-unsplash.jpg": "/home/yhvhan/Pictures/Wallpapers/Pictures/wallpaper_imagepack5_13.png"
+  },
+  "packages": {
+    "hyprland": "0.57.2-1.1",
+    "noctalia-qs": "0.0.12-2",
+    "qt6-base": "6.12.0-5.1",
+    "qt6-declarative": "6.12.0-4.1",
+    "qt6-multimedia": "6.12.0-1.1",
+    "python": "3.14.9-2",
+    "python-pillow": "13.0.0-1",
+    "ffmpeg": "2:9.0.2-3.1"
+  },
+  "system_asset_sources": [
+    "/usr/share/plymouth/themes/evhos"
+  ]
+}

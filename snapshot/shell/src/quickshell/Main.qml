@@ -8,6 +8,7 @@ import Quickshell.Hyprland
 import Quickshell.Bluetooth
 import Quickshell.Networking
 import "WindowRegistry.js" as Registry
+import "desktop/PanelPlacement.js" as PanelPlacement
 import "notifications" as Notifs
 
 PanelWindow {
@@ -222,7 +223,7 @@ PanelWindow {
     implicitWidth: masterWindow.screen ? masterWindow.screen.width : 0
     implicitHeight: masterWindow.screen ? masterWindow.screen.height : 0
 
-    visible: isVisible
+    visible: !PrivacyMode.active && isVisible
 
     mask: Region {
         item: masterWindow.isCurrentDraggable ? maskContent : topBarHole
@@ -263,7 +264,10 @@ PanelWindow {
         return false;
     }
 
-    readonly property bool isBarEffectivelyHidden: barAutohide || isFullscreenActive
+    // Bar popups are opened from a revealed bar, even when auto-hide or
+    // fullscreen is active, so leave room for it and keep it clickable.
+    readonly property bool isBarPopupOpen: ["volume", "network", "music", "calendar"].includes(currentActive)
+    readonly property bool isBarEffectivelyHidden: !isBarPopupOpen && (barAutohide || isFullscreenActive)
     readonly property bool screenReady: masterWindow.width >= 100 && masterWindow.height >= 100
     readonly property bool isCurrentDraggable: {
         let t = getLayout(masterWindow.currentActive);
@@ -280,60 +284,13 @@ PanelWindow {
 
     Item {
         id: topBarHole
-
-        property real thicknessRatio: {
-            let h = (masterWindow.rawBarSettings && masterWindow.rawBarSettings.height !== undefined) ? Number(masterWindow.rawBarSettings.height) : 40;
-            if (isNaN(h)) h = 40;
-            return Math.max(28, Math.min(48, h)) / 40;
-        }
-        property int barThickness: Math.round(48 * thicknessRatio)
-        property string bp: masterWindow.barPosition
-        property bool activeBar: !masterWindow.isBarEffectivelyHidden
-
-        property bool overlapTopLeft: masterWindow.currentActive !== "hidden" && masterWindow._animX < 10 && masterWindow._animY < barThickness
-        property bool overlapTopRight: masterWindow.currentActive !== "hidden" && (masterWindow._animX + masterWindow._animW) > (masterWindow.width - 10) && masterWindow._animY < barThickness
-        property bool overlapBottomLeft: masterWindow.currentActive !== "hidden" && masterWindow._animX < 10 && (masterWindow._animY + masterWindow._animH) > (masterWindow.height - barThickness)
-        property bool overlapBottomRight: masterWindow.currentActive !== "hidden" && (masterWindow._animX + masterWindow._animW) > (masterWindow.width - 10) && (masterWindow._animY + masterWindow._animH) > (masterWindow.height - barThickness)
-
-        x: {
-            if (!activeBar) return 0;
-            if (bp === "left") return 0;
-            if (bp === "right") return masterWindow.width - barThickness;
-            if (overlapTopLeft && bp === "top") return masterWindow._animW;
-            if (overlapBottomLeft && bp === "bottom") return masterWindow._animW;
-            return 0;
-        }
-
-        y: {
-            if (!activeBar) return 0;
-            if (bp === "top") return 0;
-            if (bp === "bottom") return masterWindow.height - barThickness;
-            if (overlapTopLeft && bp === "left") return masterWindow._animH;
-            if (overlapTopRight && bp === "right") return masterWindow._animH;
-            return 0;
-        }
-
-        width: {
-            if (!activeBar) return 0;
-            if (bp === "left" || bp === "right") return barThickness;
-            let w = masterWindow.width;
-            if (overlapTopLeft && bp === "top") w -= masterWindow._animW;
-            if (overlapTopRight && bp === "top") w -= masterWindow._animW;
-            if (overlapBottomLeft && bp === "bottom") w -= masterWindow._animW;
-            if (overlapBottomRight && bp === "bottom") w -= masterWindow._animW;
-            return Math.max(0, w);
-        }
-
-        height: {
-            if (!activeBar) return 0;
-            if (bp === "top" || bp === "bottom") return barThickness;
-            let h = masterWindow.height;
-            if (overlapTopLeft && bp === "left") h -= masterWindow._animH;
-            if (overlapBottomLeft && bp === "left") h -= masterWindow._animH;
-            if (overlapTopRight && bp === "right") h -= masterWindow._animH;
-            if (overlapBottomRight && bp === "right") h -= masterWindow._animH;
-            return Math.max(0, h);
-        }
+        readonly property var bar: masterWindow.popupBarRectangle()
+        readonly property var published: BarGeometry.bars[masterWindow.screen ? masterWindow.screen.name : ""]
+        readonly property bool activeBar: published ? (published.revealed || masterWindow.isBarPopupOpen) : !masterWindow.isBarEffectivelyHidden
+        x: activeBar ? bar.x : 0
+        y: activeBar ? bar.y : 0
+        width: activeBar ? bar.width : 0
+        height: activeBar ? bar.height : 0
     }
 
     MouseArea {
@@ -422,11 +379,17 @@ PanelWindow {
     property string targetActive: "hidden"
     property string currentActive: "hidden"
 
+    function syncPopupGeometry() {
+        BarGeometry.activePopup = currentActive;
+        BarGeometry.popupScreen = screen ? screen.name : "";
+    }
     onCurrentActiveChanged: {
+        syncPopupGeometry();
         reportWidgetState();
     }
 
     onScreenChanged: {
+        syncPopupGeometry();
         applyConfigSettings();
         if (currentActive !== "hidden") {
             reportWidgetState();
@@ -484,6 +447,38 @@ PanelWindow {
         function onSettingsLoaded() {
             masterWindow.applyConfigSettings();
         }
+        function onRawSettingsChanged() {
+            masterWindow.applyConfigSettings();
+        }
+        function onDesktopPresetTransactionStarted() {
+            masterWindow.clearPopupAnchors();
+            if (BarGeometry.barPopups.includes(masterWindow.currentActive)) masterWindow.switchWidget("hidden", "");
+        }
+    }
+
+    function clearPopupAnchors() {
+        OsdController.volumePanelAnchor = null;
+        OsdController.networkPanelAnchor = null;
+        OsdController.mediaPanelAnchor = null;
+    }
+    readonly property string barGeometrySignature: JSON.stringify([
+        rawBarSettings.position, rawBarSettings.width, rawBarSettings.height, rawBarSettings.style, globalUiScale
+    ])
+    onBarGeometrySignatureChanged: {
+        clearPopupAnchors();
+        if (BarGeometry.barPopups.includes(currentActive)) switchWidget("hidden", "");
+    }
+    function popupBarRectangle() {
+        let name = screen ? screen.name : "";
+        let actual = BarGeometry.bars[name];
+        if (actual && actual.position === barPosition) return actual;
+        let scale = globalUiScale || 1;
+        let thickness = Math.round(Math.max(28, Math.min(48, Number(rawBarSettings.height) || 40)) * scale);
+        return { position: barPosition,
+            x: barPosition === "right" ? width - thickness : 0,
+            y: barPosition === "bottom" ? height - thickness : 0,
+            width: (barPosition === "left" || barPosition === "right") ? thickness : width,
+            height: (barPosition === "top" || barPosition === "bottom") ? thickness : height };
     }
 
     function getLayout(name) {
@@ -515,14 +510,21 @@ PanelWindow {
             result.rx = Math.round(Math.max(minX, Math.min(maxX - result.w, networkAnchor.centerX - result.w / 2)));
         }
 
-        // Align the music panel with the bar media control.
-        let mediaAnchor = OsdController.mediaPanelAnchor;
-        if (name === "music" && (bp === "top" || bp === "bottom") && mediaAnchor
-                && mediaAnchor.screen === masterWindow.screen) {
-            let minX = Math.max(0, mediaAnchor.minX);
-            let maxX = Math.min(scrW, mediaAnchor.maxX);
-            if (maxX - minX < result.w) { minX = 0; maxX = scrW; }
-            result.rx = Math.round(Math.max(minX, Math.min(maxX - result.w, mediaAnchor.centerX - result.w / 2)));
+        // Match the wide weather/calendar panel, centered beyond the topbar.
+        if (name === "music") {
+            let bar = popupBarRectangle();
+            let scale = masterWindow.globalUiScale || 1;
+            if (bp === "top" || bp === "bottom") {
+                result.w = Math.min(Math.round(1360 * scale), scrW - Math.round(12 * scale));
+                result.rx = Math.round((scrW - result.w) / 2);
+            } else {
+                result.w = Math.min(Math.round(1040 * scale), scrW - bar.width - Math.round(20 * scale));
+            }
+            result.h = Math.round(460 * scale);
+        }
+
+        if (["volume", "network", "music", "calendar"].includes(name)) {
+            return PanelPlacement.place(result, popupBarRectangle(), scrW, scrH, masterWindow.globalUiScale || 1);
         }
 
         let scale = masterWindow.globalUiScale || 1.0;
@@ -584,6 +586,11 @@ PanelWindow {
         }
 
         let x = (tw !== t.w) ? recenterX(t, tw) : t.rx;
+        if (["volume", "network", "music", "calendar"].includes(currentActive)) {
+            let placed = PanelPlacement.place({w: tw, h: th, rx: x, ry: t.ry}, popupBarRectangle(),
+                masterWindow.width, masterWindow.height, globalUiScale || 1);
+            return { x: placed.rx, y: placed.ry, w: placed.w, h: placed.h };
+        }
         return { x: x, y: t.ry, w: tw, h: th };
     }
 

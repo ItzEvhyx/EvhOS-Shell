@@ -31,6 +31,13 @@ The login preview uses test-mode session information; available sessions on a re
 | Component | Included in the snapshot |
 | :--- | :--- |
 | **Desktop shell** | A customized Quickshell interface, with a floating top bar, dock, launcher, and pop-up panels. |
+| **Workspace overview** | Rounded workspace cards with app icons, an extra empty workspace, live compositor blur, mouse/arrow-key selection, and Enter to switch. Super+W or three fingers up opens it; three fingers down closes it. Horizontal workspace gestures stay available. |
+| **Privacy mode** | A black screen overlay while the laptop and agents keep running, available in the notification menu in place of airplane mode. |
+| **Project and file search** | Search project folders in the launcher, choose an installed editor with the mouse or arrow keys, and open the folder there. Ordinary files open with their default application. |
+| **Wallpaper picker** | Larger rounded carousel with sliding/fading previews, cached thumbnails, live video wallpapers and automatic discovery of new, renamed or removed media. |
+| **Media player** | Custom cover/vinyl layouts, waveform controls and a saved artwork mode. |
+| **Calendar and audio** | ASCII weather/calendar panel, balanced notch, matching volume cards and a 12-hour clock. |
+| **Boot animation** | EvhOs dotted Plymouth animation; see the optional boot setup in the installation guide. |
 | **Controls** | Notifications, media, audio, networking, power controls, clipboard and quick actions. Some integrations require optional dependencies. |
 | **Appearance** | A monochrome theme, wallpapers, fonts, icons, and the EvhOS avatar and branding. |
 | **Lock screen** | A customizable layout with clock, media and other widgets. |
@@ -47,7 +54,7 @@ The login preview uses test-mode session information; available sessions on a re
 
 - Install and verify a working **Hyprland session**, with a way to return to a TTY or another desktop if needed.
 - Install **Git**, authenticate with the GitHub account that can access this private repository, and clone it.
-- Check versions. The snapshot was captured with Hyprland **0.57.0**, Qt **6.12.0**, and the **noctalia-qs 0.0.12** Quickshell fork. The Hyprland configuration uses its Lua API; compatibility with other versions or Quickshell builds is not guaranteed.
+- Check versions. The snapshot was captured with Hyprland **0.57.2**, Qt **6.12.0**, and the **noctalia-qs 0.0.12** Quickshell fork. The Hyprland configuration uses its Lua API; compatibility with other versions or Quickshell builds is not guaranteed.
 - Review the monitor name, app shortcuts, fonts, and hardware-specific paths before logging out. The saved layout targets `eDP-1`.
 
 ```sh
@@ -111,17 +118,38 @@ For distro details, service behavior, and SDDM recovery, see the [installation g
 | `snapshot/home/.config/serpantinum/` | Shell settings and EvhOS branding assets. |
 | `snapshot/home/.local/state/serpantinum/` | Selected theme, widget, and lock-screen layout state. |
 | `snapshot/system/sddm-theme/` | Torii SDDM greeter and its assets. |
+| `snapshot/system/plymouth-theme/` | EvhOs Plymouth script and all animation frames. |
 | `install.sh` / `restore.py` | Dependency setup and backup-aware home restoration. |
 
-The included `serp-customizations.timer` periodically reapplies local patches and can overwrite later edits to its target files. Review it before enabling or changing the shell. The repository is a **snapshot**: changes made on your desktop are not uploaded automatically and must be copied back, committed, and pushed.
+The included `serp-customizations.timer` periodically reapplies local patches and can overwrite later edits to its target files. Review it before enabling or changing the shell. The repository is a **snapshot**: changes made on your desktop are not uploaded automatically. Use the capture and verification workflow below before committing and pushing.
 
 ## Desktop presets
 
 Open **Settings → Theme → Desktop presets** to save the current desktop or apply a saved preset. You can also use `serpantinum desktop-preset save "My desktop"` to capture the current theme, topbar, dock (including pinned apps), wallpaper paths, and per-monitor widget layouts. Create as many named presets as you need, list them with `serpantinum desktop-preset list`, and switch with `serpantinum desktop-preset apply "My desktop"`. Names use letters, numbers, spaces, hyphens, and underscores. Saving never overwrites an existing preset.
 
-Presets are stored in `~/.local/state/serpantinum/desktop-presets/`. Wallpaper files are referenced by path, not copied; keep them available and use the same monitor names when switching. Layouts for monitors absent from a preset are left alone. Applying validates the preset and wallpaper files first, backs up affected settings and widget files under `~/.local/state/serpantinum/desktop-preset-backups/`, and reloads widgets and wallpapers through the running shell. The backup includes `previous-desktop.json` and a manifest mapping numbered `.bak` files to their original paths. If applying fails, the tool attempts to restore the files and previous wallpapers. For manual recovery, close the shell and copy the numbered files back according to the manifest, then restart the shell. The saved desktop JSON can also be copied into the presets directory under a new name and applied normally.
+Presets are stored in `~/.local/state/serpantinum/desktop-presets/`. Wallpaper files are referenced by path; keep them available and use the same monitor names when switching. Applying validates media first and keeps a recoverable `previous-desktop.json` under `~/.local/state/serpantinum/desktop-preset-backups/`. A failed apply attempts to restore the previous desktop. `serpantinum desktop-preset undo` restores the desktop from before the last successful switch.
 
-`--offline` on `apply` is intended for testing or recovery while the shell is stopped; it writes settings and widget files but does not switch the wallpaper. Shell-specific `QS_SETTINGS`, `QS_STATE_DIR`, and `QS_CACHE_DIR` overrides are respected.
+The settings panel supports editing a saved preset or creating a new one, then **Update**, **Save as new**, or **Discard**. CLI equivalents include `begin "My desktop"`, `update`, `save "New name"`, and `discard`. Rename, duplicate and delete actions are also supported; deletion retains a recovery copy. Completed actions and failures produce notifications. `--offline --no-notify` is intended for testing/recovery with the shell stopped; it does not switch the live wallpaper. `QS_SETTINGS`, `QS_STATE_DIR`, and `QS_CACHE_DIR` overrides are respected.
+
+## Wallpaper folders
+
+Put still images in `~/Pictures/Wallpapers/Pictures/` and videos in `~/Pictures/Wallpapers/Videos/`. The picker watches both folders while open and rescans on opening. New media is indexed after copying settles; replaced video files regenerate their posters. Video playback requires FFmpeg for posters and Qt Multimedia with codecs for the chosen format. Thumbnail generation requires Python Pillow; default file opening uses `xdg-open`.
+
+The checkpoint bundles referenced wallpapers and existing seed images, rather than the full personal media collection. Saved presets that reference a deleted wallpaper use the bundled active wallpaper as a fallback in the captured copies. These substitutions, capture time and exact host package versions are recorded in [`snapshot/metadata.json`](snapshot/metadata.json). Live preset files are not changed by capture.
+
+## Capturing and checking changes
+
+The November 17, 2026 checkpoint includes the current shell, gestures, workspace focus handoff, launcher, privacy mode, wallpaper discovery, calendar/weather, media player, saved artwork mode, volume cards, 12-hour clock, boot animation and saved desktop layouts. Its [`snapshot/manifest.json`](snapshot/manifest.json) records file hashes, Git permission modes and symlink targets. Restoration verifies the manifest and bundled media references before writing files.
+
+```sh
+python3 tools/capture-live.py          # preview allowlisted live files
+python3 tools/capture-live.py --apply  # refresh the repository snapshot
+python3 tools/run-checks.py
+```
+
+Optional system appearance assets listed in `tools/capture-spec.json` are captured when installed; home restoration does not write system directories. Capture discovers new source files in managed shell directories and new saved presets, excludes runtime histories/backups and scans for credential-like content. Review `git diff` before committing, including licensing for new assets. It only captures allowlisted home configuration plus referenced wallpapers; add deliberately chosen home files to `tools/capture-spec.json` when needed. For reviewed edits made directly inside `snapshot/`, regenerate the manifest with `python3 tools/check-snapshot.py --update`, then run the checks.
+
+Install Pillow, FFmpeg and Lua 5.4 for the full portable suite. Checks cover snapshot integrity, media references, new-media discovery, refreshed video posters, project/file search, workspace focus handoff against compositor fixtures, preset failure recovery, mocked installers and a two-pass restore with backups in a temporary home. GitHub Actions runs the same suite on pushes and pull requests. These checks do not emulate real touchpad input, compositor rendering or a fresh distro installation.
 
 ## Manual restoration
 
@@ -132,7 +160,7 @@ python3 restore.py          # preview
 python3 restore.py --apply  # restore with backups
 ```
 
-The restore rewrites the original home path in UTF-8 configuration files and saves replaced files under `~/.local/state/evhos-backups/`. It does not remove unrelated files or restart the session. You can test it in a disposable directory with `python3 restore.py --home /tmp/evhos-test --apply`.
+The restore rewrites the captured home path in UTF-8 configuration files and symlink targets and saves replaced files under `~/.local/state/evhos-backups/`. It does not remove unrelated files or restart the session. You can test it in a disposable directory with `python3 restore.py --home /tmp/evhos-test --apply`.
 
 ## Recovery
 
@@ -143,6 +171,17 @@ sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-theme"
 ```
 
 Preview mode checks appearance; it does not prove a real login will succeed.
+
+A Git commit preserves this checkpoint independently of later edits. To inspect a previous version without changing your running desktop:
+
+```sh
+git worktree add ../EvhOS-review <commit-sha>
+cd ../EvhOS-review
+python3 tools/run-checks.py
+python3 restore.py
+```
+
+Review the preview before using `--apply`; restoring an older commit overwrites captured files with backups. Keep the separate `~/Pictures/Wallpapers/` collection backed up as well.
 
 ## Attribution and assets
 

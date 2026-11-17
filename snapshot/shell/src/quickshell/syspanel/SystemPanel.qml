@@ -111,8 +111,6 @@ Item {
     property bool isDraggingBri: false
     property bool usesDdcBrightness: false
 
-    property bool btStateBeforeAirplane: false
-    property bool wifiStateBeforeAirplane: true
 
     property bool canHibernate: false
 

@@ -81,3 +81,20 @@ CodexUsageDashboard 1.0 CodexUsageDashboard.qml
 CodexActionButton 1.0 CodexActionButton.qml
 
 singleton PanelActions 1.0 singletons/widgetcontrols/PanelActions.qml
+
+singleton DesktopPresets 1.0 singletons/system/DesktopPresets.qml
+singleton PrivacyMode 1.0 singletons/system/PrivacyMode.qml
+PrivacyOverlay 1.0 privacy/PrivacyOverlay.qml
+singleton BarGeometry 1.0 singletons/widgetcontrols/BarGeometry.qml
+ProjectEditorPicker 1.0 launcher/ProjectEditorPicker.qml
+singleton WorkspaceOverview 1.0 singletons/system/WorkspaceOverview.qml
+WorkspaceOverviewWindow 1.0 overview/WorkspaceOverviewWindow.qml
+WorkspaceGrid 1.0 overview/WorkspaceGrid.qml
+WorkspaceCard 1.0 overview/WorkspaceCard.qml
+
+AsciiWeatherCard 1.0 calendar/AsciiWeatherCard.qml
+
+AsciiWeatherArt 1.0 calendar/AsciiWeatherArt.qml
+
+WeatherMatrixText 1.0 calendar/WeatherMatrixText.qml
+WorkspaceWallpaperSource 1.0 overview/WorkspaceWallpaperSource.qml

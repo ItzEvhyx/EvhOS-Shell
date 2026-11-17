@@ -11,8 +11,8 @@ Item {
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     width: parent.width
-    x: root.bottomSectionSwitch.currentIndex === 2 ? 0 : parent.width + root.s(24)
-    opacity: root.bottomSectionSwitch.currentIndex === 2 ? 1.0 : 0.0
+    x: 0
+    opacity: 1.0
     visible: opacity > 0.0
     clip: true
 

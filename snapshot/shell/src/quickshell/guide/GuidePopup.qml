@@ -8,6 +8,7 @@ import Quickshell.Io
 import "../"
 import "../reusables"
 import "../reusables/buttons"
+import "../desktop"
 
 Item {
     id: root
@@ -1175,7 +1176,18 @@ Item {
                 popup: root
                 x: I18n.rtl ? 0 : sidebar.width
                 width: Math.max(0, parent.width - sidebar.width)
-                height: parent.height
+                y: presetSession.visible ? presetSession.height : 0
+                height: Math.max(0, parent.height - y)
+                enabled: !DesktopPresets.busy
+            }
+            DesktopPresetSessionBar {
+                id: presetSession
+                x: contentArea.x
+                width: contentArea.width
+                height: implicitHeight
+                z: 20
+                onNavigate: tab => root.gotoTab(tab)
+                onArrange: { DesktopPresets.arrangeWidgets(); root.closePopup(); }
             }
         }
     }

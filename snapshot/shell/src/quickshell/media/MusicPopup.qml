@@ -4,14 +4,13 @@ import QtQuick.Layouts
 import QtQuick.Effects
 import "../"
 import "../reusables"
+import "../reusables/media"
 
 MusicEqualizerState {
     id: popupRoot
     visible: false
     focus: true
 
-    property alias maskRectOuter: borderLayer.maskRectOuter
-    property alias chargeAnim: borderLayer.chargeAnim
     property alias bottomSectionSwitch: bottomHeader.bottomSectionSwitch
     property alias balanceSlider: audioView.balanceSlider
     property alias toAudioAnim: toAudioAnim
@@ -23,7 +22,6 @@ MusicEqualizerState {
 
     function startExit(onFinished) {
         introAnim.stop();
-        chargeAnim.stop();
         exitCallback = onFinished;
         exitAnim.restart();
     }
@@ -38,16 +36,15 @@ MusicEqualizerState {
         introEqHeader = 0;
         introEqSliders = 0;
         introPresets = 0;
-        maskRectOuter.drawProgress = 0;
         introAnim.restart();
-        chargeAnim.restart();
+        // The player uses quiet dotted edges instead of the charging frame.
         if (bottomSectionSwitch.currentIndex === 1) playAudioIntro();
     }
 
     property bool lyricsSubscribed: false
 
     function updateLyricsSubscription() {
-        let shouldSub = popupRoot.active && (bottomSectionSwitch.currentIndex === 2);
+        let shouldSub = popupRoot.active;
         if (shouldSub && !lyricsSubscribed) {
             lyricsSubscribed = true;
             Lyrics.customPlayer = popupRoot.targetPlayer;
@@ -65,7 +62,8 @@ MusicEqualizerState {
         sequence: "Tab"
         enabled: popupRoot.active
         onActivated: {
-            bottomSectionSwitch.currentIndex = (bottomSectionSwitch.currentIndex + 1) % 4;
+            let tabs = [0, 1, 3];
+            bottomSectionSwitch.currentIndex = tabs[(tabs.indexOf(bottomSectionSwitch.currentIndex) + 1) % tabs.length];
             popupRoot.updateLyricsSubscription();
         }
     }
@@ -74,7 +72,8 @@ MusicEqualizerState {
         sequence: "Backtab"
         enabled: popupRoot.active
         onActivated: {
-            bottomSectionSwitch.currentIndex = (bottomSectionSwitch.currentIndex + 3) % 4;
+            let tabs = [0, 1, 3];
+            bottomSectionSwitch.currentIndex = tabs[(tabs.indexOf(bottomSectionSwitch.currentIndex) + tabs.length - 1) % tabs.length];
             popupRoot.updateLyricsSubscription();
         }
     }
@@ -115,6 +114,7 @@ MusicEqualizerState {
         unregisterCava();
         if (lyricsSubscribed) {
             lyricsSubscribed = false;
+            if (Lyrics.customPlayer === popupRoot.targetPlayer) Lyrics.customPlayer = null;
             Lyrics.unsubscribe();
         }
     }
@@ -375,110 +375,119 @@ MusicEqualizerState {
     Item {
         id: mainWrapper
         anchors.fill: parent
-        
-        scale: 0.92 + (0.08 * popupRoot.introMain)
+        scale: 0.98 + (0.02 * popupRoot.introMain)
         opacity: popupRoot.introMain
-        transform: Translate { y: popupRoot.s(12) * (1 - popupRoot.introMain) }
-
-        MusicBorder {
-            id: borderLayer
-            root: popupRoot
-        }
+        transform: Translate { y: popupRoot.s(8) * (1 - popupRoot.introMain) }
 
         Rectangle {
             id: innerBg
             anchors.fill: parent
-            anchors.margins: ThemeBackend.liquidGlass ? 0 : popupRoot.s(3)
-            color: Qt.alpha(ThemeBackend.base, 0.78) // local translucent widget
+            color: Qt.alpha(ThemeBackend.base, 0.78)
             radius: ThemeBackend.borderRadius
-
-            WallpaperBlur {
-                z: -1
-                anchors.fill: parent
-                radius: parent.radius
-            }
+            WallpaperBlur { z: -1; anchors.fill: parent; radius: parent.radius }
 
             Rectangle {
                 id: innerBgMask
                 anchors.fill: parent
-                radius: ThemeBackend.borderRadius
+                radius: innerBg.radius
                 visible: false
-                layer.enabled: true 
-            }
-
-            Item {
-                id: bgEffectsLayer
-                anchors.fill: parent
-                
                 layer.enabled: true
-                layer.effect: MultiEffect {
-                    maskEnabled: true
-                    maskSource: innerBgMask
+            }
+            Item {
+                anchors.fill: parent
+                layer.enabled: true
+                layer.effect: MultiEffect { maskEnabled: true; maskSource: innerBgMask }
+                MusicWaveform {
+                    anchors.fill: parent
+                    anchors.margins: popupRoot.s(12)
+                    active: popupRoot.active && popupRoot.cavaRegistered
+                    levels: popupRoot.rawBarLevels
+                    ink: ThemeBackend.text
+                    opacity: 0.24
                 }
-
-                // The selected desktop theme supplies the player background.
+                Canvas {
+                    id: dottedEdges
+                    anchors.fill: parent
+                    property color dotColor: ThemeBackend.text
+                    onDotColorChanged: requestPaint()
+                    onWidthChanged: requestPaint()
+                    onHeightChanged: requestPaint()
+                    onPaint: {
+                        let ctx = getContext("2d");
+                        ctx.clearRect(0, 0, width, height);
+                        let step = popupRoot.s(7);
+                        let extent = popupRoot.s(105);
+                        for (let x = step; x < width; x += step) {
+                            for (let y = step; y < height; y += step) {
+                                let dx = Math.min(x, width - x);
+                                let dy = Math.min(y, height - y);
+                                // Soft corner fields: no opaque outline around the panel.
+                                let fade = Math.max(0, 1 - Math.hypot(dx, dy) / extent);
+                                if (fade <= 0) continue;
+                                ctx.fillStyle = Qt.alpha(dotColor, fade * 0.26);
+                                ctx.beginPath();
+                                ctx.arc(x, y, popupRoot.s(0.85), 0, Math.PI * 2);
+                                ctx.fill();
+                            }
+                        }
+                    }
+                }
             }
 
-            ColumnLayout {
+            // Preserve the three-column layout on unusually narrow topbars.
+            Flickable {
+                id: contentViewport
                 anchors.fill: parent
-                anchors.margins: popupRoot.s(18)
-                spacing: 0
-
+                anchors.margins: popupRoot.s(22)
+                contentWidth: Math.max(width, popupRoot.s(900))
+                contentHeight: height
+                flickableDirection: Flickable.HorizontalFlick
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
                 RowLayout {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: popupRoot.s(224)
-                    spacing: popupRoot.s(16)
+                    width: contentViewport.contentWidth
+                    height: contentViewport.height
+                    spacing: popupRoot.s(24)
 
-                    MusicCover {
-                        root: popupRoot
+                    ColumnLayout {
+                        Layout.preferredWidth: popupRoot.s(226)
+                        Layout.minimumWidth: popupRoot.s(226)
+                        Layout.fillHeight: true
+                        spacing: popupRoot.s(8)
+                        MusicCover { root: popupRoot }
+                        Item { Layout.fillHeight: true }
+                        MusicTrackControls { root: popupRoot }
                     }
 
-                    MusicTrackControls {
-                        root: popupRoot
-                    }
-                }
-
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: popupRoot.s(2)
-                    Layout.topMargin: popupRoot.s(16)
-                    Layout.bottomMargin: popupRoot.s(16)
-                    color: "#1AFFFFFF"
-                    radius: popupRoot.s(1)
-
-                    opacity: popupRoot.introSeparator
-                    transform: Translate { y: popupRoot.s(12) * (1 - popupRoot.introSeparator) }
-                }
-
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: popupRoot.s(12)
-
-                    MusicBottomHeader {
-                        id: bottomHeader
-                        root: popupRoot
-                    }
-
-                    Item {
-                        id: bottomViewsContainer
+                    ColumnLayout {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: popupRoot.s(260)
-
-                        MusicEqView {
-                            root: popupRoot
+                        Layout.minimumWidth: popupRoot.s(235)
+                        Layout.preferredWidth: contentViewport.contentWidth * 0.32
+                        Layout.fillHeight: true
+                        spacing: popupRoot.s(14)
+                        MusicTrackInfo { root: popupRoot }
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            opacity: popupRoot.introText
+                            MusicLyricsView { root: popupRoot }
                         }
 
-                        MusicAudioView {
-                            id: audioView
-                            root: popupRoot
-                        }
+                    }
 
-                        MusicLyricsView {
-                            root: popupRoot
-                        }
-
-                        MusicQueueView {
-                            root: popupRoot
+                    ColumnLayout {
+                        Layout.preferredWidth: Math.max(popupRoot.s(360), contentViewport.contentWidth * 0.40)
+                        Layout.minimumWidth: popupRoot.s(360)
+                        Layout.fillHeight: true
+                        spacing: popupRoot.s(8)
+                        MusicBottomHeader { id: bottomHeader; root: popupRoot }
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            clip: true
+                            MusicEqView { root: popupRoot }
+                            MusicAudioView { id: audioView; root: popupRoot }
+                            MusicQueueView { root: popupRoot }
                         }
                     }
                 }

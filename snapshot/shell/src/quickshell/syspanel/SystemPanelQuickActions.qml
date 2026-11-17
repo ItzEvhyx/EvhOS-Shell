@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -346,26 +347,17 @@ Item {
         }
 
         QuickActionBtn {
-            iconText: "󰀝"
-            activeColor: ThemeBackend.red
-            isActive: !view.panel.wifiRadioEnabled && !view.panel.btRadioEnabled
+            id: privacyBtn
+            iconText: "\uf070" // eye-slash
+            activeColor: ThemeBackend.mauve
+            isActive: PrivacyMode.active
+            ToolTip.visible: isHovered && view.panel.visible
+            ToolTip.text: "Privacy mode · Escape or double-click to reveal"
             onLeftClicked: {
                 Sounds.playSfx("system/quick_click.wav");
-                let enableAirplane = !isActive;
-                if (enableAirplane) {
-                    view.panel.btStateBeforeAirplane = view.panel.btRadioEnabled;
-                    view.panel.wifiStateBeforeAirplane = view.panel.wifiRadioEnabled;
-                    Networking.wifiEnabled = false;
-                    if (Bluetooth.defaultAdapter) Bluetooth.defaultAdapter.enabled = false;
-                } else {
-                    let restoreWifi = view.panel.wifiStateBeforeAirplane;
-                    let restoreBt = view.panel.btStateBeforeAirplane;
-                    if (!restoreWifi && !restoreBt) {
-                        restoreWifi = true;
-                    }
-                    Networking.wifiEnabled = restoreWifi;
-                    if (Bluetooth.defaultAdapter) Bluetooth.defaultAdapter.enabled = restoreBt;
-                }
+                view.panel.expandedQuickControl = "";
+                view.panel.closeAnim.start();
+                PrivacyMode.activate();
             }
         }
     }

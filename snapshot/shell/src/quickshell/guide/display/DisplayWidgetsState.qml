@@ -331,10 +331,11 @@ GuideTab {
         m[monName] = formattedList;
         displayWidgetsRoot.monitorWidgetsMap = m;
 
-        if (formattedList.length > 0) {
-            Quickshell.execDetached(["bash", "-c",
-                "mkdir -p \"$1\" && printf '%s' \"$2\" > \"$1/layout.json\" && quickshell -p \"$3\" ipc call \"widgets-$4\" reload",
-                "_", Caching.getStateDir("widgets/" + safeM), JSON.stringify(formattedList), Caching.mainQml, safeM]);
+        if (Caching.isStandalone) {
+            Quickshell.execDetached(["quickshell", "-p", Caching.mainQml, "ipc", "call",
+                "widgets-" + safeM, "applyPreset", JSON.stringify({widgets: formattedList})]);
+        } else {
+            WidgetSync.applyPreset(safeM, formattedList, true);
         }
     }
 

@@ -1,0 +1,3862 @@
+{
+  "snapshot/home/.cache/serpantinum/wallpaper/current_eDP-1": {
+    "mode": "100644",
+    "sha256": "dd3b0b1f1b50dd498eb0e9b5eed9bc82552d430a03b1a097b678b347774f0235"
+  },
+  "snapshot/home/.cache/serpantinum/wallpaper/current_eDP-1_name": {
+    "mode": "100644",
+    "sha256": "f3d09ece2c5995727be12d991779bdb29c178e2da2d7a23d1572a4bf0497e89d"
+  },
+  "snapshot/home/.cache/serpantinum/wallpaper/current_wallpaper.png": {
+    "mode": "100644",
+    "sha256": "8d2a1eabd9ea8861b615af3dec28ed4526866abb48dc1c7e004123f8aad3baba"
+  },
+  "snapshot/home/.cache/serpantinum/wallpaper/current_wallpaper_eDP-1.png": {
+    "mode": "100644",
+    "sha256": "8d2a1eabd9ea8861b615af3dec28ed4526866abb48dc1c7e004123f8aad3baba"
+  },
+  "snapshot/home/.config/caelestia/hypr-user.lua": {
+    "mode": "100644",
+    "sha256": "f7475fceb3b39528a9aea0d640ec7bf4b73c8cb84dd480c655b43751e965388f"
+  },
+  "snapshot/home/.config/caelestia/hypr-vars.lua": {
+    "mode": "100644",
+    "sha256": "4661fc58cb704294f10061ceaac77bf411a5ce7be86d02a1f6df08300a71dd9f"
+  },
+  "snapshot/home/.config/caelestia/user-config.fish": {
+    "mode": "100644",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "snapshot/home/.config/fastfetch/config.jsonc": {
+    "mode": "100644",
+    "sha256": "ee921f91135c60e08a7f854d2522c5280a96a5b6ea1a288e1511214ebf22a8b3"
+  },
+  "snapshot/home/.config/fastfetch/gen-greeting.py": {
+    "mode": "100644",
+    "sha256": "e65dce37d81b11328577f5a79222f81e62d05c78e4780655b9af68d7b53eafbc"
+  },
+  "snapshot/home/.config/fastfetch/greeting.jsonc": {
+    "mode": "100644",
+    "sha256": "b60292dd5932ca4d94246a3306a15f95fdbcd6455ce667847a27e72bb00b48c2"
+  },
+  "snapshot/home/.config/fish/conf.d/rustup.fish": {
+    "mode": "100644",
+    "sha256": "b85e7bd93bc023396370836ee1ff6163a249183673afcb4e563897944fd1fd5b"
+  },
+  "snapshot/home/.config/fish/conf.d/uv.env.fish": {
+    "mode": "100644",
+    "sha256": "be954a7e71d583eb12bd7e228085f159dab9d3636542e7f368543739a76a534c"
+  },
+  "snapshot/home/.config/fish/config.fish": {
+    "mode": "100644",
+    "sha256": "4b9572dbc279163a5f9228a6a6348cb6fb954af315dc368893c773c40bb16e5b"
+  },
+  "snapshot/home/.config/fish/functions/fish_greeting.fish": {
+    "mode": "100644",
+    "sha256": "2696f2c6069d22e244fa2842d935eaf168ee61b5482d7b1a9f3630a23fd0bc84"
+  },
+  "snapshot/home/.config/fish/functions/mechy.fish": {
+    "mode": "100644",
+    "sha256": "1086572534afbf44bfb669225c6ab4b38b5a81b1e513f35854ac98028b6d899a"
+  },
+  "snapshot/home/.config/hypr/hypr-user.conf": {
+    "mode": "100644",
+    "sha256": "8cffb2a1dcfe72954823aafa5ba6ef94a6a1e8c11cdb60406ebaa061358a8fdc"
+  },
+  "snapshot/home/.config/hypr/hyprland/animations.lua": {
+    "mode": "100644",
+    "sha256": "2ca023d2a7e8ae2a4c8dc854b3f0395a8d8e238d8df4103d6f2aebd35a84f4cc"
+  },
+  "snapshot/home/.config/hypr/hyprland/decoration.lua": {
+    "mode": "100644",
+    "sha256": "9368f0be66ab7562ce46b38e5e42153eef555693b903a1300dff5fbcaa6cd2af"
+  },
+  "snapshot/home/.config/hypr/hyprland/env.lua": {
+    "mode": "100644",
+    "sha256": "68af37b2f19f9b29e5e53ae2347e7444dbae0a95f029b6e103a79d12b09ded5e"
+  },
+  "snapshot/home/.config/hypr/hyprland/execs.lua": {
+    "mode": "100644",
+    "sha256": "0f30cb53b45e48f6defe954440358d02a11e6e52616031afe156100f06548985"
+  },
+  "snapshot/home/.config/hypr/hyprland/general.lua": {
+    "mode": "100644",
+    "sha256": "f9b229abc10bae4bcd6c7c9732b72a23def4a469dd38d0f476f0aed3e57d68de"
+  },
+  "snapshot/home/.config/hypr/hyprland/gestures.lua": {
+    "mode": "100644",
+    "sha256": "7baa14332b7881225fbef9986fa5d2900b12067104f70270e849caedf5cc291e"
+  },
+  "snapshot/home/.config/hypr/hyprland/group.lua": {
+    "mode": "100644",
+    "sha256": "c3db452173a2437ea0d17d84f719cf89775b4df225006d3838801925718ea261"
+  },
+  "snapshot/home/.config/hypr/hyprland/input.lua": {
+    "mode": "100644",
+    "sha256": "3dccdddc88d57fe1e9391b7e9553001922fc59c2d022b7b6aa5e35fa2f685d7b"
+  },
+  "snapshot/home/.config/hypr/hyprland/keybinds.lua": {
+    "mode": "100644",
+    "sha256": "e6e4de11074deb3627c67268a5c14bb2cc39423037dcdc5032fa1b8125e77d91"
+  },
+  "snapshot/home/.config/hypr/hyprland/misc.lua": {
+    "mode": "100644",
+    "sha256": "67761bfd9bb20d8a0bcf300a836295361878cc22db5e2bd0acf4494e4efce688"
+  },
+  "snapshot/home/.config/hypr/hyprland/rules.lua": {
+    "mode": "100644",
+    "sha256": "863489575f0de46465c1c43b3edc9bf8a272e93badebe18c1be34f544de00624"
+  },
+  "snapshot/home/.config/hypr/hyprland-gui.lua": {
+    "mode": "100644",
+    "sha256": "ceb7479f677c2db4ca0a59f7aba7e5cdf5ca2812bad8fff7c59b21973356a129"
+  },
+  "snapshot/home/.config/hypr/hyprland.conf": {
+    "mode": "100644",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "snapshot/home/.config/hypr/hyprland.lua": {
+    "mode": "100644",
+    "sha256": "c72e7ceed7479ca2bd359c538a01cefb4673420e173faaa418db0cdf133e677d"
+  },
+  "snapshot/home/.config/hypr/scheme/current.lua": {
+    "mode": "100644",
+    "sha256": "8a02ad76bd48905073dcd6c4de99a9b0ab6e9f1c3e4d31f20344da1876167b71"
+  },
+  "snapshot/home/.config/hypr/scheme/default.lua": {
+    "mode": "100644",
+    "sha256": "7bb389e3594fde54ce78f1f503710478493c6b07d0723229e5a2e2c961a750e1"
+  },
+  "snapshot/home/.config/hypr/scripts/auto-extract.sh": {
+    "mode": "100755",
+    "sha256": "4b4b7156f1ae597537a527c9fbe7cd99ba7189b504a8eed53af5e9218e003cd0"
+  },
+  "snapshot/home/.config/hypr/scripts/charger-notifications.py": {
+    "mode": "100755",
+    "sha256": "3ce094bc5709a74876edc503d9f0edbbc983c82bdd79979fdab5bf146b53b5e1"
+  },
+  "snapshot/home/.config/hypr/scripts/ensure-clean-graphical-session.sh": {
+    "mode": "100755",
+    "sha256": "6fa4b3d01f534252f81c9ab559b0f937a472a55f65c3575eaeb577ff83cb9a83"
+  },
+  "snapshot/home/.config/hypr/scripts/full-charge-alarm.sh": {
+    "mode": "100755",
+    "sha256": "465e69db599a522563e05c4c7fa76a08042f85b484bcb9ec3173de2df0303435"
+  },
+  "snapshot/home/.config/hypr/scripts/low-battery-alarm.sh": {
+    "mode": "100755",
+    "sha256": "34b0de9bf7d430df62222953d5775b8df25fd37850dcaa832173758c25dfdeff"
+  },
+  "snapshot/home/.config/hypr/scripts/ocr-select.sh": {
+    "mode": "100755",
+    "sha256": "df69b864015acb8b0bc58224a44dfa19b43f8fb3584653293b94b46ac2b320e7"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-screenshot-preview.py": {
+    "mode": "100755",
+    "sha256": "2993226b74630c276eb8ff2566b50ed1657bfc3afca12c13265f8ec7f00eb425"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-calendar.py": {
+    "mode": "100755",
+    "sha256": "ca87a00c13c99da40b0f8a29f28c357ae227fe8d3237937a954a3fe696bd2856"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-customizations.sh": {
+    "mode": "100755",
+    "sha256": "e284d2b7d70f5193799961fc8c6de464d75d4cf6b0eebdded8c18bbf3b600cb7"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-dock-indicators.py": {
+    "mode": "100755",
+    "sha256": "40d7e7b524e767f4a295001974493efb689d2a2b7e223def73bbf2a5cd30ae40"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-dock.py": {
+    "mode": "100755",
+    "sha256": "b1b1b97efc6c1d1bcb0059dbde9297d86755d7551054d0f1d4814c2752d46185"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-edge-double-click.py": {
+    "mode": "100755",
+    "sha256": "291bfc30e2a25364706c801acc6e40618b8c7d36aeccc6569c62440c4c96e90c"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-glass.py": {
+    "mode": "100755",
+    "sha256": "cfdeeb4ed1931cb7d2e9fd4d3e5676b8b4a6a052d9e6757d2ea2560786f75f10"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-icons.py": {
+    "mode": "100755",
+    "sha256": "cad68e48fa8b89f62b3fc82aee1e1a6057e0a6e123debf005f71915d7ca1aa6f"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-launcher-spacing.py": {
+    "mode": "100755",
+    "sha256": "f290a37b99add834bf283158f6c69bce2be64de2bead9753dabb36c7752d6b01"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-mascot.py": {
+    "mode": "100755",
+    "sha256": "0130eb00f66bfc2b4330d88cbc41c2382e4c4137f1f6f381633cae7660a099d4"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-media-position.py": {
+    "mode": "100755",
+    "sha256": "586afea6f5afff8ec56a51e792c70e5d22e8bb24cccb4efbf0e731905aed9aed"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-media-visualizer.py": {
+    "mode": "100755",
+    "sha256": "65b6d815300267597c2f07af52a5440f9a761d498c3eb6b79112aae704e21202"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-network-position.py": {
+    "mode": "100755",
+    "sha256": "72873dc5c5610082bcc86bd2514c1b63e8b5d0c2fa4b1f8e15e7a318bd30feb0"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-notch-hover.py": {
+    "mode": "100755",
+    "sha256": "11fa665b4046f283cddd88977d71ae5ffb17b99cbb534ef368dcb08ea8d8b053"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-notch-outline.py": {
+    "mode": "100755",
+    "sha256": "c40f6f2ae28a4406106a5456fa7ae3642484f0a973d2612582ac50e78c887f24"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-notch.py": {
+    "mode": "100755",
+    "sha256": "622cb41e348399ad0ba58b2cb10737b70afc907756fa0422245bdf9dd9b1b8f0"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-pill-style.py": {
+    "mode": "100755",
+    "sha256": "d8379013429498dd973b4b174d6d608802e157dc2f6341ae7ecaaa5dffa24a70"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-volume-position.py": {
+    "mode": "100755",
+    "sha256": "e9ee95ae4239f579e9299a49d0610f4371c2607f27ac275d2d8759cadd373d04"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-wallpaper-refresh.py": {
+    "mode": "100755",
+    "sha256": "297b5584eb2fe3c3efb226aefb9fb4d14988e91f596d775f83eb724b186013c9"
+  },
+  "snapshot/home/.config/hypr/scripts/restore-serp-workspace-wallpapers.py": {
+    "mode": "100755",
+    "sha256": "472c46688395720f55cecb3b0dd120d3314b6a98e9c248e36015fb93ff597f18"
+  },
+  "snapshot/home/.config/hypr/scripts/screenshot.sh": {
+    "mode": "100755",
+    "sha256": "981fc9291dcca4521878c753779b5379bff82fb732e8508db22db7776f60d49c"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-ascii-weather/AsciiWeatherArt.qml": {
+    "mode": "100644",
+    "sha256": "aab52a8f9d913c46e2f552cb21f42ad724270bdd489dd861de772308ae041d71"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-ascii-weather/AsciiWeatherCard.qml": {
+    "mode": "100644",
+    "sha256": "2444e7799892efe8e7c9338ab235e8d3a056acf703e28c22342eb3b7bb325688"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-ascii-weather/WeatherMatrixText.qml": {
+    "mode": "100644",
+    "sha256": "0f56496bfc55985ea8e0071a561d390402226fd79e8d33fced9a9cddacaad3cb"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-balanced-topbar.qml": {
+    "mode": "100644",
+    "sha256": "101d64adc4e5af311cc49f88f5d7032c582c9b3fee9ca294a7bc4a2656f40021"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-calendar-custom.qml": {
+    "mode": "100644",
+    "sha256": "8d74019dfbb67677540f47496cf190f431c693a4ddb86d4c30bebb428284f67f"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-clock-badge.qml": {
+    "mode": "100644",
+    "sha256": "569cd49124e8d92797b10ce936b8937cefae1e4001ebd22b225b766d172eff9e"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-compact-media.qml": {
+    "mode": "100644",
+    "sha256": "4ccfb45702a93f720caec293e355428880adfdde81792f97bfa4ac876380f1b6"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-connected-wallpapers.qml": {
+    "mode": "100644",
+    "sha256": "353886e85e5da7fcf822703d02b53930e071ae27084c9f2e2c94b4d95c8c2f94"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-music-cover.qml": {
+    "mode": "100644",
+    "sha256": "22e6febadd1b937a42a80f961ac6f39c014de44731e69161808e31928016b284"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-throughput-wifi.qml": {
+    "mode": "100644",
+    "sha256": "e8e938ef52c5ee86c788d856276f7cc323c694a9957ee2372594394fbd717ddd"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-wallpaper-picker.qml": {
+    "mode": "100644",
+    "sha256": "00592663a5c6445df71bac9f25acbee7be019937cba716fcfc745401f9e9a1d6"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-workspace-wallpapers/overview/WorkspaceCard.qml": {
+    "mode": "100644",
+    "sha256": "6358c3c2e07eb51f57bc18630ceac0cc506d12aa9f979db355d6ffc76401837c"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-workspace-wallpapers/overview/WorkspaceGrid.qml": {
+    "mode": "100644",
+    "sha256": "6c1171e4e5b9e3f851842c57c157ea9110b53de94bb416c0df61d20041d6567d"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-workspace-wallpapers/overview/WorkspaceWallpaperSource.qml": {
+    "mode": "100644",
+    "sha256": "01262f85b2e6c7615d4e8e0a1d0c36e6b3bc148b2d6cc05a8e9626b95d057703"
+  },
+  "snapshot/home/.config/hypr/scripts/serpantinum-workspace-wallpapers/wallpaper/WallpaperEngine.qml": {
+    "mode": "100644",
+    "sha256": "7d41ad09715426657acb5c21ca9789cbc9acd9c21ee24c7bcc4952638f8e0bf4"
+  },
+  "snapshot/home/.config/hypr/scripts/start-hyprland-uwsm-gdm.sh": {
+    "mode": "100755",
+    "sha256": "c959708e5f0dfcf98a899a0353000f0f1fb4ed9d307745fe8a342ed5ba865c17"
+  },
+  "snapshot/home/.config/hypr/utils/functions.lua": {
+    "mode": "100644",
+    "sha256": "f604188a10177c19061a945d520c496dff1c697cd3b83ae54a00e71e340d3914"
+  },
+  "snapshot/home/.config/hypr/utils/json.lua": {
+    "mode": "100644",
+    "sha256": "0eaccda57fabc0330736de25f45cf589821a42b5e0fe02e4e3125f7dc0bf2b7e"
+  },
+  "snapshot/home/.config/hypr/variables.lua": {
+    "mode": "100644",
+    "sha256": "1962142b72fcf842b9e9d32bc825b2bda376f53509e3946c023986c163c1702a"
+  },
+  "snapshot/home/.config/kitty/colors.conf": {
+    "mode": "100644",
+    "sha256": "5eec32913713a856df522e1d5eb42b2a548e05215f64a0327d38505eafe8bab1"
+  },
+  "snapshot/home/.config/serpantinum/assets/Orbitron-OFL.txt": {
+    "mode": "100644",
+    "sha256": "ab609b0e110d622435ff337cdf233288556e011bbf9bd0550be98846c0630819"
+  },
+  "snapshot/home/.config/serpantinum/assets/Orbitron.ttf": {
+    "mode": "100644",
+    "sha256": "f42db2dd16e642258e35782916eceb1dcdbea06fb958d77ad71dc5963587e8fd"
+  },
+  "snapshot/home/.config/serpantinum/codex-usage/CodexActionButton.qml": {
+    "mode": "100644",
+    "sha256": "b33c4653af1ee3ae05b2d03f01763d8a8f112e8d5204d6b20f548f10100d39df"
+  },
+  "snapshot/home/.config/serpantinum/codex-usage/CodexUsageDashboard.qml": {
+    "mode": "100644",
+    "sha256": "3a434c6c5ed5e3ced8ea12d0edc69e95e3a6c399697e9475e6bab740cadf3c78"
+  },
+  "snapshot/home/.config/serpantinum/codex-usage/usage.py": {
+    "mode": "100644",
+    "sha256": "4db9b45ae413d0d8ea701ba07dffb7b03d65368f4707881a3e808ec3e3cf08bd"
+  },
+  "snapshot/home/.config/serpantinum/settings.json": {
+    "mode": "100644",
+    "sha256": "e3368d3e3cc33e9e9c6b06abd3318777bf0de61468cfefa7d405fd9fe1fc0f6d"
+  },
+  "snapshot/home/.config/starship.toml": {
+    "mode": "100644",
+    "sha256": "bf1892410e5908ddf6a932e3aa56526797c0696e5d2bdaec0fc2a1345d16dc69"
+  },
+  "snapshot/home/.config/systemd/user/charger-notifications.service": {
+    "mode": "100644",
+    "sha256": "c9d5aa0a76fb2ad1d0ba651cd8bb67d9b779f8aabbfc3527dbe4c342da2fe8c0"
+  },
+  "snapshot/home/.config/systemd/user/clear-stale-graphical-session.service": {
+    "mode": "100644",
+    "sha256": "48478906be1b9acba970804bb503f1dac8aefa048e09a4c2d8c5e918a8c0d92b"
+  },
+  "snapshot/home/.config/systemd/user/full-charge-alarm.service": {
+    "mode": "100644",
+    "sha256": "0c8063d159530cb52abec4dcc564a82b3bd074fbad757b89b1c1c3236aee7cb0"
+  },
+  "snapshot/home/.config/systemd/user/low-battery-alarm.service": {
+    "mode": "100644",
+    "sha256": "205376fe5a24313710aec8bb1c0639e167197ae1d982a59dd87ae8e6c4ea99e7"
+  },
+  "snapshot/home/.config/systemd/user/serp-bar-auto.service": {
+    "mode": "100644",
+    "sha256": "643c1035d19e19e8d0deddbf9f382f330f19a5ed0e2f30968b5ae3f033dd090e"
+  },
+  "snapshot/home/.config/systemd/user/serp-customizations.service": {
+    "mode": "100644",
+    "sha256": "d97dd999594566e8c481d4bac51f5d2e985ef3fdfd7ac371f598035d49e78789"
+  },
+  "snapshot/home/.config/systemd/user/serp-customizations.timer": {
+    "mode": "100644",
+    "sha256": "7395176ba83367c398d2c715e000e98753eb97f10bc812f6f5f424ac45de6d0e"
+  },
+  "snapshot/home/.config/systemd/user/serpantinum-calendar-reminder.service": {
+    "mode": "100644",
+    "sha256": "3d082b0082d5a0d695be616ebd6f5d8b7f4387f87b164c7f6811e190125278e6"
+  },
+  "snapshot/home/.config/systemd/user/serpantinum-calendar-reminder.timer": {
+    "mode": "100644",
+    "sha256": "3e6171b514cc6811f2e176589a16e05fe989dffa25767f2b160df77b54188a82"
+  },
+  "snapshot/home/.face": {
+    "mode": "100644",
+    "sha256": "e00c1ec59950652d573893a3c1dbc66047a657f3eeae23aa5bdcf6cfc8bb73a0"
+  },
+  "snapshot/home/.local/bin/serp-bar-auto": {
+    "mode": "100755",
+    "sha256": "c2b3eb0c51eed0e4df603b937fdc0c215d788de42ce34dbcbb6c65f65dd3a976"
+  },
+  "snapshot/home/.local/bin/serp-reapply": {
+    "mode": "100755",
+    "sha256": "0e2b0013b17371d4604372c442991797f6ee317ee594df97cf1754987d9b25a1"
+  },
+  "snapshot/home/.local/bin/start-shell": {
+    "mode": "100755",
+    "sha256": "32a9775e4c7fd2eca1c1d6c387ccf336a66e68b642b0c5df9c09dc64e6bef01f"
+  },
+  "snapshot/home/.local/bin/switch-shell": {
+    "mode": "100755",
+    "sha256": "2f79dfde402152fb54307bf8b94b27393336dd8e3f9bf39f6d1467d929c62f39"
+  },
+  "snapshot/home/.local/share/icons/hicolor/512x512/apps/brave-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.png": {
+    "mode": "100644",
+    "sha256": "a18253079c46b7b4ee527a827bf82c3cdb9217fe3d55e6bb9a0228d40150e412"
+  },
+  "snapshot/home/.local/share/serpantinum-calendar/remind.py": {
+    "mode": "100644",
+    "sha256": "97f0983de4b28e48b5fab09bff1d6d286077ae33e50a733df139b0e503bc246a"
+  },
+  "snapshot/home/.local/state/active-shell": {
+    "mode": "100644",
+    "sha256": "5f07a559a1a5fcac4000442fd61add4d8af6ea8d129cbfa8523d76cb11db6799"
+  },
+  "snapshot/home/.local/state/serpantinum/desktop-presets/EvhOS current.json": {
+    "mode": "100644",
+    "sha256": "614f22bbde7b36c94dd800b64335a9a9aeb0832b57ad41622fbe8e1d56758d6d"
+  },
+  "snapshot/home/.local/state/serpantinum/desktop-presets/side bar.json": {
+    "mode": "100644",
+    "sha256": "d1a119968b095ff42577d7386ec88e6cd99ea65452e59e0e8b3ad2635c15acbd"
+  },
+  "snapshot/home/.local/state/serpantinum/lockscreen/layout.json": {
+    "mode": "100644",
+    "sha256": "6c0b2e718694eb1471f1479cc41b1009ca97a623a917ce387928c31e686e7668"
+  },
+  "snapshot/home/.local/state/serpantinum/media-artwork.ini": {
+    "mode": "100644",
+    "sha256": "9cb3ff8fb3a086290fbc26fa7df0a35da70c3fcc9669cad4f359505cc153716a"
+  },
+  "snapshot/home/.local/state/serpantinum/qs_colors.json": {
+    "mode": "100644",
+    "sha256": "499b9f383a39943c5adceb8e75c517f9e93fe62787010501583cd23043b542c1"
+  },
+  "snapshot/home/.local/state/serpantinum/qs_matugen_colors.json": {
+    "mode": "100644",
+    "sha256": "de0f6d698ec21897fd9006eea247cfe196d0cb3b4174bf43ac99bae303481dbe"
+  },
+  "snapshot/home/.local/state/serpantinum/themes/Dynamic.json": {
+    "mode": "100644",
+    "sha256": "69119313bc9f3db0e35511e83c409848881fb534c15ac8b2c3e28df7b2d0ee73"
+  },
+  "snapshot/home/.local/state/serpantinum/version": {
+    "mode": "100644",
+    "sha256": "d28436fd89de184776433482ea2a633293ab46447e345b4212eb49fea3191d7e"
+  },
+  "snapshot/home/.local/state/serpantinum/wallpaper-ring-favorites.json": {
+    "mode": "100644",
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "snapshot/home/.local/state/serpantinum/widgets/eDP-1/layout.json": {
+    "mode": "100644",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "snapshot/home/Documents/OS_Images/avatar_laptop.png": {
+    "mode": "100644",
+    "sha256": "f0a5e25979d8afb23cf23db8dc51edf752a3a90e4eeb51f310acf335c9960df1"
+  },
+  "snapshot/home/Documents/OS_Images/notif_center_avatar.png": {
+    "mode": "100644",
+    "sha256": "0e7f4f55d9229b3b8a42dbfd43fde7bb8c5ce4adab510e6ab911ddf388ee8872"
+  },
+  "snapshot/home/Documents/SDDM_IMAGES/SDDM_PROFILE": {
+    "mode": "100644",
+    "sha256": "0afcf942da35dc3afb3e3b5e79ab72663b56f1cd2ce8ef1df001629c11f1d509"
+  },
+  "snapshot/home/Documents/SDDM_IMAGES/SDDM_WALLPAPER.png": {
+    "mode": "100644",
+    "sha256": "e50a77e6778d78965cf64da988fa3c700963f77aedf407e411978c23611fdc66"
+  },
+  "snapshot/home/Documents/SDDM_IMAGES/SDDM_WP1.png": {
+    "mode": "100644",
+    "sha256": "b6119d8e9dc3dd4ee86c1491412e0e7de37a8287dbf2317c105cdd11ecc098e9"
+  },
+  "snapshot/home/Documents/SDDM_IMAGES/SDDM_WP2.png": {
+    "mode": "100644",
+    "sha256": "c87aea04ba196a53a7d283301b21707a46146bccb82928b954a16ba43d2542c3"
+  },
+  "snapshot/home/Documents/SDDM_IMAGES/SDDM_WP3.png": {
+    "mode": "100644",
+    "sha256": "73b5d8e0f3de09322f89d19f9f3fb683d3ccaf3bd588c0c5b3aa1209b660bbf5"
+  },
+  "snapshot/home/Documents/SYSTEM_ASSETS/OS_LOGO.png": {
+    "mode": "100644",
+    "sha256": "232e9be0eca6b4fbcafdafe13477995f9d04db3de18ed19729fd340863eb9dd3"
+  },
+  "snapshot/home/Pictures/Wallpapers/Pictures/EvhOS-current.png": {
+    "mode": "100644",
+    "sha256": "9916b79d6de0eb749bb26859f22fb22ce26dbf1d60ae9a13c16caf4b8e859cfb"
+  },
+  "snapshot/home/Pictures/Wallpapers/Pictures/wallpaper_imagepack3_9.png": {
+    "mode": "100644",
+    "sha256": "aa09b8caf58b4a0c14ae27a8866910071f4030a9342875591b8ddffd28c11851"
+  },
+  "snapshot/home/Pictures/Wallpapers/Pictures/wallpaper_imagepack5_13.png": {
+    "mode": "100644",
+    "sha256": "8d2a1eabd9ea8861b615af3dec28ed4526866abb48dc1c7e004123f8aad3baba"
+  },
+  "snapshot/home/Pictures/Wallpapers/Videos/.keep": {
+    "mode": "100644",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "snapshot/metadata.json": {
+    "mode": "100644",
+    "sha256": "7b5f32d21fd78a5b3e23601633f744d771a49d20dcde5244391e0deff5435edc"
+  },
+  "snapshot/shell/bin/serpantinum": {
+    "mode": "100755",
+    "sha256": "7056c6ff891e744ae6ae55217dc797b40b09cb74f70144d4c22aa1fd3e29047a"
+  },
+  "snapshot/shell/bin/serpantinumd": {
+    "mode": "100755",
+    "sha256": "c7964bbf710f391b6c44ea8b64f817b446a3c0ff1b401b25df32f2439395a287"
+  },
+  "snapshot/shell/src/assets/fonts/0xProtoNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "014921bcefcbc763151a86beca4a4a53b572494aad2c38787f20e58a8d5f350d"
+  },
+  "snapshot/shell/src/assets/fonts/3270NerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "78540c3880221f7cc34eac347c6c42e4135ecaf12dc69f2f2170f31e5fee13f1"
+  },
+  "snapshot/shell/src/assets/fonts/AdwaitaMonoNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "bcd970a74682acfba181d5494083abf2a33cbb98d69e399681bdc2f3c21c34ef"
+  },
+  "snapshot/shell/src/assets/fonts/AgaveNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "6111ca3d2797dd93b144baa17ae074731793620117ccc106c4ac2661eb6c59c9"
+  },
+  "snapshot/shell/src/assets/fonts/AnonymiceProNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "6a8c8842c02a69555f09678cb1f0a92be0acb2ebe5bc67b7381b8eca95702a5f"
+  },
+  "snapshot/shell/src/assets/fonts/ArimoNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "c8391ed0dbcc16d15e938ea56dc4c1984ebc96e865ebb3836af84293a7c79f66"
+  },
+  "snapshot/shell/src/assets/fonts/AtkynsonMonoNerdFont-Regular.otf": {
+    "mode": "100644",
+    "sha256": "d915620850ca931110d8c1766a161c963377b7df5096cb13919eb3b6846289e0"
+  },
+  "snapshot/shell/src/assets/fonts/AurulentSansMNerdFont-Regular.otf": {
+    "mode": "100644",
+    "sha256": "4d40b68181514a7013a0e3fa7e87feb4ee1c5108d2c9c72bf2a7ab5895a2b694"
+  },
+  "snapshot/shell/src/assets/fonts/AurulentSansMNerdFontMono-Regular.otf": {
+    "mode": "100644",
+    "sha256": "da75261e2decf463a025e74bac647d65e05a33b269abb4e6978b1be769ecc6eb"
+  },
+  "snapshot/shell/src/assets/fonts/BitcountPropSingle-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "2be05ab22044f652c0c576b4890375cfae19e9825aeff64a470715598ba16498"
+  },
+  "snapshot/shell/src/assets/fonts/BitcountPropSingle_Roman-Bold.ttf": {
+    "mode": "100644",
+    "sha256": "d5fd31d5ad530065392dad870a69b7890b7a7af88dc454316123a74d27bb7f56"
+  },
+  "snapshot/shell/src/assets/fonts/BlexMonoNerdFont-Bold.ttf": {
+    "mode": "100644",
+    "sha256": "0d40cee43321be3915194991edf23810931f3532403b1c061913e61e9572b224"
+  },
+  "snapshot/shell/src/assets/fonts/BlexMonoNerdFont-Light.ttf": {
+    "mode": "100644",
+    "sha256": "a591c43b85ebbc580f2591f6a842b62ab7218fbead06862cfa34d12d3b65da00"
+  },
+  "snapshot/shell/src/assets/fonts/BlexMonoNerdFontMono-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "f9892505b7cd6e9d29f9ba0924da73df023714adf6dbe6d8f920d47b8930fcef"
+  },
+  "snapshot/shell/src/assets/fonts/ComicMono.ttf": {
+    "mode": "100644",
+    "sha256": "3bc1425e922a16abf0ec767effe4d0268439b4c0dce98432e07d15f5dad57196"
+  },
+  "snapshot/shell/src/assets/fonts/ComicShannsMonoNerdFont-Regular.otf": {
+    "mode": "100644",
+    "sha256": "8a49e1ecee6a2d2aa75d6e7ca6b8abce66d421f5e6726c884474a52154ef8343"
+  },
+  "snapshot/shell/src/assets/fonts/CousineNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "c27984a30f1b2a745fdd8552797e5ffaca4ddf094f8204ac66acafd75538c01b"
+  },
+  "snapshot/shell/src/assets/fonts/DaddyTimeMonoNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "cf044df51c3f79939361715ed4eb03077c776892b10426b239b8bf4108050362"
+  },
+  "snapshot/shell/src/assets/fonts/DejaVuSansMNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "02beb8054a77f57e6c743837a853aeee32862ec778e6a36164a72c5dc9df399c"
+  },
+  "snapshot/shell/src/assets/fonts/EduVICWANTHand-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "2c05d38ab5078830867235c3449f70ab7c5d85924f8ebdb30ce3cfd60fcc9060"
+  },
+  "snapshot/shell/src/assets/fonts/FiraCode-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "5dc1651a1143c53169d4394dfc55585860d13c158cc0bcc2e56c23a1da5dd777"
+  },
+  "snapshot/shell/src/assets/fonts/GohuFontuni14NerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "ebd98e42b542172cf1bdb1ba972f3af5488797310d74175e1b1ee617129c03c1"
+  },
+  "snapshot/shell/src/assets/fonts/GoogleSansFlex.ttf": {
+    "mode": "100644",
+    "sha256": "a9ac770798857d5e8ac593ced42b22e40a7c08cec98319f92b0eccc2783a77ba"
+  },
+  "snapshot/shell/src/assets/fonts/HeavyDataNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "1c65089ddd54fa114614f5dda8d9aa6624b4f84e086a5d892422b86198e7a847"
+  },
+  "snapshot/shell/src/assets/fonts/IBMPlexMono-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "ab08018ccd276b79fb2c636bb95b9c543598f9d50505fe92506fcb4dae7810cd"
+  },
+  "snapshot/shell/src/assets/fonts/InconsolataGoNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "804b35cd8361cfe0492676909bd8ac0cf50ff6c74e940ffb01b5b694605d1d24"
+  },
+  "snapshot/shell/src/assets/fonts/IosevkaNerdFont-Bold.ttf": {
+    "mode": "100644",
+    "sha256": "d13814ca9b4d51909ab151a47b2087915ceb91c244901b7d3497e27826ba090c"
+  },
+  "snapshot/shell/src/assets/fonts/IosevkaNerdFont-Italic.ttf": {
+    "mode": "100644",
+    "sha256": "8d5607aa9eaacbd1ed9a86c52fb34025957de307b20a3e61bbfebb575584f86d"
+  },
+  "snapshot/shell/src/assets/fonts/IosevkaNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "48dad582909322164f40892e4e27eaa497346ab046b450b5c23c754ac35b53d2"
+  },
+  "snapshot/shell/src/assets/fonts/JetBrainsMono-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "a0bf60ef0f83c5ed4d7a75d45838548b1f6873372dfac88f71804491898d138f"
+  },
+  "snapshot/shell/src/assets/fonts/JetBrainsMono-SemiBold.ttf": {
+    "mode": "100644",
+    "sha256": "1b3bfa1ed5665a4ce3f9feb68d2d4e40e70bf8b4b7d9a3edd418f321b4e166a0"
+  },
+  "snapshot/shell/src/assets/fonts/LektonNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "36d5bfeaaea3017d06f8fb99ddce5850581af7ff4d89dfd441f3feab4d6f51eb"
+  },
+  "snapshot/shell/src/assets/fonts/OpenDyslexicNerdFont-Regular.otf": {
+    "mode": "100644",
+    "sha256": "d66d8e37a291deaf5f18f45cad4d41d8698d9bdcc169bae70608e5cd020877fc"
+  },
+  "snapshot/shell/src/assets/fonts/ProggyCleanSZNerdFont-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "04cf0be1a5284b4a6fd050d352aab963409019a54b477899e25185cf586ced7b"
+  },
+  "snapshot/shell/src/assets/fonts/Roboto-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+  },
+  "snapshot/shell/src/assets/fonts/SymbolsNerdFontMono-Regular.ttf": {
+    "mode": "100644",
+    "sha256": "fe471e538392f51910faab985fa8e192a39dd3426125edd15b71b3680df0e749"
+  },
+  "snapshot/shell/src/assets/languages/ar.json": {
+    "mode": "100644",
+    "sha256": "273af02381f76060030f69a711719a2b7d8aeea8ef675d0fb184887e45569c04"
+  },
+  "snapshot/shell/src/assets/languages/az.json": {
+    "mode": "100755",
+    "sha256": "7d602326c3c24e4937adea3821d85270d3615eee21f035597cd53d0585efa29c"
+  },
+  "snapshot/shell/src/assets/languages/bg.json": {
+    "mode": "100644",
+    "sha256": "a090e6f55763454ae56e4acfe2852212e9d60980f2630a55d18db14db156a9ff"
+  },
+  "snapshot/shell/src/assets/languages/de.json": {
+    "mode": "100755",
+    "sha256": "59b4fa5b3f8c8e29c4db6c03b49a2ad4d2ea4bf90b174c751e84ed5a9432e7c3"
+  },
+  "snapshot/shell/src/assets/languages/en.json": {
+    "mode": "100755",
+    "sha256": "ba5a809a1cc7371f5d8410b5b5524bcc1e8a0547937e3439bbb12e13fc7e767f"
+  },
+  "snapshot/shell/src/assets/languages/es.json": {
+    "mode": "100755",
+    "sha256": "f058270ee69677f3174167d52148284114f4c75fba2b528911413ae1b032ad57"
+  },
+  "snapshot/shell/src/assets/languages/fa.json": {
+    "mode": "100644",
+    "sha256": "b2afd75e01540913235d44fa0859174e605740c5489177a1258c19443b28760f"
+  },
+  "snapshot/shell/src/assets/languages/fr.json": {
+    "mode": "100644",
+    "sha256": "08112910bb06136a895349e5a121b7074b090ceb3635a8444a447e85e4c94e3b"
+  },
+  "snapshot/shell/src/assets/languages/hi.json": {
+    "mode": "100644",
+    "sha256": "3c4fa3d855578c7d8d0d83cdd633005d36925453e07f03d700e5c3320c65ef43"
+  },
+  "snapshot/shell/src/assets/languages/hy.json": {
+    "mode": "100755",
+    "sha256": "4c68e22bbfca945481c5b34623dffe39c7c61edf365efb4e08edf69810a5d9bf"
+  },
+  "snapshot/shell/src/assets/languages/id.json": {
+    "mode": "100644",
+    "sha256": "e0abe12538c333594ee8141293a40b671aef5e5cc07c3ae584b4da7ccc31c8bb"
+  },
+  "snapshot/shell/src/assets/languages/it.json": {
+    "mode": "100755",
+    "sha256": "d8e9c6931540510389cc0e510fe383f0974a0521b28a3ec653e207a67efc61b9"
+  },
+  "snapshot/shell/src/assets/languages/ja.json": {
+    "mode": "100644",
+    "sha256": "12d15ac2ad16d4ecfed55e4c0451862fdd787f1d9174a7142ec4ecf208f6da28"
+  },
+  "snapshot/shell/src/assets/languages/ko.json": {
+    "mode": "100755",
+    "sha256": "502f46829cf43fe2ccb2d69c6dc8e8665b5e38011f13d81425c3eeaad5831570"
+  },
+  "snapshot/shell/src/assets/languages/nl.json": {
+    "mode": "100644",
+    "sha256": "651ee1fb3e503a29daca3f2c9f53430ea9b60d3ce1ab26002da84e198d632880"
+  },
+  "snapshot/shell/src/assets/languages/pl.json": {
+    "mode": "100644",
+    "sha256": "eddd3ba3acc0ed36e4ff3ac9811d41347ee9f3f863e82c76436ea37027e8de99"
+  },
+  "snapshot/shell/src/assets/languages/pt.json": {
+    "mode": "100755",
+    "sha256": "ff33ab6a37c5f025c385ce76361a9046742496b6f5040662dfb3c76c7a4aa99f"
+  },
+  "snapshot/shell/src/assets/languages/ru.json": {
+    "mode": "100755",
+    "sha256": "d4d720eb87a2495da70d1b3c75102ee847f25672e807f4faf36b068c72e1c590"
+  },
+  "snapshot/shell/src/assets/languages/tr.json": {
+    "mode": "100644",
+    "sha256": "bbea8a54ec62b5d8a667114ac7b53f37bba69ec463555922a11f80d3e92f448a"
+  },
+  "snapshot/shell/src/assets/languages/ua.json": {
+    "mode": "100644",
+    "sha256": "aaaae6bccc4295800dc4ddaca87736acaaea1e43e39231b662d3f711f7dd7d80"
+  },
+  "snapshot/shell/src/assets/languages/vi.json": {
+    "mode": "100755",
+    "sha256": "1e125a6e9da1738191e5e09e9e3a323ca44ccf0fdee466d2938c9ff728448d2f"
+  },
+  "snapshot/shell/src/assets/languages/zh.json": {
+    "mode": "100644",
+    "sha256": "97892eec1670278b489940975dc2cd8c01701b15ed02a6dd351ba2253b674359"
+  },
+  "snapshot/shell/src/assets/languages/zh_tw.json": {
+    "mode": "100644",
+    "sha256": "40364811f7be446a0982cf9f25586e3944f649fb88f5b4a3efe0a54bdecba6a1"
+  },
+  "snapshot/shell/src/assets/logo.svg": {
+    "mode": "100755",
+    "sha256": "73b79df9827b40dddb898fbcd262dd6b45256bf95db6e1ce2831e08068bc02c7"
+  },
+  "snapshot/shell/src/assets/matugen/config-static.toml": {
+    "mode": "100644",
+    "sha256": "a49f8b927e7ab105fc2ad233c04c6cf08cbc9d0a5655fdbfe5eef4ae3f4587c4"
+  },
+  "snapshot/shell/src/assets/matugen/config.toml": {
+    "mode": "100644",
+    "sha256": "8a567d05ae1958a52b5de7bce1dc653b42249915b83da9388bc054d34f8a213c"
+  },
+  "snapshot/shell/src/assets/matugen/templates/cava-colors.ini.template": {
+    "mode": "100644",
+    "sha256": "1a8fa054831842fa13b69148c3f7a7a9b76bd848e13fce81407de221add92c1d"
+  },
+  "snapshot/shell/src/assets/matugen/templates/fastfetch.jsonc.template": {
+    "mode": "100644",
+    "sha256": "c35e991346956db8f0a1f56d2552931b41c081c1b61428684b3ea48814d15672"
+  },
+  "snapshot/shell/src/assets/matugen/templates/kitty-colors.conf.template": {
+    "mode": "100644",
+    "sha256": "eb807998f23c1766e2aa08a669db0be5cb9e0f19ea38f4297d1cb2e04269517d"
+  },
+  "snapshot/shell/src/assets/matugen/templates/serpantinum_matugen_colors.json.template": {
+    "mode": "100644",
+    "sha256": "1a150f9712efb2363d5e3b52e0c7d581ce033e7f3cbc30655ba6c9b44c5e4bbb"
+  },
+  "snapshot/shell/src/assets/media/vinyl_arm.png": {
+    "mode": "100644",
+    "sha256": "a0e4717b0dcf1e5199441bb5138969827eb8d9100fbbe21293dae2e1092a3e98"
+  },
+  "snapshot/shell/src/assets/pushy.gif": {
+    "mode": "100755",
+    "sha256": "0950b88928eb56599f997b635404538043e45d66a95d6dbb46d7a15b331b46cc"
+  },
+  "snapshot/shell/src/assets/pushy2.gif": {
+    "mode": "100755",
+    "sha256": "2e55680ced35ec66e3ef4f2b72d88f9fd9acc1e02f44c247df986d8bb0c5e910"
+  },
+  "snapshot/shell/src/assets/shaders/audio/seekbar_wave.frag": {
+    "mode": "100644",
+    "sha256": "a4673d55ad54194ddd9b7d75332a98a72524c719a7b1f4fbd1426cb982891500"
+  },
+  "snapshot/shell/src/assets/shaders/audio/seekbar_wave.frag.qsb": {
+    "mode": "100644",
+    "sha256": "35f956dff85eac66085f90ac2cf199d36abc0c85dbbf5381a43b5294c4557bae"
+  },
+  "snapshot/shell/src/assets/shaders/audio/visualizer_bars.frag": {
+    "mode": "100644",
+    "sha256": "5e2aa127f822528048af6f9bebe85e96b7ca1393f64496c0d92b38abe3b7d586"
+  },
+  "snapshot/shell/src/assets/shaders/audio/visualizer_bars.frag.qsb": {
+    "mode": "100644",
+    "sha256": "fc8c019cc0fae441a2d4f901a5fb711f6e52af7af3af417c6d037ad07e37480b"
+  },
+  "snapshot/shell/src/assets/shaders/audio/visualizer_ring_wave.frag": {
+    "mode": "100644",
+    "sha256": "c696fbd13554cf1fbc4acc335e17c1c0ec0873ffa1a6db038ba8bafff558a817"
+  },
+  "snapshot/shell/src/assets/shaders/audio/visualizer_ring_wave.frag.qsb": {
+    "mode": "100644",
+    "sha256": "18ef9b26f52dc261d13f1ef7dc62493357103d0481241174471dd81ca4c7ef26"
+  },
+  "snapshot/shell/src/assets/shaders/audio/visualizer_wave.frag": {
+    "mode": "100644",
+    "sha256": "b7d2e31520b56a7563c27f13369ab215e21081613a5eff679afe5f6fd556d090"
+  },
+  "snapshot/shell/src/assets/shaders/audio/visualizer_wave.frag.qsb": {
+    "mode": "100644",
+    "sha256": "aeb64ef745ac52d1c589f71e3dabbf31562c3770cc3cade3052a887fca6baba5"
+  },
+  "snapshot/shell/src/assets/shaders/effects/curtain_wipe.frag": {
+    "mode": "100644",
+    "sha256": "85bf637d7d8e4fc616fcc962a9db15cfa1784983ab91d036a04ad2c7a99ea8c8"
+  },
+  "snapshot/shell/src/assets/shaders/effects/curtain_wipe.frag.qsb": {
+    "mode": "100644",
+    "sha256": "af6fff44850d697bf6e312502bc93129c3e4681cbe93a0dcc89119d52cef2cca"
+  },
+  "snapshot/shell/src/assets/shaders/effects/liquid_glass.frag": {
+    "mode": "100644",
+    "sha256": "d3b6f57304868f1afc1b4a3fde91a9c81ba0417102c81b431a4dbbe52a43e5df"
+  },
+  "snapshot/shell/src/assets/shaders/effects/liquid_glass.frag.qsb": {
+    "mode": "100644",
+    "sha256": "c0d8d8bfb0b4e310fdcde712c23c98393e7391431f3aecaf277547c87c6e5e22"
+  },
+  "snapshot/shell/src/assets/shaders/effects/screen_wipe.frag": {
+    "mode": "100644",
+    "sha256": "8d71ca3d6ee7669364151b53216e9b3150b68315767b0ea1bba3df8618f519d9"
+  },
+  "snapshot/shell/src/assets/shaders/effects/screen_wipe.frag.qsb": {
+    "mode": "100644",
+    "sha256": "7606ea329a40e81e8fd6bbc5bb62b6c6bee36bf12ddbb8b1cf09e77dba33bf1b"
+  },
+  "snapshot/shell/src/assets/shaders/effects/vignette.frag": {
+    "mode": "100644",
+    "sha256": "4e567fd488e3cf548c56f52472f8e14bb804867c8364cfcb1f7e126151699ecc"
+  },
+  "snapshot/shell/src/assets/shaders/effects/vignette.frag.qsb": {
+    "mode": "100644",
+    "sha256": "71b83fab594ffea18ecda0bbff472d99c47f433b855e08455f5a654090b2257c"
+  },
+  "snapshot/shell/src/assets/shaders/fluid/fluid_wave.frag": {
+    "mode": "100644",
+    "sha256": "1c9b84887cc2f9625303feba8237d6a4dd96f0abe12c929c1c1448fc0b646308"
+  },
+  "snapshot/shell/src/assets/shaders/fluid/fluid_wave.frag.qsb": {
+    "mode": "100644",
+    "sha256": "a524268b308121ef072029b3ef1807c27f5b90f089d691722683fe292026f337"
+  },
+  "snapshot/shell/src/assets/shaders/fluid/liquid_fill.frag": {
+    "mode": "100644",
+    "sha256": "715e8880b3197a99d5d701b6aab51fbd86cc84dc41480c48264cf3d5655b5763"
+  },
+  "snapshot/shell/src/assets/shaders/fluid/liquid_fill.frag.qsb": {
+    "mode": "100644",
+    "sha256": "33ecd30ccedc725af8762de303adcd4a737ca0a3e8908551ef7ef46ff9256597"
+  },
+  "snapshot/shell/src/assets/shaders/fluid/logo_water_wave.frag": {
+    "mode": "100644",
+    "sha256": "176f04957b85de5697ac144e625e1ceb53919f42a349377a828e411f5c7f43e5"
+  },
+  "snapshot/shell/src/assets/shaders/fluid/logo_water_wave.frag.qsb": {
+    "mode": "100644",
+    "sha256": "7cd38058f32bd16c96baa32eeead286fb1bb66f6430dc535f82c8722f71d81de"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/circular_wave_gauge.frag": {
+    "mode": "100644",
+    "sha256": "0cab103a8c848082e360deddd3c7ec97e48ad940159d6a1efccf4ec89ef34c22"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/circular_wave_gauge.frag.qsb": {
+    "mode": "100644",
+    "sha256": "743b804c089225fcf16d3a461559fa1341b4780d73fa543a412919732650ff3d"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/circular_wave_gauge_smooth.frag": {
+    "mode": "100644",
+    "sha256": "09786d97a01de48a02f6951b97aa312406f60f70369a9b6fdabb8bba0ff419a8"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/circular_wave_gauge_smooth.frag.qsb": {
+    "mode": "100644",
+    "sha256": "5a127af72159ceed89e500589d02c2447e2807a260c0615e4a10b88a0e476ca6"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/clock_lumen_dial.frag": {
+    "mode": "100644",
+    "sha256": "ef928a108d4aa1ce879e5814a3a0b3451430c00aae8e188b046725d2b85e5b82"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/clock_lumen_dial.frag.qsb": {
+    "mode": "100644",
+    "sha256": "d3035f955f754c4b77f1ce1faab36545d79d0b6485daeaf11d148464a93f87cc"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/clock_second_arc.frag": {
+    "mode": "100644",
+    "sha256": "82e52a3702e5223eec8f4c746cad220d9650be0fb6a1f67e3311b4e30708837e"
+  },
+  "snapshot/shell/src/assets/shaders/gauges/clock_second_arc.frag.qsb": {
+    "mode": "100644",
+    "sha256": "62cedce8b7577df8effac36bb3e16bf500c5c155b8920324b79c1e4829b24425"
+  },
+  "snapshot/shell/src/assets/shaders/lock/fingerprint_ring.frag": {
+    "mode": "100644",
+    "sha256": "fdd5c5cc65a2854e0f49af50846e5cf55393c6ea15866090b6470fd0a046c464"
+  },
+  "snapshot/shell/src/assets/shaders/lock/fingerprint_ring.frag.qsb": {
+    "mode": "100644",
+    "sha256": "2e80cbdff730fda1ab3a01dd33cd9fb9ca0506515d48d6c5b8936522a13655c7"
+  },
+  "snapshot/shell/src/assets/shaders/lock/fingerprint_success.frag": {
+    "mode": "100644",
+    "sha256": "061484aadff04a9b2f96538fc882ca52884242f66a5a6e913087a7f04bbee26a"
+  },
+  "snapshot/shell/src/assets/shaders/lock/fingerprint_success.frag.qsb": {
+    "mode": "100644",
+    "sha256": "405c7166aa49afc46c47314990c95f6b9513eca57b7d65cf429c86c10d575868"
+  },
+  "snapshot/shell/src/assets/shaders/transitions/wallpaper_blend.frag": {
+    "mode": "100644",
+    "sha256": "9e94f469191a2f96a3776b2f199b27fbb1bde8ca1db4eb812da5c7aafa20778e"
+  },
+  "snapshot/shell/src/assets/shaders/transitions/wallpaper_blend.frag.qsb": {
+    "mode": "100644",
+    "sha256": "9867ad77d03d8c2cb7451986c2cf6307429c5b487771e4a71880fa503e3f2534"
+  },
+  "snapshot/shell/src/assets/shaders/transitions/wallpaper_transition.frag": {
+    "mode": "100644",
+    "sha256": "22af8e2b50d7189cc4646561566e308eb0c62d6ee92c215d0fbf8b6c44bdbff9"
+  },
+  "snapshot/shell/src/assets/shaders/transitions/wallpaper_transition.frag.qsb": {
+    "mode": "100644",
+    "sha256": "627715cccd9bbe27a813bb215e2a68797e804ed503ef757284a89b225a43a812"
+  },
+  "snapshot/shell/src/assets/shaders/ui/corner_cutout.frag": {
+    "mode": "100644",
+    "sha256": "ac2fce23b3a3407660477f4161ce88c9b22c4f64c3a75be0ccbe9ba7cc663dec"
+  },
+  "snapshot/shell/src/assets/shaders/ui/corner_cutout.frag.qsb": {
+    "mode": "100644",
+    "sha256": "ad3f7e27e1f74531a7dfca832a6fe02016c1f17dd4fe2e824d33e18328c8805a"
+  },
+  "snapshot/shell/src/assets/shaders/ui/dashed_ellipse.frag": {
+    "mode": "100644",
+    "sha256": "18ad7b8ba9b9313c99ca1a85d3f7e2d80fefacb922c3d4fdea95e6f4f24bf936"
+  },
+  "snapshot/shell/src/assets/shaders/ui/dashed_ellipse.frag.qsb": {
+    "mode": "100644",
+    "sha256": "892cdad153ea20f326a432862ee26543cc7e862d13c468505b8e968a435ee026"
+  },
+  "snapshot/shell/src/assets/shaders/ui/grid_pattern.frag": {
+    "mode": "100644",
+    "sha256": "8c3b2e37a754773d006581baa0f2b23aafa19b22eac8893fb3f0c2164ebcb04f"
+  },
+  "snapshot/shell/src/assets/shaders/ui/grid_pattern.frag.qsb": {
+    "mode": "100644",
+    "sha256": "f07582dc9f9693dfe6794638d50515b7aeeac36f08ccedeeb12a37a2e78b047c"
+  },
+  "snapshot/shell/src/assets/shaders/ui/loader_blob.frag": {
+    "mode": "100644",
+    "sha256": "a7ef4a71989deb4c0431c5a03ba5a5542f87bd6d2dd91af558a4967a0e9bec62"
+  },
+  "snapshot/shell/src/assets/shaders/ui/loader_blob.frag.qsb": {
+    "mode": "100644",
+    "sha256": "c44ebf8dab4f45f6b516a6ed533e75b4d6b256eb8629f3895a0c499e4bbd9ca0"
+  },
+  "snapshot/shell/src/assets/shaders/ui/marquee_scroll.frag": {
+    "mode": "100644",
+    "sha256": "27cc660d586f1e5e92cde971e179a316dbe53be4b082dfae120e1bd9eadd4a67"
+  },
+  "snapshot/shell/src/assets/shaders/ui/marquee_scroll.frag.qsb": {
+    "mode": "100644",
+    "sha256": "6100345ab6527ff6ca41e2d7bdd0d3ed4fd389233b14eb104967131c5ccd7ddf"
+  },
+  "snapshot/shell/src/assets/shaders/ui/rounded_mask.frag": {
+    "mode": "100644",
+    "sha256": "229898457c651f825955ea17a4556041c11a56a26acd14e8a1e1caa47a8840c0"
+  },
+  "snapshot/shell/src/assets/shaders/ui/rounded_mask.frag.qsb": {
+    "mode": "100644",
+    "sha256": "208833f2a2a57af6558f09f711091ff088d446cd0f700f1d589a19f4ce3a35c2"
+  },
+  "snapshot/shell/src/assets/shaders/vfx/eq_lightning.frag": {
+    "mode": "100644",
+    "sha256": "6e8df6022218dbd7dcb18bd68e5ff316694da9ba19a4ab0efc05c20caccd6f77"
+  },
+  "snapshot/shell/src/assets/shaders/vfx/eq_lightning.frag.qsb": {
+    "mode": "100644",
+    "sha256": "88893d3e801fd2d6870fa44e66bd9fb6da3b0818f28c24b6dee248c2399f3ecb"
+  },
+  "snapshot/shell/src/assets/shaders/vfx/node_beams_clipped.frag": {
+    "mode": "100644",
+    "sha256": "da40fa37def168bf2f203a19fb8d351d9c4f51058a9f019c7ebc946fe8ca4e59"
+  },
+  "snapshot/shell/src/assets/shaders/vfx/node_beams_clipped.frag.qsb": {
+    "mode": "100644",
+    "sha256": "839063ac6a3b947e35a773dde1f61f33ea55e6a4567fc811eb779297dcdb0eb2"
+  },
+  "snapshot/shell/src/assets/shaders/widgets/pacman.frag": {
+    "mode": "100644",
+    "sha256": "0d6eba796ed59b6ae290b4c4b1b60d16208d9007eb49e66f1f64d78dd79b615a"
+  },
+  "snapshot/shell/src/assets/shaders/widgets/pacman.frag.qsb": {
+    "mode": "100644",
+    "sha256": "ac77565dcb38acff800374fd06444ee0e21d254f731c78b057f7d7d33b1185fd"
+  },
+  "snapshot/shell/src/assets/shaders/widgets/widget_outline.frag": {
+    "mode": "100644",
+    "sha256": "4ed22466ac56acd3f1360eda865b5b71e5d2cb3fc22b1547e8d7c9b1de443630"
+  },
+  "snapshot/shell/src/assets/shaders/widgets/widget_outline.frag.qsb": {
+    "mode": "100644",
+    "sha256": "1981dcdd25a13e0f5f75a9f7e89b08eb2a4b79e528731acef5d5248cba68b530"
+  },
+  "snapshot/shell/src/assets/sounds/guide/barconfig/in.wav": {
+    "mode": "100644",
+    "sha256": "94448e17f4969db1f0a62b4b2c3d28f3b8610035295e44f5b287488424960288"
+  },
+  "snapshot/shell/src/assets/sounds/guide/barconfig/out.wav": {
+    "mode": "100644",
+    "sha256": "5a49799f10e6ea59da06d24c3167523462f95e71c74b8c3bed32c369cf0d2404"
+  },
+  "snapshot/shell/src/assets/sounds/musicpopup/swoosh.wav": {
+    "mode": "100644",
+    "sha256": "d751ba2a06e28018eb3b1ba981eff6a8a7679eb0f352de2a7988335d2f47ccce"
+  },
+  "snapshot/shell/src/assets/sounds/network/connect.wav": {
+    "mode": "100644",
+    "sha256": "64489c39f5394e8a4c5902b4b17eee0d57b0008c03ffff5abfc87ced1a869cae"
+  },
+  "snapshot/shell/src/assets/sounds/network/disconnect.wav": {
+    "mode": "100644",
+    "sha256": "7c6ea71b8033a43f67720c0c5d80b0d88876adae86fa0d3586eb18a4ca6d61e9"
+  },
+  "snapshot/shell/src/assets/sounds/network/power_off.wav": {
+    "mode": "100644",
+    "sha256": "ef2759f4004f1fe5c917a4f8f3c6dfd0548f3e652cab57232cee0f662294523b"
+  },
+  "snapshot/shell/src/assets/sounds/network/power_on.wav": {
+    "mode": "100644",
+    "sha256": "6f9bc1f059ea2b329ff4b82d19af8d067b5b4807eef2e73dfda09c52acb9285c"
+  },
+  "snapshot/shell/src/assets/sounds/network/switch.wav": {
+    "mode": "100644",
+    "sha256": "a4e3508434a00b87ca8499a2c89a079ac4f369d35ae7be277e5a7d05748a375d"
+  },
+  "snapshot/shell/src/assets/sounds/notifications/Botanica.wav": {
+    "mode": "100644",
+    "sha256": "2a428633bfe0aa26654dc1e7febc81026b06baa7cbf712dfe2d2756f3d6eb1f6"
+  },
+  "snapshot/shell/src/assets/sounds/notifications/Curious.mp3": {
+    "mode": "100644",
+    "sha256": "58636839c8198c51ca89e8c3f8f205dc7f53c6eabee7a5b6aaee33fa3683b02c"
+  },
+  "snapshot/shell/src/assets/sounds/notifications/Progress.wav": {
+    "mode": "100644",
+    "sha256": "d178edc6cc7d2bc405b048df21d23adf666ba817f70979280ab6fde65a1d8637"
+  },
+  "snapshot/shell/src/assets/sounds/notifications/Sine.wav": {
+    "mode": "100644",
+    "sha256": "9b421eadc12fc65d90f773a215a0c8f32fe3fbfb647cd4a807a7c9ed7f7bb04a"
+  },
+  "snapshot/shell/src/assets/sounds/notifications/Sneak.mp3": {
+    "mode": "100644",
+    "sha256": "4032c1aeaf41f12f2d93e4de4e6592cb2fd8191898b77ec792661c21496d05bb"
+  },
+  "snapshot/shell/src/assets/sounds/notifications/WakeUp.mp3": {
+    "mode": "100644",
+    "sha256": "748e6d03a559ac909d04b9fa907fca3424c6bf00aa45bcad3f6a07238e58f6cb"
+  },
+  "snapshot/shell/src/assets/sounds/notifications/Wobbly.mp3": {
+    "mode": "100644",
+    "sha256": "1f00f6568532a3e94a73a806a5383ef61e63cc27cf692580cb28bdfa203c6d8d"
+  },
+  "snapshot/shell/src/assets/sounds/quickactions/usage.wav": {
+    "mode": "100644",
+    "sha256": "08bab077f156ff15cf218150cddca5cba0ee8d145bcbd9d1021c3c00a15f9a4d"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/clickbutton/click.wav": {
+    "mode": "100644",
+    "sha256": "0dea4d30acdb3c5d5c3c9cccea70e2634efd9a90a04f0ca0253c3eca9d8fd2e2"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/clickbutton/click2.wav": {
+    "mode": "100644",
+    "sha256": "bf4c5ffc136d66ace461fe55106a562f4d49c9d2427b52320ca6913d497cbe13"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/draggable/tick.wav": {
+    "mode": "100644",
+    "sha256": "01cb08b0d7c277991f36a9f29894e9cd78c3acc4ecd16b853b71c68a706b6cee"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/dropdown/click.wav": {
+    "mode": "100644",
+    "sha256": "0dea4d30acdb3c5d5c3c9cccea70e2634efd9a90a04f0ca0253c3eca9d8fd2e2"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/dropdown/list.wav": {
+    "mode": "100644",
+    "sha256": "b8ef826eda42f157132e3eb298a68e9c028a0e7158d0d78ed838c09dac3cf611"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/fillbutton/button.wav": {
+    "mode": "100644",
+    "sha256": "7be1ed6f4aa95c52de731a5e934ec395dcb0c1cc4613abdf13fb8e1e0d3a0ad5"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/fillbutton/charge_loop.wav": {
+    "mode": "100644",
+    "sha256": "8904a0c4b80c2d2fd8c9a0fa72edd6c64b61c377e42c72e1d925d4e5f5560d5f"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/fillbutton/charge_loop2.wav": {
+    "mode": "100644",
+    "sha256": "2bc08a59b7f7c767a37994c50b73d2d2f63c4951a24efcb9e53919def24a61ca"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/iconbutton/click.wav": {
+    "mode": "100644",
+    "sha256": "0dea4d30acdb3c5d5c3c9cccea70e2634efd9a90a04f0ca0253c3eca9d8fd2e2"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/input/type.wav": {
+    "mode": "100644",
+    "sha256": "0649e34f48c709198ae7392e12f233acd186bd79434a261ae997ec1bc50a4c5a"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/switch/sfx.wav": {
+    "mode": "100644",
+    "sha256": "3de70aaf46e4d3f4191e53fc47a82d0ec2a36089a30505071d78a5742a1102e8"
+  },
+  "snapshot/shell/src/assets/sounds/reusables/toggle/sfx.wav": {
+    "mode": "100644",
+    "sha256": "b092eec92bc09c208766ac171c338aee336719cccb424f93f75f15fc8634badf"
+  },
+  "snapshot/shell/src/assets/sounds/start/background.wav": {
+    "mode": "100644",
+    "sha256": "988d452c7f2254c7e620299a983b8febc193667a2481c24626f753c6fdaeaed6"
+  },
+  "snapshot/shell/src/assets/sounds/start/exit.wav": {
+    "mode": "100644",
+    "sha256": "2f9383a936bb42d105c28b44276f252cd73ed6ad8f89036374a5a3c88cbebcb6"
+  },
+  "snapshot/shell/src/assets/sounds/start/pop_author.wav": {
+    "mode": "100644",
+    "sha256": "751f710ef4d5fc452a4820d6808bd8430f220f7922920ff8e5cf7ea0de087f60"
+  },
+  "snapshot/shell/src/assets/sounds/start/start.wav": {
+    "mode": "100644",
+    "sha256": "82a17b2e5805955a338b0eedae3a39137e27ae2cfb626bc790fccecdd239a333"
+  },
+  "snapshot/shell/src/assets/sounds/start/transition_serp.wav": {
+    "mode": "100644",
+    "sha256": "fa27e65b91dd1a3976ecc1e7b59a16eee0767d0a92c9e9e5548ad4a2a5cd09d0"
+  },
+  "snapshot/shell/src/assets/sounds/start/type.wav": {
+    "mode": "100644",
+    "sha256": "0649e34f48c709198ae7392e12f233acd186bd79434a261ae997ec1bc50a4c5a"
+  },
+  "snapshot/shell/src/assets/sounds/start/wave.wav": {
+    "mode": "100644",
+    "sha256": "9f6e39a1ae00b670e70032fbce7a33890c8fa474235ea04a1b12637eb0e8b986"
+  },
+  "snapshot/shell/src/assets/sounds/system/quick_click.wav": {
+    "mode": "100644",
+    "sha256": "9ed3369b07b571ddbdd125bde50de3b8896610beaa4617f5c75712b7cb5b0b00"
+  },
+  "snapshot/shell/src/assets/sounds/tutorial/tip.wav": {
+    "mode": "100644",
+    "sha256": "14455267b2e71835e7a15cf6ddbb690ec290b1dbf7b1447a5d9db5a45e7d131c"
+  },
+  "snapshot/shell/src/assets/sounds/tutorial/tip_guide.wav": {
+    "mode": "100644",
+    "sha256": "406b6528357a2051a6d40ad0b1f8273f32d588ae6cbd886eb018e8bfd71bad00"
+  },
+  "snapshot/shell/src/assets/themes/Alexandrite.json": {
+    "mode": "100644",
+    "sha256": "615aff4e036a9e37bbf56d7bd7be60e73ea5501c5694650b32755ceeeca38cc7"
+  },
+  "snapshot/shell/src/assets/themes/Amber.json": {
+    "mode": "100644",
+    "sha256": "8d407fdef66b4da66758b15d9bbf4246163fa22cde55bdee61420c5a9836512a"
+  },
+  "snapshot/shell/src/assets/themes/Amethyst.json": {
+    "mode": "100644",
+    "sha256": "4d2f0dd9442b5291443a68433ebe40445c58b9a2fbe5548e2095408aa85c8c39"
+  },
+  "snapshot/shell/src/assets/themes/Ametrine.json": {
+    "mode": "100644",
+    "sha256": "5a47ea2cc4e60b7350d306a507436e72b95dd5497e5fcb622c69033f390c57b9"
+  },
+  "snapshot/shell/src/assets/themes/Andromeda.json": {
+    "mode": "100644",
+    "sha256": "bd04531c99434895ce44fe1b89c7240d704883ed3efdf430b5d56410aceb5e73"
+  },
+  "snapshot/shell/src/assets/themes/Aquamarine.json": {
+    "mode": "100644",
+    "sha256": "3214bdf5412d097b5f12ea4d8a5bdb0d63db2a7f79c6eef7c9552acf963b27c4"
+  },
+  "snapshot/shell/src/assets/themes/Aventurine.json": {
+    "mode": "100644",
+    "sha256": "64c8461a8b2bf52ffbcf3923ee5eda090c12487571c56b918538925666d20fee"
+  },
+  "snapshot/shell/src/assets/themes/Ayu Dark.json": {
+    "mode": "100644",
+    "sha256": "fd7a2f976941bb52e5d7db67f4410617fa1b391306bd569733b75676351861d0"
+  },
+  "snapshot/shell/src/assets/themes/Ayu Mirage.json": {
+    "mode": "100644",
+    "sha256": "d7b0238e1917882247cd24e65a9269171a8c65d23a4fb19594b5f9673b9eba2c"
+  },
+  "snapshot/shell/src/assets/themes/Benitoite.json": {
+    "mode": "100644",
+    "sha256": "6107c5d9ae6fca406f8099085d640b018974251cb3c3e74200aadfc3811a4a1f"
+  },
+  "snapshot/shell/src/assets/themes/Beryl.json": {
+    "mode": "100644",
+    "sha256": "23cb8e49536c862a7f0996cd72cce6c07956069241a0c63bc6c2a5f0d3d5368b"
+  },
+  "snapshot/shell/src/assets/themes/Bloodstone.json": {
+    "mode": "100644",
+    "sha256": "43e53b59dcc9a34152b8f587d40f0460c0c3027c703505a4f9391a0f2b0d5692"
+  },
+  "snapshot/shell/src/assets/themes/Bronze.json": {
+    "mode": "100644",
+    "sha256": "acf086d56d482dcc273c29511fd4e9a6fb066a68f411a7fe72f2893e50300bec"
+  },
+  "snapshot/shell/src/assets/themes/Carbonfox.json": {
+    "mode": "100644",
+    "sha256": "1f0006960d5e0c9889467b7a61668c91255b77b93664847e0c9d765efb932132"
+  },
+  "snapshot/shell/src/assets/themes/Carnelian.json": {
+    "mode": "100644",
+    "sha256": "7a6bd96f9b592925cac5920709345161775756038c8d1402903c39a23d2ba76a"
+  },
+  "snapshot/shell/src/assets/themes/Charoite.json": {
+    "mode": "100644",
+    "sha256": "f56137d66a1cd247899cee39bc00df1f7f9ef6dfd8615a9bcf7302433b01e990"
+  },
+  "snapshot/shell/src/assets/themes/Chrysocolla.json": {
+    "mode": "100644",
+    "sha256": "42e1bd99a983c5c7921fa8f3af2eb3c1d22242f4f3d9f370fea49372116d51cb"
+  },
+  "snapshot/shell/src/assets/themes/Citrine.json": {
+    "mode": "100644",
+    "sha256": "94928e40d7f5120c343f39c9065da3985bcbd24cd8c004e776cf09e1b90295ff"
+  },
+  "snapshot/shell/src/assets/themes/Cobalt2.json": {
+    "mode": "100644",
+    "sha256": "ce4841d703535aef4cd0b75858257e3809fed695faf590a38818d3a2857d4528"
+  },
+  "snapshot/shell/src/assets/themes/Copper.json": {
+    "mode": "100644",
+    "sha256": "d8fbbb7968fb5c1b98ae00804aa0640bf5fe542c77ee422e21bfff610a479e48"
+  },
+  "snapshot/shell/src/assets/themes/Coral.json": {
+    "mode": "100644",
+    "sha256": "4598d9ddf8910153b03c18504b2cd16d14ce6acf9c2eb84b079c6646c8e2dcdb"
+  },
+  "snapshot/shell/src/assets/themes/Cyberpunk.json": {
+    "mode": "100644",
+    "sha256": "22e7200b69320b1ed4946a4c592e55a3c7eaea006f429e7327ef84679cc14a68"
+  },
+  "snapshot/shell/src/assets/themes/Dracula.json": {
+    "mode": "100644",
+    "sha256": "2d8553ef6f7bcab353292b46db8bb3fe338f9330adce0ed98ad862e58c902fcd"
+  },
+  "snapshot/shell/src/assets/themes/DustFox.json": {
+    "mode": "100644",
+    "sha256": "2cd73e20f6f1abcb4340b68e74ff2802c5d9b536e2548701f1e7e79c239cc39c"
+  },
+  "snapshot/shell/src/assets/themes/Emerald.json": {
+    "mode": "100644",
+    "sha256": "e4a39aefee2656e8eee835169b66993b24594664b93c2adc5b3a9a3c3e41381c"
+  },
+  "snapshot/shell/src/assets/themes/Espresso.json": {
+    "mode": "100644",
+    "sha256": "cb82350dc0989a790627368b5f7e53b87563437320073dd73b43cf122ece2001"
+  },
+  "snapshot/shell/src/assets/themes/Everforest.json": {
+    "mode": "100644",
+    "sha256": "07970f5358325ecdf478fb7469ff2d30fd34ee01db63dc93494e9675005607c3"
+  },
+  "snapshot/shell/src/assets/themes/Flexoki Dark.json": {
+    "mode": "100644",
+    "sha256": "0d8cbef9eb6cb75283a76e42b4d4ee359706b331aeebbcd465d036453af0635e"
+  },
+  "snapshot/shell/src/assets/themes/Flexoki Light.json": {
+    "mode": "100644",
+    "sha256": "3ed4f6ea0611495a0c73e93acc46aa5a1bdf2fe5e054e7daf009f26f19be2676"
+  },
+  "snapshot/shell/src/assets/themes/Frappe.json": {
+    "mode": "100644",
+    "sha256": "9e0d317453a176f1487f72f27095b7a5c4c5e0a96576fe64976ab1aba1fbbd85"
+  },
+  "snapshot/shell/src/assets/themes/Garnet.json": {
+    "mode": "100644",
+    "sha256": "ac35aad7a0609c967e29466157207e3d066a33a4d4cdfafc87b762152fd3df60"
+  },
+  "snapshot/shell/src/assets/themes/GitHub Dark.json": {
+    "mode": "100644",
+    "sha256": "f774cbcd9411251a9f7839c759bf5faf3d68b83b52b4e228a9b6647e2b98d4bc"
+  },
+  "snapshot/shell/src/assets/themes/GitHub Light.json": {
+    "mode": "100644",
+    "sha256": "c02f9000f128b65a454477aa0304b61f53aa38d559558c285618ac3cdcb3922a"
+  },
+  "snapshot/shell/src/assets/themes/Gruvbox.json": {
+    "mode": "100644",
+    "sha256": "92ae4f02cb3d12b56d6ae64e2c4f12809bf895f165af7da1cdefc6f5e0c8b080"
+  },
+  "snapshot/shell/src/assets/themes/Heliodor.json": {
+    "mode": "100644",
+    "sha256": "260a06c13b3c1b54c55eaac47a7e80bfd6e468cac685614b69904e79176acd68"
+  },
+  "snapshot/shell/src/assets/themes/Hematite.json": {
+    "mode": "100644",
+    "sha256": "af8e1101e3fa544b2df09ffbd22981b8e9fd7f9792d1e16316df22b1f796c58b"
+  },
+  "snapshot/shell/src/assets/themes/Horizon.json": {
+    "mode": "100644",
+    "sha256": "b3474b476ea55ab30dc7d40b8d1f68d0189f92f8a24a1e39aada9080c9bac2b8"
+  },
+  "snapshot/shell/src/assets/themes/Iolite.json": {
+    "mode": "100644",
+    "sha256": "902bb2d13bec95ebe4ac5de5959cc1fff248370ba9c30706654b81b2962c5fb0"
+  },
+  "snapshot/shell/src/assets/themes/Jade.json": {
+    "mode": "100644",
+    "sha256": "88cd00891ac672e06f2f9d319e3f41fecd67007f69ca45035916ded4434cc68f"
+  },
+  "snapshot/shell/src/assets/themes/Jasper.json": {
+    "mode": "100644",
+    "sha256": "a0d45fcbffe2eb8041daa27dceb399357190961a8ea2ea44a7352ea854b198b7"
+  },
+  "snapshot/shell/src/assets/themes/Kanagawa Dragon.json": {
+    "mode": "100644",
+    "sha256": "afce04d2fe12c9e4caf976283d0bf71c17dea414d143ea0094ce361b42d2dc97"
+  },
+  "snapshot/shell/src/assets/themes/Kanagawa.json": {
+    "mode": "100644",
+    "sha256": "b5375f1f4a65870bbd64c99964c8ca7d392c8130aff6e2afa7595dff9870dc78"
+  },
+  "snapshot/shell/src/assets/themes/Kunzite.json": {
+    "mode": "100644",
+    "sha256": "a9d35d7f1dcd4365360b507b4363224325d1addd6e58c7ccb9dab7dfb50aa5d7"
+  },
+  "snapshot/shell/src/assets/themes/Lapis.json": {
+    "mode": "100644",
+    "sha256": "12ce12ee0b0bf177d613b0644b4630fd53a789ac11906095250a1ca034b48b58"
+  },
+  "snapshot/shell/src/assets/themes/Larimar.json": {
+    "mode": "100644",
+    "sha256": "32d230b7337b6fa40706ff3fc9a54fc257645ca5887df5161c782f1970aa81a1"
+  },
+  "snapshot/shell/src/assets/themes/Latte.json": {
+    "mode": "100644",
+    "sha256": "463e0b5b886c20303a9b8234b1e1a560e6212328a8e0281f780a33c4f0527903"
+  },
+  "snapshot/shell/src/assets/themes/Macchiato.json": {
+    "mode": "100644",
+    "sha256": "4a3eeefb18fed16e6949d8e2ee21ba6bf0fddced922425b55c44dad507f84d2b"
+  },
+  "snapshot/shell/src/assets/themes/Malachite.json": {
+    "mode": "100644",
+    "sha256": "48474a2234d893491ca9fd426f621c45fb2039f1e8a2ca7b19b5a2463047571c"
+  },
+  "snapshot/shell/src/assets/themes/Mariana.json": {
+    "mode": "100644",
+    "sha256": "a4b73caa27fffbed1231c0becb8eb02baede24e50e9042728e368822a7742aff"
+  },
+  "snapshot/shell/src/assets/themes/Material Darker.json": {
+    "mode": "100644",
+    "sha256": "4a245f68af68e7e00712482a4a204597a20b737ed5c1829e1a4e31874548c915"
+  },
+  "snapshot/shell/src/assets/themes/Material Ocean.json": {
+    "mode": "100644",
+    "sha256": "356d673a76503c58198a679e7dd555b0ee630c7a21a044d8ae5587d9833917e2"
+  },
+  "snapshot/shell/src/assets/themes/Matugen.json": {
+    "mode": "100644",
+    "sha256": "6c0eb5872c5f88ba2eb12f6f6f973015d4df805ff5de34846b1b81fc84449722"
+  },
+  "snapshot/shell/src/assets/themes/Mocha.json": {
+    "mode": "100644",
+    "sha256": "c76ff65a37fd9a2392324742ebca1ed45e7a318852ddd9da1aa5645ed5c8e20d"
+  },
+  "snapshot/shell/src/assets/themes/Monokai.json": {
+    "mode": "100644",
+    "sha256": "545fb4ec42c93bbf59c6b2dd82325f134fcf59e3300891676e0a2040bb664d65"
+  },
+  "snapshot/shell/src/assets/themes/Moonstone.json": {
+    "mode": "100644",
+    "sha256": "7db31aeadc53779b43098af23d21824cb2f19117e9b4e697c7dcee6f68d6750d"
+  },
+  "snapshot/shell/src/assets/themes/Morganite.json": {
+    "mode": "100644",
+    "sha256": "ddb8242365f19cbfbad2746c5908d12e9a3bbf9f2d8a3284d3d0daa6a5585629"
+  },
+  "snapshot/shell/src/assets/themes/Night Owl.json": {
+    "mode": "100644",
+    "sha256": "9f9d2d0b0cfcd866b5ff427990dc9ec663b94d3db27d58ca4fd7cc5081cff8d6"
+  },
+  "snapshot/shell/src/assets/themes/Nightfox.json": {
+    "mode": "100644",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "snapshot/shell/src/assets/themes/Nord.json": {
+    "mode": "100644",
+    "sha256": "531c6e545e24c82cd73f6ecd8b9d9816402e1c3bb05292ab607e780c44a7c3d9"
+  },
+  "snapshot/shell/src/assets/themes/Obsidian.json": {
+    "mode": "100644",
+    "sha256": "10956084bdaf45d29dfc9a2448ed417c0aeb7c26da268cb1ae622b7089eaa524"
+  },
+  "snapshot/shell/src/assets/themes/One Dark.json": {
+    "mode": "100644",
+    "sha256": "efdf2cb8b0ca1f11dc1cc055bdae26f0d8f727808f4600cc4e6c9acc036a2fea"
+  },
+  "snapshot/shell/src/assets/themes/Onyx.json": {
+    "mode": "100644",
+    "sha256": "2b5322481be8cffa2df9c749ee11e96d4fe632e9c0fdcc79013c2593371b96fa"
+  },
+  "snapshot/shell/src/assets/themes/Opal.json": {
+    "mode": "100644",
+    "sha256": "42ce63a9c6187dcd1809aa6c2af035946837a811833c1a5be97ec001a2653982"
+  },
+  "snapshot/shell/src/assets/themes/Palenight.json": {
+    "mode": "100644",
+    "sha256": "8abb9a60334b8714ee50349e9569b2d9a6cb154af371a1a65e8bc0e1ab2b128b"
+  },
+  "snapshot/shell/src/assets/themes/Panda.json": {
+    "mode": "100644",
+    "sha256": "41cc0167fb380a46aa426ee52e6fc0343ca1c9b644ef16df0d9a20a1dceefacc"
+  },
+  "snapshot/shell/src/assets/themes/PaperColor Light.json": {
+    "mode": "100644",
+    "sha256": "8c1582ccf6f58fdf3b3a52249884b2a96f45ced39d0d6f3d72e47400be74b7fd"
+  },
+  "snapshot/shell/src/assets/themes/Pearl.json": {
+    "mode": "100644",
+    "sha256": "86b97e0088355518b1a6e3afa3eaf2496bf291c89da4586b32ce650bfb78f18c"
+  },
+  "snapshot/shell/src/assets/themes/Peridot.json": {
+    "mode": "100644",
+    "sha256": "4e7ca22bef09586bccfbc3feeb8fccac0c5500f9847b5dd830592407286573a6"
+  },
+  "snapshot/shell/src/assets/themes/Platinum.json": {
+    "mode": "100644",
+    "sha256": "6752af3cade99a8a15dee3b7971d58dcf06b02bd6244a306a9f1895f45fef3dd"
+  },
+  "snapshot/shell/src/assets/themes/Poimandres.json": {
+    "mode": "100644",
+    "sha256": "679b4fc8e2dbc427e2699c432702ac62f648cb4ea9fb35d46b661296e1f14bc0"
+  },
+  "snapshot/shell/src/assets/themes/Pyrite.json": {
+    "mode": "100644",
+    "sha256": "f96dfa3d0b8558c7c5ecf871eb4a36857b9ff35c194be8e72909d514180520ec"
+  },
+  "snapshot/shell/src/assets/themes/Quartz.json": {
+    "mode": "100644",
+    "sha256": "01db0576728b16ac672d3c97198ef4a20199e0d3f6a8d8a52fb0921a0e4853de"
+  },
+  "snapshot/shell/src/assets/themes/Rhodochrosite.json": {
+    "mode": "100644",
+    "sha256": "c12f65e9e4c39005b858ae9a57f0e5a7a95f969b14dd2fc55bfc2ad1eda96b8f"
+  },
+  "snapshot/shell/src/assets/themes/Rhodonite.json": {
+    "mode": "100644",
+    "sha256": "12156204bc9de1cfd769d8e01fbe4dc0bd6f2f7446a37588fb02bca712397dda"
+  },
+  "snapshot/shell/src/assets/themes/Rose Pine Dawn.json": {
+    "mode": "100644",
+    "sha256": "9ffe29ba752b1aff277146860e087a8474dc51b6ae8da6e624465bbb785bcc44"
+  },
+  "snapshot/shell/src/assets/themes/Rose Pine Moon.json": {
+    "mode": "100644",
+    "sha256": "65b0b0b6c55eed4c138eba7d1fad832cf7cb6a3edcc675c3d22a96dfcd4ec92f"
+  },
+  "snapshot/shell/src/assets/themes/Rose Pine.json": {
+    "mode": "100644",
+    "sha256": "778d59f2fec3cdecd51dde042e3bf2656ae0bca5de5544138ce4b4743e8faf66"
+  },
+  "snapshot/shell/src/assets/themes/Ruby.json": {
+    "mode": "100644",
+    "sha256": "9cdd07e8029d50c562b6877e55f6b29fc5923676b37e7ca79113efe920e2cbe0"
+  },
+  "snapshot/shell/src/assets/themes/Sapphire.json": {
+    "mode": "100644",
+    "sha256": "970e4cfb1a487ef4074f207617ea1ebe11d3096012abbff3f66777e6cd5c7578"
+  },
+  "snapshot/shell/src/assets/themes/Shades of Purple.json": {
+    "mode": "100644",
+    "sha256": "0d3dbbe034f0f67df294560ca2229c2b2addeb9f719caa7832fcaa1dbe02d102"
+  },
+  "snapshot/shell/src/assets/themes/Solarized.json": {
+    "mode": "100644",
+    "sha256": "af782e5532e009c8244437a1678f0177930cb19a10554e71c8028821272c38ff"
+  },
+  "snapshot/shell/src/assets/themes/Sphene.json": {
+    "mode": "100644",
+    "sha256": "fea03ec4a04eed3cb4e58a476779a175d7fe2845cc09dd1cd82d03a6d1ca93f0"
+  },
+  "snapshot/shell/src/assets/themes/Spinel.json": {
+    "mode": "100644",
+    "sha256": "bbebbaad568d2028beb7b6567d0278e7b691e62f775d43ae4f5fbfaca070014e"
+  },
+  "snapshot/shell/src/assets/themes/Sugilite.json": {
+    "mode": "100644",
+    "sha256": "d5fa96ac861dca2d47185de818de6b0be505a95733e010eed3d753a14a6e91f9"
+  },
+  "snapshot/shell/src/assets/themes/Sunburst.json": {
+    "mode": "100644",
+    "sha256": "86fa75ba0c05dafb61a3affaab6003cea445259d55c94a67e8c9b7a603612c87"
+  },
+  "snapshot/shell/src/assets/themes/Sunstone.json": {
+    "mode": "100644",
+    "sha256": "97ee740e0beafca79ce58e4a9ce59ed424911d083437498cf509743607faeba3"
+  },
+  "snapshot/shell/src/assets/themes/SynthWave '84.json": {
+    "mode": "100644",
+    "sha256": "3678e6b587ac354125c008b045a3fefe4b4b18771711fab8ccc6ee187c555fd2"
+  },
+  "snapshot/shell/src/assets/themes/Tanzanite.json": {
+    "mode": "100644",
+    "sha256": "01d013992993b2deb5a1972109bdb8c9739aedb95d8fceaf858393d8c9ce51cf"
+  },
+  "snapshot/shell/src/assets/themes/Titanium.json": {
+    "mode": "100644",
+    "sha256": "d9e29d787fb0b321faf7f3408e714e3e7f7328c59c1e2ef371a41ca353f4dfef"
+  },
+  "snapshot/shell/src/assets/themes/Tokyo Storm.json": {
+    "mode": "100644",
+    "sha256": "fad676ffbce80da8f8fd4a921a8de98966d0c63396b60438fd54bc36526a3272"
+  },
+  "snapshot/shell/src/assets/themes/Tokyo.json": {
+    "mode": "100644",
+    "sha256": "549c8262aafdf640e519e6d14da71841e2cbb805769d92fed90b3f08a6de49fd"
+  },
+  "snapshot/shell/src/assets/themes/Topaz.json": {
+    "mode": "100644",
+    "sha256": "1bd777ff7ee6ba0ab59ff345522bc45d1388765c46da626f6e166d8a1c147c3c"
+  },
+  "snapshot/shell/src/assets/themes/Tourmaline.json": {
+    "mode": "100644",
+    "sha256": "efb5dacd9a22b0eec6958f1426e1de0c23c63886e4c93cb00e5475496b159ffb"
+  },
+  "snapshot/shell/src/assets/themes/Turquoise.json": {
+    "mode": "100644",
+    "sha256": "4f470a963793c628f6f2cade769cfd8f4f7cc1b0712197dd2dbc7acbb9d92b70"
+  },
+  "snapshot/shell/src/assets/themes/Vesper.json": {
+    "mode": "100644",
+    "sha256": "2c99acc5885fa7eb7bbb374586cb59d5c94260820d96fa31cb1cceeff43ed7a2"
+  },
+  "snapshot/shell/src/assets/themes/Zircon.json": {
+    "mode": "100644",
+    "sha256": "517ed086caa1e264b5b909aa923a9fdb6fab35fb1994d29a4e264a9b601a7acc"
+  },
+  "snapshot/shell/src/assets/tutorial.json": {
+    "mode": "100755",
+    "sha256": "7641e4e27c52c6af3baab2cd50169d99132d9efd4528ec602a9dc4c126adb1f4"
+  },
+  "snapshot/shell/src/assets/widgets/dashboard.json": {
+    "mode": "100644",
+    "sha256": "2faf7f75c52d95d5d48a1af323ab386380b8545db7e5c33b2a17b070e9418e5c"
+  },
+  "snapshot/shell/src/assets/widgets/media_station.json": {
+    "mode": "100644",
+    "sha256": "627eb92e6b138d2f042f151655fe6f418972349cbb366fd764ca0af2061dbfd9"
+  },
+  "snapshot/shell/src/assets/widgets/minimal.json": {
+    "mode": "100644",
+    "sha256": "89aa6fa6ed5b53e477040908fb3821eec0fac40d507fc64188d8b3d587259a54"
+  },
+  "snapshot/shell/src/quickshell/CodexActionButton.qml": {
+    "mode": "100644",
+    "sha256": "b33c4653af1ee3ae05b2d03f01763d8a8f112e8d5204d6b20f548f10100d39df"
+  },
+  "snapshot/shell/src/quickshell/CodexUsageDashboard.qml": {
+    "mode": "100644",
+    "sha256": "3a434c6c5ed5e3ced8ea12d0edc69e95e3a6c399697e9475e6bab740cadf3c78"
+  },
+  "snapshot/shell/src/quickshell/Dim.qml": {
+    "mode": "100644",
+    "sha256": "4e64a39aa564d1f826536f834783204b1ae389ed19b283f7fbc172f83dbf33b4"
+  },
+  "snapshot/shell/src/quickshell/Main.qml": {
+    "mode": "100644",
+    "sha256": "47ffc33340ded7d5c501526b92e2dc2bd85722a4c6fb2ab33532c972744c51e9"
+  },
+  "snapshot/shell/src/quickshell/Runner.qml": {
+    "mode": "100644",
+    "sha256": "ae437c4e2e673f57205c9afb22698722d8eb9f93d2f5101f80477345e0271888"
+  },
+  "snapshot/shell/src/quickshell/SettingsApp.qml": {
+    "mode": "100644",
+    "sha256": "fec7a66956b637b59b94bcf20144386630ae1d8cd06b990eb8a7b939639e05b4"
+  },
+  "snapshot/shell/src/quickshell/Shell.qml": {
+    "mode": "100644",
+    "sha256": "bccaf97e30f84f2c0f681d0113832f26aa8ea4da069e1188ef7198a081f81d47"
+  },
+  "snapshot/shell/src/quickshell/WindowRegistry.js": {
+    "mode": "100644",
+    "sha256": "41ec29c6a533806e9920772578ae389ef1380406c89c65e892d838654e2671e7"
+  },
+  "snapshot/shell/src/quickshell/bar/Bar.qml": {
+    "mode": "100644",
+    "sha256": "ff1d188d1f61a5b15739762930e7a49e5d1a8506c1bfba5dd0488a04ef008f30"
+  },
+  "snapshot/shell/src/quickshell/bar/BarModule.qml": {
+    "mode": "100644",
+    "sha256": "3f7d0fc71821b888e4337870d9cfedc29d3bb3a7d47a43feec969e7a77f6e172"
+  },
+  "snapshot/shell/src/quickshell/bar/BarModuleRegistry.qml": {
+    "mode": "100644",
+    "sha256": "c73bd48d4bba17552d6e6b98948da84a49ab8cb994e7d5c6492b47cdc04ee6d9"
+  },
+  "snapshot/shell/src/quickshell/bar/SideBar.qml": {
+    "mode": "100644",
+    "sha256": "a4d77d3ed2bbe2ba22e53e88f6f19543f1d8d2e8ec0f4e728c225295fbe778e4"
+  },
+  "snapshot/shell/src/quickshell/bar/TopBar.qml": {
+    "mode": "100644",
+    "sha256": "101d64adc4e5af311cc49f88f5d7032c582c9b3fee9ca294a7bc4a2656f40021"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/bat/BatFace.qml": {
+    "mode": "100644",
+    "sha256": "8f887d7c22160c8f4d5e7cb7d174a8bc9bc52b924f1441f75a99585eefbabf95"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/bt/BtFace.qml": {
+    "mode": "100644",
+    "sha256": "b42ba492de4a574883c48d72af2f86601ea421f14805e545a021d03f2da2040b"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/focus/FocusFace.qml": {
+    "mode": "100644",
+    "sha256": "468da3b53a02fdcc166d31f086a094e5b213444e27790fb6822bd54f8b6b0c80"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/info/InfoFace.qml": {
+    "mode": "100644",
+    "sha256": "54caf403d21465f7879fdd7989db57d6f43f5bacddaa9f2d872b5a8e17efe4dc"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/kb/KbFace.qml": {
+    "mode": "100644",
+    "sha256": "4981df9df35f53222d43247336b4d620b085d846d938d10ebc01246b695e2ef9"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/left/LeftFace.qml": {
+    "mode": "100644",
+    "sha256": "639bf6793a72cafbd4d1ef709408abccab767c2da15419758e7c117657a6aa16"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/media/MediaFace.qml": {
+    "mode": "100644",
+    "sha256": "4ccfb45702a93f720caec293e355428880adfdde81792f97bfa4ac876380f1b6"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/sysmon/SysMonFace.qml": {
+    "mode": "100644",
+    "sha256": "2d57cb202b34b729863204f7de9d08849a99fe97d5a463190846cdc6aca06a79"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/timedate/BadgeFace.qml": {
+    "mode": "100644",
+    "sha256": "569cd49124e8d92797b10ce936b8937cefae1e4001ebd22b225b766d172eff9e"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/timedate/ClassicFace.qml": {
+    "mode": "100644",
+    "sha256": "d34864c248971b4e80f733ad56c7d2b68c3183ff2b73f32734aac68729b646e7"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/timedate/MaterialFace.qml": {
+    "mode": "100644",
+    "sha256": "fb11934d2744b12d9df91e981e8f6c77a80f53cc469646b972fd47b536ec7023"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/timedate/TimeDateFace.qml": {
+    "mode": "100644",
+    "sha256": "11793534e7454a8c89339b4169d8eaf057fbfc759f5f2922d2ac8c597b95ea65"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/tray/TrayFace.qml": {
+    "mode": "100644",
+    "sha256": "d13f249df22b55b93364560571df2de27fdafe1d3d6e8f29e9d8296bef52f3fe"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/vis/VisFace.qml": {
+    "mode": "100644",
+    "sha256": "2cd17b7d2d510655e8db7855ff447597160affd7e980e3b8e247f4ec7504490b"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/vol/VolFace.qml": {
+    "mode": "100644",
+    "sha256": "73e695dcc00689521bf7d5d38de603fa3fb677991eab0706d7fd2d414612dc1b"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/weather/WeatherFace.qml": {
+    "mode": "100644",
+    "sha256": "7ecb3f64d41c81fdc204f740a5dfe4b6183a0fdf90c656c42c1c60a641c76669"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/wifi/WifiFace.qml": {
+    "mode": "100644",
+    "sha256": "e8e938ef52c5ee86c788d856276f7cc323c694a9957ee2372594394fbd717ddd"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/workspaces/NumbersFace.qml": {
+    "mode": "100644",
+    "sha256": "ee98791d53d000dbf82da5938ee091a5c2254852100f671e18f5ecf8262787db"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/workspaces/PacmanFace.qml": {
+    "mode": "100644",
+    "sha256": "3e96613af64d147f91852b4b3e79b4d0d61c991794665ec92f02efbb8acdd174"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/workspaces/PillsFace.qml": {
+    "mode": "100644",
+    "sha256": "180306d792d0f3ad98fdd4b08592de0dd2704f278a240f7f192ac1b884abb9a4"
+  },
+  "snapshot/shell/src/quickshell/bar/faces/workspaces/WorkspacesFace.qml": {
+    "mode": "100644",
+    "sha256": "2a3fd3c9fbd6fd8a003e5d61c72f9dd329b55b94905114c2be1073b3745affbe"
+  },
+  "snapshot/shell/src/quickshell/bar/qmldir": {
+    "mode": "100644",
+    "sha256": "fc926312bf6ba80ba059b01d4f7b3e726d08afb0098cc9f4176c8ffed8d1a274"
+  },
+  "snapshot/shell/src/quickshell/calendar/AsciiWeatherArt.qml": {
+    "mode": "100644",
+    "sha256": "aab52a8f9d913c46e2f552cb21f42ad724270bdd489dd861de772308ae041d71"
+  },
+  "snapshot/shell/src/quickshell/calendar/AsciiWeatherCard.qml": {
+    "mode": "100644",
+    "sha256": "2444e7799892efe8e7c9338ab235e8d3a056acf703e28c22342eb3b7bb325688"
+  },
+  "snapshot/shell/src/quickshell/calendar/CalendarPopup.qml": {
+    "mode": "100644",
+    "sha256": "8d74019dfbb67677540f47496cf190f431c693a4ddb86d4c30bebb428284f67f"
+  },
+  "snapshot/shell/src/quickshell/calendar/WeatherMatrixText.qml": {
+    "mode": "100644",
+    "sha256": "0f56496bfc55985ea8e0071a561d390402226fd79e8d33fced9a9cddacaad3cb"
+  },
+  "snapshot/shell/src/quickshell/clipboard/Clipboard.qml": {
+    "mode": "100644",
+    "sha256": "04133b4ec70ef449463e709c4622995848d9c2681b5a5287fad85f4165e54106"
+  },
+  "snapshot/shell/src/quickshell/clipboard/clip_fetcher.py": {
+    "mode": "100644",
+    "sha256": "6be8347cb7ec0336f35036c96c4ebfa8fe72f71370874aa31b2dc1ad02776729"
+  },
+  "snapshot/shell/src/quickshell/desktop/DesktopPresetOverlay.qml": {
+    "mode": "100644",
+    "sha256": "910db9c438dec75d60e89ba837baa5817f8edb264bd222f4d47de94b8ae7d693"
+  },
+  "snapshot/shell/src/quickshell/desktop/DesktopPresetSessionBar.qml": {
+    "mode": "100644",
+    "sha256": "599065e7bdfca8c71a4bccfbdc7c5f5ad1cdefbf074ada8f19a3564bf08a8320"
+  },
+  "snapshot/shell/src/quickshell/desktop/PanelPlacement.js": {
+    "mode": "100644",
+    "sha256": "7909700233db59304ed85a339addab2d5e223c8127fa2b21b6f34f0468e666a0"
+  },
+  "snapshot/shell/src/quickshell/desktop/PresetAction.qml": {
+    "mode": "100644",
+    "sha256": "6c953200f16568e70f3b31399cecedf3a5ef16db9becd452fd45745f19a0c2af"
+  },
+  "snapshot/shell/src/quickshell/dock/Dock.qml": {
+    "mode": "100644",
+    "sha256": "884be6cf5256509940f14175323bab4244604c40aaa8dc5f7db0aaac4d04307a"
+  },
+  "snapshot/shell/src/quickshell/dock/DockAppButton.qml": {
+    "mode": "100644",
+    "sha256": "bc4d0a7c8b73e0be114e2dc5f0239fde0ed214b733769870a9af15a5b800f387"
+  },
+  "snapshot/shell/src/quickshell/dock/DockAppPicker.qml": {
+    "mode": "100644",
+    "sha256": "d7084943ba3d6028dbb66b5d50396aea5326c32e0105ba9bb27b0723e4b59a67"
+  },
+  "snapshot/shell/src/quickshell/dock/DockContainer.qml": {
+    "mode": "100644",
+    "sha256": "ff58ed51ffa709b566f8e4f1df9be95e9e05d750f6bd8f9de278043491f65690"
+  },
+  "snapshot/shell/src/quickshell/dock/DockExclusionWindow.qml": {
+    "mode": "100644",
+    "sha256": "2bf6d9be7506a34e3d664bfe7ff4ca6e1f38b74eeacdd0e94b1f5ac1a4d22771"
+  },
+  "snapshot/shell/src/quickshell/dock/DockPickerRow.qml": {
+    "mode": "100644",
+    "sha256": "66f09216ec77e4b50c408b2f1c44ee07de3961093ff0fb338c8408748b2d6620"
+  },
+  "snapshot/shell/src/quickshell/dock/DockRunningButton.qml": {
+    "mode": "100644",
+    "sha256": "e3df4361cf48235687019711372afa3705cf21bc0510e6f7dd2147e6bd2c8517"
+  },
+  "snapshot/shell/src/quickshell/dock/DockWindow.qml": {
+    "mode": "100644",
+    "sha256": "1fe05db286c9ec235a98c34f04e3afd3f46f9ad18c543706a91524c82744ff2c"
+  },
+  "snapshot/shell/src/quickshell/dock/DockWindowApps.qml": {
+    "mode": "100644",
+    "sha256": "bc69e5b036b3a464adc76527380ac9e5ba294604d009b3498adc13f0527c2b6e"
+  },
+  "snapshot/shell/src/quickshell/dock/DockWindowState.qml": {
+    "mode": "100644",
+    "sha256": "fb4d386325f5be209e7e67ffd8898f6cfd14351b9a2ea13ddd32c238b394dcf1"
+  },
+  "snapshot/shell/src/quickshell/dock/qmldir": {
+    "mode": "100644",
+    "sha256": "6804852f4d61dd9c0ee94a97ff1150f45b8f6ee9f414c2de6498efecf3e11365"
+  },
+  "snapshot/shell/src/quickshell/guide/AboutTab.qml": {
+    "mode": "100644",
+    "sha256": "cbf3c0f46553d2bcd5831d535c35e9043636ba2c2aa2e066292001d47deb03c3"
+  },
+  "snapshot/shell/src/quickshell/guide/DockTab.qml": {
+    "mode": "100644",
+    "sha256": "6d2e9ae59133fa43e34587d3c2f56cd41f50d80b848c3283a25e0f4fe20c0f2f"
+  },
+  "snapshot/shell/src/quickshell/guide/GuideContent.qml": {
+    "mode": "100644",
+    "sha256": "9c3fba09036897ebfa9fc4ebf3fa4d89df0408c5760077684053afc0b5549c15"
+  },
+  "snapshot/shell/src/quickshell/guide/GuidePopup.qml": {
+    "mode": "100644",
+    "sha256": "e4714fa0abb83d5c7b67172c9863f73595e7a380fb561c11af90e1c641139b4c"
+  },
+  "snapshot/shell/src/quickshell/guide/GuideSearchResults.qml": {
+    "mode": "100644",
+    "sha256": "00615e5f36ed8f7c6dcd260d51bd4fad1544284fe7e0dae698df321a81fff4cc"
+  },
+  "snapshot/shell/src/quickshell/guide/GuideSidebar.qml": {
+    "mode": "100644",
+    "sha256": "f62b9b115e691e380d657d06300c2ef72608c5cc281e904a134cd17cb3eafdeb"
+  },
+  "snapshot/shell/src/quickshell/guide/GuideTab.qml": {
+    "mode": "100644",
+    "sha256": "3852bd3a0eebc650be469502cb3d93ac912e8c81e11760fc59427db2bf28547b"
+  },
+  "snapshot/shell/src/quickshell/guide/IdleTab.qml": {
+    "mode": "100644",
+    "sha256": "c4aa84f536d9c68f9976a7c736e905b2e04d0379bd584f0991ef384fe60ce400"
+  },
+  "snapshot/shell/src/quickshell/guide/LauncherTab.qml": {
+    "mode": "100644",
+    "sha256": "1f744521a4c44234cb85be351f093ad10056320881fc479207eec314c68d1974"
+  },
+  "snapshot/shell/src/quickshell/guide/MouseWheelScroll.qml": {
+    "mode": "100644",
+    "sha256": "8864e29fc076f1834618b1c99cb10b122c5583cac36cff8e4d813764eb035370"
+  },
+  "snapshot/shell/src/quickshell/guide/OnScreenDisplayTab.qml": {
+    "mode": "100644",
+    "sha256": "7fd75a03b60f9945b8f4f5d252253093086e4835b9bf67d799188adbae155f41"
+  },
+  "snapshot/shell/src/quickshell/guide/WelcomeTab.qml": {
+    "mode": "100644",
+    "sha256": "f9ed79a5af9847b19e5177e09ced17537712ecc3a08ff44e529317be77344043"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/BarGeneralTab.qml": {
+    "mode": "100644",
+    "sha256": "e6a5a33df532e5deda90fb04d2d2cedcf0de4baee7bde3300f6f896f1f3dc493"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/BarModulesTab.qml": {
+    "mode": "100644",
+    "sha256": "41138545a3681b920a932395e7e08ce814c90ed21733168f4f1e24759185c2f8"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/general/BarAutohideSection.qml": {
+    "mode": "100644",
+    "sha256": "a60a2296ee2db50f9b9bfa812f8e5fbb3f82dc2116a89e7d25941ceb62e229d6"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/general/BarDragBox.qml": {
+    "mode": "100644",
+    "sha256": "2e523f5420dc73faa63128f9abedab37b63eb3a3e105d30879fd5c41f62ea59a"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/general/BarGeneralState.qml": {
+    "mode": "100644",
+    "sha256": "e28a4f2979e9ce4b457717ecd51cad5ef1f353f0170d3bf76894c73d6c532e2f"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/general/BarLayoutEditor.qml": {
+    "mode": "100644",
+    "sha256": "a83557e77b560dfd40bc83bce32f6a0a56094a5ff50217bf64ad103c8ac141b3"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/general/BarPlacementSection.qml": {
+    "mode": "100644",
+    "sha256": "26d184e89b66194f6930317cda2d97b766ab3f8acb8487f536389a19e01f1504"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/general/BarStyleSection.qml": {
+    "mode": "100644",
+    "sha256": "2736def7951930a56fcfbf047acbd6ad505041601349ba5eb23f73adf8a801f4"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/general/qmldir": {
+    "mode": "100644",
+    "sha256": "2f9579f849cbe40962df1e841754a58b357f6c66cf5d4b4a76d1687656f4a235"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarBatteryCard.qml": {
+    "mode": "100644",
+    "sha256": "168d6514e6bed4c71fc1b90b686b27ac3350ca208f5de0f00ab1269619494593"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarBluetoothCard.qml": {
+    "mode": "100644",
+    "sha256": "a0fb6d7e200601846c3d22537e089e4fbc0693bcf9ce6d8385a0fc45336b63ee"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarKeyboardCard.qml": {
+    "mode": "100644",
+    "sha256": "a3742d471aba7bffe423c1ca18fb410b40038b0ccfb8b059d11772305530aaef"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarMediaCard.qml": {
+    "mode": "100644",
+    "sha256": "6de68f14fadfc9e5e86aeb6fcb805a351fffb43e97234ad6490b5061a16b87e6"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarMenuCard.qml": {
+    "mode": "100644",
+    "sha256": "53b95bec1e1cd3ac292f00895d1d04c014d4ed3cd6b0092f98fc591663c354c1"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarModuleCard.qml": {
+    "mode": "100644",
+    "sha256": "97b627800e46e034017c71584a85c179a248fded2099b9b3cafb0def18f47a23"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarModulePreview.qml": {
+    "mode": "100644",
+    "sha256": "92db0ddb68577e37b4b06d6618f4563ca71e7e3578a3fdfee6cfe81e88fd3ceb"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarModuleStyleCard.qml": {
+    "mode": "100644",
+    "sha256": "6599458cb898556008a93fe85e8bb1af4cfacbfbcb50d4162bf3e72168f754be"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarModulesSettings.qml": {
+    "mode": "100644",
+    "sha256": "b35a5b574e82f49ef30576e86ba75bd3f9cdc8019aa3249b5e897ec88373d558"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarNetworkCard.qml": {
+    "mode": "100644",
+    "sha256": "92b9453b13d8e9b6f84c434aed521da847fed72c83621b0e7e24cb51cfb01530"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarPreviewWidget.qml": {
+    "mode": "100644",
+    "sha256": "ab4abaa6c59db7bdaa6371abfa4085c342b2925513c0ba375ccd5ff6a80717fe"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarSysmonCard.qml": {
+    "mode": "100644",
+    "sha256": "3f725287ea4fb6babbf6cf772086276b055ad5649129d3dd225202b8067a8c84"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarTimeDateCard.qml": {
+    "mode": "100644",
+    "sha256": "a6a410995f2966870b8fe3a50913fd8e9f5260a54679b9843404d8c238b884e0"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarVisualizerCard.qml": {
+    "mode": "100644",
+    "sha256": "5750536af21c51a9dd36c5a3cebd0f95b658b6e1ab34462f73e06b8fd062523f"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarVolumeCard.qml": {
+    "mode": "100644",
+    "sha256": "e799b55622cba3e1436dff2c3cdbd432cf25705fb1d1666664a6ab649399241d"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/BarWorkspacesCard.qml": {
+    "mode": "100644",
+    "sha256": "d833e6574371905195b60c4e6fc7e111c44e0e0a1a96ac1ee34ae9880dcafacb"
+  },
+  "snapshot/shell/src/quickshell/guide/bar/modules/qmldir": {
+    "mode": "100644",
+    "sha256": "348ea37b322d432ee1b718b7acaa3241e7b33666026e654ab525a9130f8b412b"
+  },
+  "snapshot/shell/src/quickshell/guide/display/DisplayLockscreenState.qml": {
+    "mode": "100644",
+    "sha256": "ee6044b0d4f6f00d0b24bc033651b5aaeab1ceebad5ace72da39b3242de0e1d0"
+  },
+  "snapshot/shell/src/quickshell/guide/display/DisplayLockscreenTab.qml": {
+    "mode": "100644",
+    "sha256": "22d570c7921733d2feafd91ecff4882b5945be1aa94fa2deb3be49bc13e6ed1a"
+  },
+  "snapshot/shell/src/quickshell/guide/display/DisplayMainState.qml": {
+    "mode": "100644",
+    "sha256": "5488fb2c1617e429b0db9896a8bf25f4854741d37a20e736b5710edd71ffd704"
+  },
+  "snapshot/shell/src/quickshell/guide/display/DisplayMainTab.qml": {
+    "mode": "100644",
+    "sha256": "0ab6bc9e8523a2d83d24d56645c320f965c44d92981032fd9df8633a3d1cd29b"
+  },
+  "snapshot/shell/src/quickshell/guide/display/DisplayMonitorCard.qml": {
+    "mode": "100644",
+    "sha256": "266a9e0b68d9f7642bc0c069e7ea1716bf27a75e3199685199148eefbf078072"
+  },
+  "snapshot/shell/src/quickshell/guide/display/DisplayWidgetsState.qml": {
+    "mode": "100644",
+    "sha256": "572bd97f0b01b647551ca39411ba4faf32a70489de5fac47f9a768a94dd0e46d"
+  },
+  "snapshot/shell/src/quickshell/guide/display/DisplayWidgetsTab.qml": {
+    "mode": "100644",
+    "sha256": "0e6258607351976f78eb725960e6c73b3ac73b0da0c5d8c91e82e659693b6448"
+  },
+  "snapshot/shell/src/quickshell/guide/display/LockBackgroundPreview.qml": {
+    "mode": "100644",
+    "sha256": "26e3335ebe5aadc0c8c0fb2972f0e7793aaea6021eb0a5e46dc8521aadbee8aa"
+  },
+  "snapshot/shell/src/quickshell/guide/display/SavePresetPopup.qml": {
+    "mode": "100644",
+    "sha256": "5b1e21ea84e759fafd7c2aba22f0cf8cecc4ccbf2f447450b4ed894d5da4cc20"
+  },
+  "snapshot/shell/src/quickshell/guide/display/WidgetItemCard.qml": {
+    "mode": "100644",
+    "sha256": "fbd77e7e62f7e656ffba71fbc0040000cb9c09c06f33b5dde9a62fab6e23af7b"
+  },
+  "snapshot/shell/src/quickshell/guide/display/WidgetMonitorCard.qml": {
+    "mode": "100644",
+    "sha256": "7c1a1e553ed019d288ab1022fa19440549e79fce3d975514c5a3b93a63096005"
+  },
+  "snapshot/shell/src/quickshell/guide/display/WidgetPresetCard.qml": {
+    "mode": "100644",
+    "sha256": "0aead7d9c68cf6dfec409c42f6b30d817c98234904bd9ed27ceacbe0b5261e5b"
+  },
+  "snapshot/shell/src/quickshell/guide/display/WidgetPresetMiniWidget.qml": {
+    "mode": "100644",
+    "sha256": "a54224fec12df236a678d768cafdaf297e3ffdbc548d3af44d8a0ef654c3d83b"
+  },
+  "snapshot/shell/src/quickshell/guide/display/WidgetPresetsPanel.qml": {
+    "mode": "100644",
+    "sha256": "6e686a24509018b667b13f5758793dde35c16f56afe9c68024048d2fd6473795"
+  },
+  "snapshot/shell/src/quickshell/guide/display/qmldir": {
+    "mode": "100644",
+    "sha256": "2b495ef7d5590a293a42e2d515c6dc1577a7ce9a732a52b634d65aeef5cafecc"
+  },
+  "snapshot/shell/src/quickshell/guide/general/AvatarPreview.qml": {
+    "mode": "100644",
+    "sha256": "68f2c89b20a8c912f9d185267c89a2ec00ddde42ae50e7faee86b29a9bcabe1b"
+  },
+  "snapshot/shell/src/quickshell/guide/general/GeneralAudioSection.qml": {
+    "mode": "100644",
+    "sha256": "2a3aa80f898b1e157beccbd7b750c075cefe5c3460dc30db4e3929502200c10b"
+  },
+  "snapshot/shell/src/quickshell/guide/general/GeneralBehaviorSection.qml": {
+    "mode": "100644",
+    "sha256": "565f38f1c1f87326be0a9b3c802bb7764e6cefc5c8a4cb1c21add1b6e5aad9b2"
+  },
+  "snapshot/shell/src/quickshell/guide/general/GeneralLocationSection.qml": {
+    "mode": "100644",
+    "sha256": "6ffb43c7404e6d2f53fe5586608872726cb082353a4a263a73cdbd375678549b"
+  },
+  "snapshot/shell/src/quickshell/guide/general/GeneralProfileSection.qml": {
+    "mode": "100644",
+    "sha256": "e8071493ff284759450b96f5976d07bded0feb19075a7fbd7cee60a5a86813d4"
+  },
+  "snapshot/shell/src/quickshell/guide/general/GeneralTab.qml": {
+    "mode": "100644",
+    "sha256": "503ca2182967b02d64d71fc449217c9c30f85683b70068a7ccfb63ecfd027046"
+  },
+  "snapshot/shell/src/quickshell/guide/general/LocationInfo.qml": {
+    "mode": "100644",
+    "sha256": "910b06630f86b36b89180ba49f41fb68c5ee7ca8856dd9b3654f1402dcfb9298"
+  },
+  "snapshot/shell/src/quickshell/guide/general/qmldir": {
+    "mode": "100644",
+    "sha256": "dbd5be051d648f90c0ffbb1caf9cf09898b81042df1c1ded4be7fe8af25573da"
+  },
+  "snapshot/shell/src/quickshell/guide/notifications/NotificationPositionRow.qml": {
+    "mode": "100644",
+    "sha256": "549c008943bc34f6d50639b8b86365d769b1d28d27a4846783aeb2585a1f5c18"
+  },
+  "snapshot/shell/src/quickshell/guide/notifications/NotificationsBehaviorSection.qml": {
+    "mode": "100644",
+    "sha256": "4e5244f51303637f1fe60b00dbab077c13e94b4c785abec06fda7c1ab7c55376"
+  },
+  "snapshot/shell/src/quickshell/guide/notifications/NotificationsSoundSection.qml": {
+    "mode": "100644",
+    "sha256": "9b88db2c4443c9e468efa305cf79bd288f066b8b80163a78daa2394fae5e78d8"
+  },
+  "snapshot/shell/src/quickshell/guide/notifications/NotificationsTab.qml": {
+    "mode": "100644",
+    "sha256": "0232b3523fd868484a731cc9311e0f7cd8b6efd577da4924b47f6453a4bb0f21"
+  },
+  "snapshot/shell/src/quickshell/guide/notifications/SoundPicker.qml": {
+    "mode": "100644",
+    "sha256": "740a5ce79437d4358c0e2e8161666ddf67a51fa9c26128519dcf5aff58c2400d"
+  },
+  "snapshot/shell/src/quickshell/guide/notifications/qmldir": {
+    "mode": "100644",
+    "sha256": "4a24e3744a175531796d0d1cd90f78201be516329b71d224983b9904afe4dc75"
+  },
+  "snapshot/shell/src/quickshell/guide/qmldir": {
+    "mode": "100644",
+    "sha256": "bdf59f23ba462740edb8c56829329d5a8a2be2d7d0b8f5b15745d7347dda8d07"
+  },
+  "snapshot/shell/src/quickshell/guide/screenshot/OcrLanguages.js": {
+    "mode": "100644",
+    "sha256": "6316d29d875bbb33ca43e4a4cbe710ccc7e97dc3ffe81012fb40325f76530c83"
+  },
+  "snapshot/shell/src/quickshell/guide/screenshot/ScreenshotTab.qml": {
+    "mode": "100644",
+    "sha256": "6c62ed0b58e7de5bbd7f1f5e3b253e4eaa335e71a7358c3c3fa5ccaf49bbb4a9"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/DesktopPresetsSection.qml": {
+    "mode": "100644",
+    "sha256": "dce2573e21e35bd9a680b55c1e327a9b31bd4ba361e6e5ec14a15739ecc6eea1"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/FontPicker.qml": {
+    "mode": "100644",
+    "sha256": "4b079dd8e246aa97749936bd4cac9220b514134958635104dd864c5940363ee0"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/PresetsTab.qml": {
+    "mode": "100644",
+    "sha256": "389ea05712dca5a4c957eea4f13a44ea813ac4b1c89a5faba35046caff63a33e"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemeAppearanceSection.qml": {
+    "mode": "100644",
+    "sha256": "1a01f8a9f88ee81805fea98a6f191d16ea237098adab7e12c444951b13300d34"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemeEditor.qml": {
+    "mode": "100644",
+    "sha256": "b4ea26481ebd42379588c1b7935fb312b5a38e83e3ef16b3d0a18a5c616056b9"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemePresetDelegate.qml": {
+    "mode": "100644",
+    "sha256": "05c5b9eaede28e7443c9b62d2c3ad9981c5f39302fc5c9e694f24a2469e7e4f8"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemePresetTile.qml": {
+    "mode": "100644",
+    "sha256": "1de2c23b46ab8689af4a3578744cf88ddb53dbf48a45516206645691538e723e"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemePresetsSection.qml": {
+    "mode": "100644",
+    "sha256": "1fcb180abad57f6804108d0dc021208b97fd24c8d4f8ff763a98373bfe22cff8"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemeTab.qml": {
+    "mode": "100644",
+    "sha256": "e3e1d00f4d17fdf75af7664f2c6a17f2c4e1ce2bd8c341ec8729af477594a712"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemeTabState.qml": {
+    "mode": "100644",
+    "sha256": "7df5b6e56bd9cde9b342a845cda0905fa86269d8ead54dadd6a10c06aa2d3217"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemeWallpaperDirRow.qml": {
+    "mode": "100644",
+    "sha256": "51c911dad0f46ed8ac3e31fcdbd92d83fe5220c58c4ef83f1cdd505d689b473c"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/ThemeWallpaperPreview.qml": {
+    "mode": "100644",
+    "sha256": "9be1e23e37d782a4cefbb4d1062c4a49aa75d3665084aa99ffaf72ea57b85afa"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/qmldir": {
+    "mode": "100644",
+    "sha256": "4b4fd4cd23d297a3255e452d471254f8d05f5ddffbb4fb660ad58966276ac079"
+  },
+  "snapshot/shell/src/quickshell/guide/theme/theme_sorter.py": {
+    "mode": "100644",
+    "sha256": "e406144439b989a66c2ff3ed858b77db8cb4950d0af4ab3576772085385d9dc5"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/DigitalWellbeingTab.qml": {
+    "mode": "100644",
+    "sha256": "5bbe17722075ecf2d86d5d4495e7dc906ac6507b30ff6b016d3fdf6a02911ec6"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingAppPicker.qml": {
+    "mode": "100644",
+    "sha256": "317eefb3bc4dc4b1dda5c70eaed4edb8927a508aaee6806d905ac1631d72f792"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingBottomPanel.qml": {
+    "mode": "100644",
+    "sha256": "69b9332b33e91317cd4aabf20619740db6da2820254a123c3933691eb4f29208"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingDailyView.qml": {
+    "mode": "100644",
+    "sha256": "1c5d5cd11f10bd0c6ba9f835e543a3fac6f1db9d38b4e901b4e1eb4a5cd08643"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingHeader.qml": {
+    "mode": "100644",
+    "sha256": "7649299f539f4cbf3c2b37973a511eb8342b0381142ba324a790ce9ad5050823"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingLimitOverlay.qml": {
+    "mode": "100644",
+    "sha256": "ed9aab7fef8b5d044a8afc284cbeccf393f082de7bf07f9ed22635f073e12095"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingMetric.qml": {
+    "mode": "100644",
+    "sha256": "76d85eeb2181cfd613d291571dd9f41347e5e793f899901137d321fa1e62dd61"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingMidRow.qml": {
+    "mode": "100644",
+    "sha256": "76b82692eb5956a8a960218643743b910636bcee8d96e76cd4e04e3012ad15e7"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingSettingsView.qml": {
+    "mode": "100644",
+    "sha256": "40d208a228bbed9997332dc840211c14dcd203e3ecb11f2df5a2bf86753d4c3d"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingState.qml": {
+    "mode": "100644",
+    "sha256": "0a4f527ce8e8a4a71c179cd30c376b5870d4bef02ed503ce5095a26a96777934"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingStatsRow.qml": {
+    "mode": "100644",
+    "sha256": "e728bc0c04afde03eec9a3ebf06741f9b0a7bad88bff3202b0c4f7a0fcd75e5d"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingWeekChart.qml": {
+    "mode": "100644",
+    "sha256": "d458a9fab193c796498bf7eb45800a8c3aa4d341d8974c905518861c99067631"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingWeekDetails.qml": {
+    "mode": "100644",
+    "sha256": "4bbd6c813db1ba8294b22f057323d0ace90d1bca0465f4da2d30b9770c45467f"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/WellbeingWeekView.qml": {
+    "mode": "100644",
+    "sha256": "5b67fbc291f5d3848b1b03dceb7cd2d3a1a930f407210d7751bbdc7c1c6f47d2"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/focus_daemon.py": {
+    "mode": "100755",
+    "sha256": "6673726250ad487ab6ceb97f46e151272acd4a561631cf676c303b2b61399365"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/get_stats.py": {
+    "mode": "100755",
+    "sha256": "01b1d29678ead4d8afe4980b69ffdd35fa187a3bc8e7c90420fef0da56aede4c"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/launch_daemon.sh": {
+    "mode": "100755",
+    "sha256": "ee9b054f4b80be20a4552bb786aabe5c6595f6d764279981ce485de288d530e3"
+  },
+  "snapshot/shell/src/quickshell/guide/wellbeing/qmldir": {
+    "mode": "100644",
+    "sha256": "95fa2f364d2e8e043c3d4040c3f1251bf83ad90ead7bfcf3b2579cc6070b2ef3"
+  },
+  "snapshot/shell/src/quickshell/idle/Idle.qml": {
+    "mode": "100644",
+    "sha256": "3781b46b5c2eadfd0d549646cffbecc63afc8a5c15f55802eb5c1ee8564acc15"
+  },
+  "snapshot/shell/src/quickshell/idle/idle_helper.py": {
+    "mode": "100644",
+    "sha256": "f85b7c52fa94eaeacc9e7aadcf5e1703fbe61c33bc9ff89f23bd6981336198ad"
+  },
+  "snapshot/shell/src/quickshell/launcher/EmojiData.js": {
+    "mode": "100644",
+    "sha256": "329addaf78b2281d7435ec6a75d823b9d3fcbeca0bb1ea8a31db5d63a464be91"
+  },
+  "snapshot/shell/src/quickshell/launcher/EmojiSearch.qml": {
+    "mode": "100644",
+    "sha256": "f67f8d2bbec25c3d0745ce5cbc4b0e8894f7cb9870cfcba701572383f9da2b3e"
+  },
+  "snapshot/shell/src/quickshell/launcher/Launcher.qml": {
+    "mode": "100644",
+    "sha256": "999cb0ff6b80d404d99e0d5a470fb8c5e904ed70a4fc1d306cb5ee4bb735aa05"
+  },
+  "snapshot/shell/src/quickshell/launcher/ProjectEditorPicker.qml": {
+    "mode": "100644",
+    "sha256": "0f1d3b5b4439c6600b84aceb543de766a17afda625d81b6af6a3e4e19186b38f"
+  },
+  "snapshot/shell/src/quickshell/launcher/SearchProviders.js": {
+    "mode": "100644",
+    "sha256": "532055cba8a997a27d30bd35ea099e2ea1ea576cdb384d695b143a71c1be91d7"
+  },
+  "snapshot/shell/src/quickshell/launcher/app_rank.py": {
+    "mode": "100644",
+    "sha256": "749a72cf717a796c116d46379498421fc2ec2a4c674a223e73c896429947f489"
+  },
+  "snapshot/shell/src/quickshell/launcher/project_search.py": {
+    "mode": "100644",
+    "sha256": "7ad1881ddf5df172853d0022657a4cb3b12113463fd1881618010d5dc0b043f1"
+  },
+  "snapshot/shell/src/quickshell/lock/FingerprintIndicator.qml": {
+    "mode": "100644",
+    "sha256": "e6c2db911529f5c988ad8ffca3bfe19066d1be811af61aedc7af1866069f14a1"
+  },
+  "snapshot/shell/src/quickshell/lock/Lock.qml": {
+    "mode": "100644",
+    "sha256": "3fb21c26f86950803d46f83ceaea1c22cbb593eca9d7fe9a0ea4739cf7eafee2"
+  },
+  "snapshot/shell/src/quickshell/lock/LockBackdrop.qml": {
+    "mode": "100644",
+    "sha256": "2b9dc04519c83d511b9a7d4afe63c2b0431432347d27062f47bfcd95cfd6ec37"
+  },
+  "snapshot/shell/src/quickshell/lock/LockClock.qml": {
+    "mode": "100644",
+    "sha256": "2322b8afdb76102e19344813d3a1863290346a80164bde1decf1c1c4531fdf92"
+  },
+  "snapshot/shell/src/quickshell/lock/LockDashboard.qml": {
+    "mode": "100644",
+    "sha256": "95b979ce25b38e15f86cb7f65979ad5e1fb8c54b5f0c57d93f89697863e561d7"
+  },
+  "snapshot/shell/src/quickshell/lock/LockPowerControls.qml": {
+    "mode": "100644",
+    "sha256": "241f31d1c0348ae3f15411ec3d3ad61437c67f0816bc99a39ac782184cba6a1e"
+  },
+  "snapshot/shell/src/quickshell/lock/LockScreen.qml": {
+    "mode": "100644",
+    "sha256": "76786809019c3522964d3ac720a81c02a93f736c4c971637be467f9feeb8dc35"
+  },
+  "snapshot/shell/src/quickshell/lock/LockSurface.qml": {
+    "mode": "100644",
+    "sha256": "26a7b8b96570647afc2d327121e17c7e2f534827988d77d1bb67b5807fe534f6"
+  },
+  "snapshot/shell/src/quickshell/lock/VideoLock.qml": {
+    "mode": "100644",
+    "sha256": "2103a5ce8461fbceb11c9789593a80cec6727da7315b269820462cb36b3b783f"
+  },
+  "snapshot/shell/src/quickshell/lock/qmldir": {
+    "mode": "100644",
+    "sha256": "3d820f8c27f0bac04f52b4859a4d3c498004eb26617a086b216a929ac8bccaab"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockElementRegistry.qml": {
+    "mode": "100644",
+    "sha256": "cb9069b296c884adc1b2b22ce816fedbb8e0a452153d1341b1d96c0fa73aee30"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockLayoutStore.qml": {
+    "mode": "100644",
+    "sha256": "00510f9e3dda133e9fdd73cc3c3a3e120e6ad77e7b1b1f52053cb031e48b13ee"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockLayoutView.qml": {
+    "mode": "100644",
+    "sha256": "1ccdc6039da5bb3cb32d5cddcb8c48ec78e166ac07bd86090f0671ada0e8e5b1"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockPanelStage.qml": {
+    "mode": "100644",
+    "sha256": "9d90c14071ca8bbab7a90fc67c7b9a53347c782c5831bc44d886f855e740aa7b"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockRedactor.qml": {
+    "mode": "100644",
+    "sha256": "8f1037ead5e06ab223c0d2ec9815b7f27be01cab513a81c6d65c84cbd37c9255"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockScene.qml": {
+    "mode": "100644",
+    "sha256": "15c1d110c70b9792d7eb1127ac93f92b801a3ac6b9be9bf818fdee7c86c7116e"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockSettingsRepeater.qml": {
+    "mode": "100644",
+    "sha256": "16a7988b404c04ab4733f0ebe2fb7f87797f12a91c81cb7fae4cebdeb270f1fe"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockStageFrame.qml": {
+    "mode": "100644",
+    "sha256": "a07f66b705355e74193f93136c4cc11f2f3d42d94693fc2373759210e82ca38c"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/LockToolbarItem.qml": {
+    "mode": "100644",
+    "sha256": "ae7305babd1cde1d8538516f07fa210435829c65aaa8d51c86d8687ca960b0d3"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockAvatarElement.qml": {
+    "mode": "100644",
+    "sha256": "e46bae2783208cf6e854445b2eab9ab913ad439279215b17224b50fe4ae0bd19"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockBatteryElement.qml": {
+    "mode": "100644",
+    "sha256": "79b2856417b038314d4dbd7b03c4216527e20fa61f331d3329b7a8e0a5965cda"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockFingerprintElement.qml": {
+    "mode": "100644",
+    "sha256": "4b6f06140e030e28f9a6727dcfa24626b9c9246d72573ae1e6c6b3fcfe862909"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockKeyboardElement.qml": {
+    "mode": "100644",
+    "sha256": "de890a5234b81155f840046edb4f07e452e8e0922caa5f2ec245d41531c3cb34"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockLockStatusElement.qml": {
+    "mode": "100644",
+    "sha256": "d47b77a00f46681a4e2c96954c0ef58e6a5a23ccc83692c74d1f9358a9d39f38"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockMusicElement.qml": {
+    "mode": "100644",
+    "sha256": "849891be74fcde7dd1a814cfba980b44c275130008b1bc303e4c55f0dc9befda"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockNotificationsElement.qml": {
+    "mode": "100644",
+    "sha256": "54db19fa5756f1a0738e72b0aebbc60be5c3446772297c19fdba4d29d29f99ab"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockPasswordElement.qml": {
+    "mode": "100644",
+    "sha256": "9e0e72a74ccf7fb8014b871d3da6beea734a8cb1f665f4751ed9a83b00aa3bbc"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/LockUserElement.qml": {
+    "mode": "100644",
+    "sha256": "56a49a820e5ac7c9c6097a1331de300246a9cedf9cd19d7ad86106d357b736cf"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/elements/qmldir": {
+    "mode": "100644",
+    "sha256": "3de3cb7ee7453c7d9729e4a8329d06cb3ceeeeee9494a22e0f08ac60ef6a2a01"
+  },
+  "snapshot/shell/src/quickshell/lock/redactor/qmldir": {
+    "mode": "100644",
+    "sha256": "a7d6a6948a654680122d29c1bd454d45a9cf9badffd9e1d854c5526120ed482e"
+  },
+  "snapshot/shell/src/quickshell/media/MusicAudioView.qml": {
+    "mode": "100644",
+    "sha256": "05fd46e47220a1a8598302cbd7cc6257e2f725f3eca8a26f223a5cb1631ff64f"
+  },
+  "snapshot/shell/src/quickshell/media/MusicBlurCrossfader.qml": {
+    "mode": "100644",
+    "sha256": "994817a7246fbe000df9f4ff383134f1f738ad5c33f0fcfc5404426af521a825"
+  },
+  "snapshot/shell/src/quickshell/media/MusicBorder.qml": {
+    "mode": "100644",
+    "sha256": "cb38c7b58fe5618db024fec9fab080785d9f7fdb878ad22071264f69f414816e"
+  },
+  "snapshot/shell/src/quickshell/media/MusicBottomHeader.qml": {
+    "mode": "100644",
+    "sha256": "6b3ba3eebd33281ab30c25bc1939abe5a7dfdc166bf56b919446fd456600ea13"
+  },
+  "snapshot/shell/src/quickshell/media/MusicCover.qml": {
+    "mode": "100644",
+    "sha256": "22e6febadd1b937a42a80f961ac6f39c014de44731e69161808e31928016b284"
+  },
+  "snapshot/shell/src/quickshell/media/MusicEqView.qml": {
+    "mode": "100644",
+    "sha256": "1cf5733c4719fd90edb556c4c8c0ffa4bcb2d6a79f090c54a388e1a9b7aa84c7"
+  },
+  "snapshot/shell/src/quickshell/media/MusicEqualizerState.qml": {
+    "mode": "100644",
+    "sha256": "63c28f950c4436366892f26c10287bbc3e8e2398f7134d0796e8090834149ca2"
+  },
+  "snapshot/shell/src/quickshell/media/MusicLyricsView.qml": {
+    "mode": "100644",
+    "sha256": "bf2edc302e5db41be981fd037a874e20a1994b778eb70611a4db17176db4b068"
+  },
+  "snapshot/shell/src/quickshell/media/MusicPlayerState.qml": {
+    "mode": "100644",
+    "sha256": "0c4c653eb7740083a5212c6eebb1be6a65b08a3421178a080cb244ab527cbfe8"
+  },
+  "snapshot/shell/src/quickshell/media/MusicPopup.qml": {
+    "mode": "100644",
+    "sha256": "e9801bd6cab2d53f8028a185c950c6aee5921f122e90d49aab9fa8844de5e555"
+  },
+  "snapshot/shell/src/quickshell/media/MusicPresetButton.qml": {
+    "mode": "100644",
+    "sha256": "7de3f316047327ef655f1f6f397ea4c93676bfeb1142540fdacf893eaf94d325"
+  },
+  "snapshot/shell/src/quickshell/media/MusicQueueView.qml": {
+    "mode": "100644",
+    "sha256": "866fe5b685f0ab27e0b35ca28fc9e89c069de698ab56576c98db5255ab48e001"
+  },
+  "snapshot/shell/src/quickshell/media/MusicTrackControls.qml": {
+    "mode": "100644",
+    "sha256": "a444287e9ce6fbde331b60603264d580f47f52df98a03dbdb8f3046bfb6b02ab"
+  },
+  "snapshot/shell/src/quickshell/media/MusicTrackInfo.qml": {
+    "mode": "100644",
+    "sha256": "d00a8d15b373c1125c3b20fcf6badee45173146472cfe2e785fc8b7699169116"
+  },
+  "snapshot/shell/src/quickshell/media/MusicWaveform.qml": {
+    "mode": "100644",
+    "sha256": "2f723929db04dffc1054b3d86e99d5a68511506f411e6f9234b43fff6a7c2432"
+  },
+  "snapshot/shell/src/quickshell/media/art_fetch.sh": {
+    "mode": "100755",
+    "sha256": "7795e274a1ba779dfd2034e02d05049b7f8a16c80a35a5ff857487c065417953"
+  },
+  "snapshot/shell/src/quickshell/media/equalizer.sh": {
+    "mode": "100755",
+    "sha256": "16c238f6766bf5ee4150595ad1611f8691f7868f613fb45ff06854087d030a9b"
+  },
+  "snapshot/shell/src/quickshell/media/qmldir": {
+    "mode": "100644",
+    "sha256": "ad2f75380725b5d00f9457ada5ebad03165ac36f54a7d13569e469690b55e584"
+  },
+  "snapshot/shell/src/quickshell/network/LoadingDots.qml": {
+    "mode": "100644",
+    "sha256": "6cde5af975d5cb1b21f7985e5c3619e101a8f8e709486996492a4e5a042ddfb9"
+  },
+  "snapshot/shell/src/quickshell/network/NetworkCardLayer.qml": {
+    "mode": "100644",
+    "sha256": "6332f43660133b849108c0ae8595c500d8ec28a2666f64bd18cd3a58f3471237"
+  },
+  "snapshot/shell/src/quickshell/network/NetworkControls.qml": {
+    "mode": "100644",
+    "sha256": "0450276fb4620724c8fb8f87888fd714b536781d1d6e24f22dfca29cfe31abe3"
+  },
+  "snapshot/shell/src/quickshell/network/NetworkCoreLayer.qml": {
+    "mode": "100644",
+    "sha256": "bbf1cd05ed66cbb26242bf0f32d21766c4418aeeaf34ced75c0079735616a803"
+  },
+  "snapshot/shell/src/quickshell/network/NetworkPopup.qml": {
+    "mode": "100644",
+    "sha256": "77d1118bc17c83491b1968f161d8e97a3f5393dd47cdbf4d4eab858b685ef7b3"
+  },
+  "snapshot/shell/src/quickshell/network/bluetooth_panel_logic.sh": {
+    "mode": "100755",
+    "sha256": "2668c7b2ed14b534a3794565e833104c90125a3aa1e3632de4573bec255cb352"
+  },
+  "snapshot/shell/src/quickshell/network/qmldir": {
+    "mode": "100644",
+    "sha256": "b82529ed6a5a753aeb9d870c4ba1a39b4594b8fc6d1d7e2daadb63086371af7e"
+  },
+  "snapshot/shell/src/quickshell/notifications/Notification.qml": {
+    "mode": "100644",
+    "sha256": "3604d9a8df1be8703710a98823517aa4fcd7c3392ed84038cfe42e990aa36b78"
+  },
+  "snapshot/shell/src/quickshell/notifications/NotificationCenter.qml": {
+    "mode": "100644",
+    "sha256": "113fa4e9f4125a4eccf7ba8452832b94179215b302be96ec6e5591c45b5db632"
+  },
+  "snapshot/shell/src/quickshell/notifications/NotificationManager.qml": {
+    "mode": "100644",
+    "sha256": "38bae418978f95a43fcc5b5e7414ae46dd10f6eb4603fb364a8d9af39bfea54f"
+  },
+  "snapshot/shell/src/quickshell/notifications/NotificationPopups.qml": {
+    "mode": "100644",
+    "sha256": "9c23e43748735b6d78ef059f584eacc2775f5415dfa8a6f426a0a3cc41cb302e"
+  },
+  "snapshot/shell/src/quickshell/notifications/types/Default.qml": {
+    "mode": "100644",
+    "sha256": "ca0375dff61442448bb6a7119dde4e393724b4c499963a4bff06b5481156e69d"
+  },
+  "snapshot/shell/src/quickshell/notifications/types/Screenshot.qml": {
+    "mode": "100644",
+    "sha256": "c3cee86fc9e5c8b766a6168a508198279dfe474d3e265d8fd02931d4c75c5b52"
+  },
+  "snapshot/shell/src/quickshell/notifications/types/Update.qml": {
+    "mode": "100644",
+    "sha256": "8a5f15293b5a22c56fbb010203b6ea4462598ae67e79f884bc61b7c6acee236d"
+  },
+  "snapshot/shell/src/quickshell/notifications/types/Weather.qml": {
+    "mode": "100644",
+    "sha256": "94e0a748769887241dde14e1f9676315c262c826170019510547bda05b3bbfad"
+  },
+  "snapshot/shell/src/quickshell/overview/OverviewLogic.js": {
+    "mode": "100644",
+    "sha256": "b29e7ba323c60a03c1c6308ce2f1c5b716865dbdc4f15f4be7d2e9679c8fc089"
+  },
+  "snapshot/shell/src/quickshell/overview/WorkspaceCard.qml": {
+    "mode": "100644",
+    "sha256": "6358c3c2e07eb51f57bc18630ceac0cc506d12aa9f979db355d6ffc76401837c"
+  },
+  "snapshot/shell/src/quickshell/overview/WorkspaceGrid.qml": {
+    "mode": "100644",
+    "sha256": "6c1171e4e5b9e3f851842c57c157ea9110b53de94bb416c0df61d20041d6567d"
+  },
+  "snapshot/shell/src/quickshell/overview/WorkspaceOverviewWindow.qml": {
+    "mode": "100644",
+    "sha256": "e102dc060e26cfc407bc5377376579b84a2dc2527144da99b7c6a29dc5469f0e"
+  },
+  "snapshot/shell/src/quickshell/overview/WorkspaceWallpaperSource.qml": {
+    "mode": "100644",
+    "sha256": "01262f85b2e6c7615d4e8e0a1d0c36e6b3bc148b2d6cc05a8e9626b95d057703"
+  },
+  "snapshot/shell/src/quickshell/overview/overview_backend.py": {
+    "mode": "100644",
+    "sha256": "9524c496f96088c86b2f4d13c8f8fef163ada0c18a4ee96c66360c061fe1d53f"
+  },
+  "snapshot/shell/src/quickshell/polkit/Polkit.qml": {
+    "mode": "100644",
+    "sha256": "65b965216fc3221cdf6fda68e15b41a674279726857854c8fb2a79d1c517353d"
+  },
+  "snapshot/shell/src/quickshell/polkit/PolkitService.qml": {
+    "mode": "100644",
+    "sha256": "19b4259b10592409cb3f90f0c9e31e865cda9999d1e79f23011259dc9f5b02d8"
+  },
+  "snapshot/shell/src/quickshell/popouts/DesktopMenu.qml": {
+    "mode": "100644",
+    "sha256": "353886e85e5da7fcf822703d02b53930e071ae27084c9f2e2c94b4d95c8c2f94"
+  },
+  "snapshot/shell/src/quickshell/popouts/DockAppMenu.qml": {
+    "mode": "100644",
+    "sha256": "13898d4fb8dca9711b28ac7f71cbc584b6662234dd5263440a17ac7feccce953"
+  },
+  "snapshot/shell/src/quickshell/popouts/Osd.qml": {
+    "mode": "100644",
+    "sha256": "034defd91da7b39d502cb83703c2213cd4c458982ff2abf49744ae98f68633fc"
+  },
+  "snapshot/shell/src/quickshell/popouts/PopoutManager.qml": {
+    "mode": "100644",
+    "sha256": "e9539857f5b7a220e7d62ed634870154a76c572b1f61f612eef04802125576e5"
+  },
+  "snapshot/shell/src/quickshell/popouts/SideMusicPopout.qml": {
+    "mode": "100644",
+    "sha256": "666d088d512bbf8fe79fce2a883c56e6efc2ca81332a68ccf7249a543892af0b"
+  },
+  "snapshot/shell/src/quickshell/popouts/TrayBase.qml": {
+    "mode": "100644",
+    "sha256": "68cd8111481c945d06ede75002aa4c65a3bd526bc26910ba290a089dde60f43c"
+  },
+  "snapshot/shell/src/quickshell/privacy/PrivacyOverlay.qml": {
+    "mode": "100644",
+    "sha256": "3857ab7f5f4150b74b0b545ff99df4b863e529d10ad2b687fab53ed683a521e9"
+  },
+  "snapshot/shell/src/quickshell/qmldir": {
+    "mode": "100644",
+    "sha256": "2bdbf3cc9f541dae8fe3db742e77f88d22ca3cb775d69c8bf24ad883c0e5db2b"
+  },
+  "snapshot/shell/src/quickshell/quickactions/Floating.qml": {
+    "mode": "100644",
+    "sha256": "ce8a3cf9b57468ec57fcdfaf66888de2fcae1095386b4425844a173096b2a98c"
+  },
+  "snapshot/shell/src/quickshell/quickactions/FloatingEdgeTrigger.qml": {
+    "mode": "100644",
+    "sha256": "ecd6f8bb8b950803c07c8c0e7ed37cc5cda52498948b8f6347a061c7b4a06cdc"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/Calculator.qml": {
+    "mode": "100644",
+    "sha256": "9917e21204f276e9b2e73a04603920235572812c8eb47f7b1ccbb7ba9b39579b"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/CalculatorEngine.js": {
+    "mode": "100644",
+    "sha256": "62088cc907e8f571282d523622c1ee9ffdcb1f1dc2fa054e4a5ea1a51a3b3ed9"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/CalculatorKey.qml": {
+    "mode": "100644",
+    "sha256": "68586fd218cf984ff68390b08aff2b8e9039ef87e8e4c838b43238f2ebb21a1c"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/ClipboardShelf.qml": {
+    "mode": "100644",
+    "sha256": "9e1e0870888503853e92f84390a6d23d38b141ebc53b6ab964690a33ab01e6c3"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/ConverterEngine.js": {
+    "mode": "100644",
+    "sha256": "f45889dce15e755256570467cdd80a73d69020adec935c9a257ea507e4f16f18"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/Dock.qml": {
+    "mode": "100644",
+    "sha256": "b44f060f77fdc708e831e109a503b6fddc476457735da83ed7bc5ae6439bfa6a"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/DrawAction.qml": {
+    "mode": "100644",
+    "sha256": "afdad638a1625eae0eb59348de90b720109eb18fcb079d0bc7c32dcc4fb67fff"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/Notes.qml": {
+    "mode": "100644",
+    "sha256": "8eb1c2d04f1b27abe690f1260c6ec6d587ddf807a9dd83120cdd1028343e749d"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/NotesFormat.js": {
+    "mode": "100644",
+    "sha256": "1d388a3cdcbf3de522605af8e782e84c321bd630a4d3e451afeec0b6f9496171"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/SystemUsage.qml": {
+    "mode": "100644",
+    "sha256": "41381aa4223da4853642f3297e252c7d3aaa0cd99b4232dd5df5e2c6401a48db"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/Timer.qml": {
+    "mode": "100644",
+    "sha256": "4e3490262ccbfd96bba6f81df0bb7ecad65aaa66b4fd03e9520436e92175198a"
+  },
+  "snapshot/shell/src/quickshell/quickactions/actions/qmldir": {
+    "mode": "100644",
+    "sha256": "f66dbef29ae1f2a470ad8cc083b9565e17d09f97314737b68e3bf2d817e9dafc"
+  },
+  "snapshot/shell/src/quickshell/reusables/behavior/Draggable.qml": {
+    "mode": "100644",
+    "sha256": "a80d44fd080d8bbbbccfe6722b4ddaf12186d46e6153336a6718a24c4225366d"
+  },
+  "snapshot/shell/src/quickshell/reusables/behavior/ScreenPositionSelector.qml": {
+    "mode": "100644",
+    "sha256": "f313d71afdc6eaa9effbf0339cfad9d24b3869545e7bb40305c9c935685c38c7"
+  },
+  "snapshot/shell/src/quickshell/reusables/buttons/CanvasIconButton.qml": {
+    "mode": "100644",
+    "sha256": "5aa824f679d6ac51c66ab0b73138d8437e5d11d7ef0a6c19e66217a75cac93a8"
+  },
+  "snapshot/shell/src/quickshell/reusables/buttons/ClickButton.qml": {
+    "mode": "100644",
+    "sha256": "a7cf4c33eebcb433d26c8cbfd769dcbcf2a65e02f5c261ea87ad04e49cc2b301"
+  },
+  "snapshot/shell/src/quickshell/reusables/buttons/CloseButton.qml": {
+    "mode": "100644",
+    "sha256": "be1586446f5e230690c95190f98496a28ed26540a87ce4b520d8b6961ec0b3b6"
+  },
+  "snapshot/shell/src/quickshell/reusables/buttons/DeleteButton.qml": {
+    "mode": "100644",
+    "sha256": "55861a100d2a36245a2aa19b2ed2c40c9543ebadb26a78b403de1ba19c8f3a04"
+  },
+  "snapshot/shell/src/quickshell/reusables/buttons/FillButton.qml": {
+    "mode": "100644",
+    "sha256": "36002713077d1705ab4d1e469a52fa3b45849cc7bc9c61fae6658da14983c04f"
+  },
+  "snapshot/shell/src/quickshell/reusables/buttons/IconButton.qml": {
+    "mode": "100644",
+    "sha256": "125d9b3586ef6353eecf0c49777b7bc75166e7b6d7b56c4b1f2c8996c8634008"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/BoundedImage.qml": {
+    "mode": "100644",
+    "sha256": "277af54cf3c28d66807a542743fd609c234d5bb61cda273d823227152ed74fed"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/FlipIcon.qml": {
+    "mode": "100644",
+    "sha256": "50c213fd3ce5707dbe396fd739cd576731b3ff49148834bda7954ce570b54538"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/FluidWave.qml": {
+    "mode": "100644",
+    "sha256": "973d09f0a21ce6d0c173b486ac3e8070d8cb5b90c3fc3557b33ff6e691ea2461"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/GlassFill.qml": {
+    "mode": "100644",
+    "sha256": "3241588053fe32e90b4e8f4e09ebae9542376d3aad84ff0ed287c6f5b79a7194"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/GlassFillets.qml": {
+    "mode": "100644",
+    "sha256": "637918e6f2b1e553f2fccaa46d24977deae21d8bef05e4301cbe3fb2734c59a6"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/GlassLens.qml": {
+    "mode": "100644",
+    "sha256": "0fa4ff08d2a7a87a8e6df22605aa9a48f2bfe308609a36535e2b6d757ed2be01"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/ImageBox.qml": {
+    "mode": "100644",
+    "sha256": "c6c84c7efc49c6684b973d0b2eed6406639d61b9e78b89db8974a3dbb660a8c9"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/LiquidFill.qml": {
+    "mode": "100644",
+    "sha256": "074323be527966a39477efe8607df8a93aa4af5b5e33f5ac697ca0f6470d5c2d"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/LiquidGlass.qml": {
+    "mode": "100644",
+    "sha256": "44446b2801172e1e4c5f8490a383ca22b5069b679eabe55e0d1bb2e330c51d80"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/LoaderIcon.qml": {
+    "mode": "100644",
+    "sha256": "f151b39f7bb1e923d607b6b42f46fe0a20830c9718b83f943511f2e23c31dce4"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/MarqueeText.qml": {
+    "mode": "100644",
+    "sha256": "53dfd4b94014b175d8b721f2fd35355825adcd0ab22a92d3a3792ec28d82f9d5"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/MaterialDigitGrid.qml": {
+    "mode": "100644",
+    "sha256": "c23a61d154c6b960e1bd01dd4495a0527b85ab2765e98abb33b2096fa3dcf8d1"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/NotificationBox.qml": {
+    "mode": "100644",
+    "sha256": "9d698784f7c002cdc0988740e3c067a2e51b84c114e2becef4bfccf9ab76a5ec"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/NotificationBox.qml.orig": {
+    "mode": "100644",
+    "sha256": "68a301eb64bb14fdaa3a95674d94720cfa5881b9d6a8cbfebc49f6b447f13acb"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/SystemUsageCard.qml": {
+    "mode": "100644",
+    "sha256": "d758ca5c92860a086805101e5d1c74f2c84aefa07ae27cb1271e9d8f79400009"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/SystemUsageCircle.qml": {
+    "mode": "100644",
+    "sha256": "aef9278ec89212c352f661bd7f9173d2d75f3196a99cf4fb157d58b19bb02a72"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/WallpaperBlur.qml": {
+    "mode": "100644",
+    "sha256": "8d9f69939a401ab02aa95665c6043d961a01c18cd3abc6da363596a1b227deaf"
+  },
+  "snapshot/shell/src/quickshell/reusables/display/glassNesting.js": {
+    "mode": "100644",
+    "sha256": "386372d1ba6e7e3090191d53d869a5527a87c5a1a72fa9362a634b7f51ba348c"
+  },
+  "snapshot/shell/src/quickshell/reusables/guide/SettingsBlob.qml": {
+    "mode": "100644",
+    "sha256": "ffba8f477038678e1a631362a2270b9af4bc41bce271815bec4c9eb79dd808ca"
+  },
+  "snapshot/shell/src/quickshell/reusables/guide/SettingsGroup.qml": {
+    "mode": "100644",
+    "sha256": "50ebfe2a139d5b8b413241a68ec54bd44a9b7e6a22bb2f0216de949207d4e150"
+  },
+  "snapshot/shell/src/quickshell/reusables/guide/SettingsRow.qml": {
+    "mode": "100644",
+    "sha256": "bd6119e20e85e499b945fa3861bb5879bbfff3db67206c15c8cd6fbf5641d515"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/Dropdown.qml": {
+    "mode": "100644",
+    "sha256": "8e21b72dc95f870457ac68fd2cfc91e2cf593a6a642a34a82a75c01fb9d1ad33"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/FilePicker.qml": {
+    "mode": "100644",
+    "sha256": "3ec4b05dde10fc4112099b210bc4ee62444257e6a4db8f4c26881f2b6dfca377"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/ImagePicker.qml": {
+    "mode": "100644",
+    "sha256": "f736f473b970c8774e8154f3d14d8e86bf315f0499cab7b209dd122c912d0a87"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/ImagePickerVideo.qml": {
+    "mode": "100644",
+    "sha256": "99eb12447fad9b5a9e394df3dd1e0cc5953046a00bea603ce3a9f2679601e9ac"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/Input.qml": {
+    "mode": "100644",
+    "sha256": "d99c6add003358eae1047ed39d12b95ba81d89509200536c0002f1454e1a18d3"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/LyricsPicker.qml": {
+    "mode": "100644",
+    "sha256": "1602148bef0b7f46e54c112406b8426fde2b7866aae439e2d33d4fbecfb7bf9a"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/NumberSelector.qml": {
+    "mode": "100644",
+    "sha256": "cfe2a69f0f7fdcb55150a217678197aee848c36877d5b16ecf3313e0e7d8d746"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/PasswordInput.qml": {
+    "mode": "100644",
+    "sha256": "69584bcdb150f72250baf1c25239540d33827e86bd1df801d74ebf4cb603e680"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/SliderProgress.qml": {
+    "mode": "100644",
+    "sha256": "9d43628cd7718a2633fd71e23b523ba2c20f2aec0bdb443a3b71a4699d1762ae"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/Switch.qml": {
+    "mode": "100644",
+    "sha256": "93e2b37ddc1f1345b7c51148a88acf45b19b9e312ff5bee7c3dca322b9f64433"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/TimeSelector.qml": {
+    "mode": "100644",
+    "sha256": "769024a686510139c6abc6ff9d0b4691923495ac5f27ad6da5c07f97a8bc029f"
+  },
+  "snapshot/shell/src/quickshell/reusables/inputs/Toggle.qml": {
+    "mode": "100644",
+    "sha256": "eb8dbab8441230be91e04b82d6e7f25e0657cacee0aee32649965f7a2f62c2b4"
+  },
+  "snapshot/shell/src/quickshell/reusables/layout/AxisFlow.qml": {
+    "mode": "100644",
+    "sha256": "bac9c5c61d416725f696795a6b9028e861d0b7e56f7d390d81779158b6d76a50"
+  },
+  "snapshot/shell/src/quickshell/reusables/layout/Reserved.qml": {
+    "mode": "100644",
+    "sha256": "b08130dded0ddab1f7cba8cbf1fe0e0188f5dadb0f3a29c4dcd69a18ae9f7e7e"
+  },
+  "snapshot/shell/src/quickshell/reusables/media/LyricsView.qml": {
+    "mode": "100644",
+    "sha256": "1cd6402f2bd49f2ecf558fb5ae955d6c12d68522450983658e048927123bd186"
+  },
+  "snapshot/shell/src/quickshell/reusables/media/Visualizer.qml": {
+    "mode": "100644",
+    "sha256": "fe4ce974374fc5679c00518e70be1eac29fd1188ec022be5189a9ac82de7f29d"
+  },
+  "snapshot/shell/src/quickshell/reusables/media/WavySeekBar.qml": {
+    "mode": "100644",
+    "sha256": "417f1f5ee312dedf08911af48baf96f1272b0c61f072d1686e73921a68651486"
+  },
+  "snapshot/shell/src/quickshell/reusables/qmldir": {
+    "mode": "100644",
+    "sha256": "98dd5bca53b93c28aa4d6f2fbb90159f5802add92b39f65efd118cc4f5d37cd2"
+  },
+  "snapshot/shell/src/quickshell/screenshot/ScreenshotOverlay.qml": {
+    "mode": "100644",
+    "sha256": "c79a171b02ca8b2c8ae7ee9a3cd19794bae6ad84f8e1065332279eab2572e755"
+  },
+  "snapshot/shell/src/quickshell/serp/Serpantinum.qml": {
+    "mode": "100644",
+    "sha256": "7f5d3a43136b7f66c92a4b7973ca0ddf367cf2440fd6756a8ca2f4ae5aa1ff51"
+  },
+  "snapshot/shell/src/quickshell/serp/Start.qml": {
+    "mode": "100644",
+    "sha256": "03837413a4ad74fb3bde3cd098114bcb87a33f049a04dc52cc1e0b35651d91e7"
+  },
+  "snapshot/shell/src/quickshell/singletons/audio/Audio.qml": {
+    "mode": "100644",
+    "sha256": "ba07aeaf8c190bcd2ea0b84c675005d99bffabda018215ac1d846cd88592265a"
+  },
+  "snapshot/shell/src/quickshell/singletons/audio/AudioCache.js": {
+    "mode": "100644",
+    "sha256": "d6b5812d3d2037683dc63a8f0ecccd7f6eae0c7de250b8ee64cd6459fde5846d"
+  },
+  "snapshot/shell/src/quickshell/singletons/audio/Cava.qml": {
+    "mode": "100644",
+    "sha256": "ef07381f894bc08783b1f95c628e2a3aeb6a8aed6ddbca23bde667377f56e374"
+  },
+  "snapshot/shell/src/quickshell/singletons/audio/Lyrics.qml": {
+    "mode": "100644",
+    "sha256": "5b24bfefdeebb34003114cf27cbb3aa7242625041c597ee3282ec9fa61402e1b"
+  },
+  "snapshot/shell/src/quickshell/singletons/audio/LyricsMatch.js": {
+    "mode": "100644",
+    "sha256": "2652c6bd2a4dbeeb432be77fd506156e1d3dbe8b72ef4b1878afbbe1212dd45b"
+  },
+  "snapshot/shell/src/quickshell/singletons/audio/MprisController.qml": {
+    "mode": "100644",
+    "sha256": "fcf681024eb52b940810c953234a69766cb5baa874bbce1b209525e5bec62cee"
+  },
+  "snapshot/shell/src/quickshell/singletons/audio/Sounds.qml": {
+    "mode": "100644",
+    "sha256": "d874a35f8f468edc497c90a2aed6ff85b7d287274d2f0b9b495acbc7e8d063b1"
+  },
+  "snapshot/shell/src/quickshell/singletons/environment/BlueLight.qml": {
+    "mode": "100644",
+    "sha256": "2775a7d0804d993c688ff9dcb82b03b2a76f346a1cbe6610566b08b8086338a5"
+  },
+  "snapshot/shell/src/quickshell/singletons/environment/Location.qml": {
+    "mode": "100644",
+    "sha256": "872df34b6b6511936e958d03617013ad6180c6c9b7217b8a4088d004d802cfdf"
+  },
+  "snapshot/shell/src/quickshell/singletons/environment/Weather.qml": {
+    "mode": "100644",
+    "sha256": "1868273c5c40e9bcc25593211a3bfade66e55d0819ea145e12985d9bc2cfc5b5"
+  },
+  "snapshot/shell/src/quickshell/singletons/info/SysData.qml": {
+    "mode": "100644",
+    "sha256": "c00d4c7832415d2ba676761ad1db39923fd6cee8f2a2c13c493b54869332762b"
+  },
+  "snapshot/shell/src/quickshell/singletons/info/SystemInfo.qml": {
+    "mode": "100644",
+    "sha256": "5b9efbb26dda18415992f7117812b09b61f52c5a360a4bd57ba86b22cfa2b5d9"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/AppMatcher.qml": {
+    "mode": "100644",
+    "sha256": "0373d9f0adfe87aeae157916be89e5024abc39d50b08fa24ffe1a49033a44a61"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/AppMatcherInternal.js": {
+    "mode": "100644",
+    "sha256": "3aedacab5f7221de03d768d006a2bd5f91c372e55f648e6552b4fb8beacd79c2"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/Caching.qml": {
+    "mode": "100644",
+    "sha256": "ae568de0407d184b28b1a37dc39ce614cd6b08cb3cdad86ed878ede60f1db13d"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/Config.qml": {
+    "mode": "100644",
+    "sha256": "85c07d061208cbf4faff1fab62f5d2eb2bca413d6280b2c073b59684a5512dc6"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/CurrentFocus.qml": {
+    "mode": "100644",
+    "sha256": "239e784e5b8b537af9d3096dc770b6c2cede019c6047f744d1f8656f925c7c78"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/DateTime.qml": {
+    "mode": "100644",
+    "sha256": "20fc21ba778814cc2a5fb1a8dce96e07e5868a259cc79a9094b145403aa02364"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/DesktopPresets.qml": {
+    "mode": "100644",
+    "sha256": "7d53f583dac51589d3805aabd03925a06c1ab334667775a06e2058c59ee50c18"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/FirstLaunch.qml": {
+    "mode": "100644",
+    "sha256": "6da646a46981f9b5b33c62fbd048809d751ffb1573f39113b99162217ec93c62"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/I18n.qml": {
+    "mode": "100644",
+    "sha256": "bcd63b144f590293dfd3fa490337f7d6d7fe08786c3f5de118e567e7358d0ace"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/KeyboardLayout.qml": {
+    "mode": "100644",
+    "sha256": "9db6f30f4e0173419973b597f26c74ac5a223c7d5dbc5a552d1bff425e5b933d"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/MangoState.qml": {
+    "mode": "100644",
+    "sha256": "510a41184a3061a5460c34fc03c667cce9c8fda62867008ea52cb7bf5f4ddcb2"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/NiriState.qml": {
+    "mode": "100644",
+    "sha256": "7d476628dd224bd75f37fc0d9263c6f1028e69a9f7025d053336410fc100c811"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/PrivacyMode.qml": {
+    "mode": "100644",
+    "sha256": "d3af72d5c7850567d88b8873f16821f6dc94f22c6b4b27694e359c29e2e7a13b"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/RecordingState.qml": {
+    "mode": "100644",
+    "sha256": "3fe050dfe816ae6e1994c94ab4ac29d88cfa8d37a34af7edb7bc4f54267875af"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/SysNotif.qml": {
+    "mode": "100644",
+    "sha256": "6ab4eb3301f74d7a905f85f413c3e576056ea49309e01cdf389a4936e4278bd2"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/TimerState.qml": {
+    "mode": "100644",
+    "sha256": "7935bdeb9691aee47c25ad86f358961c788eaa86b07117ebdbf56b34496fb628"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/Updater.qml": {
+    "mode": "100644",
+    "sha256": "00739cf3d696ec3d7b733ac0439cfa8cb60390285d1c52c9eb77604042ce53b5"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/WindowTracker.qml": {
+    "mode": "100644",
+    "sha256": "e84943aa8766fdb69c61a92754099d498bbc41b9a0a24382977d2dc0da0b05d1"
+  },
+  "snapshot/shell/src/quickshell/singletons/system/WorkspaceOverview.qml": {
+    "mode": "100644",
+    "sha256": "01f3273cfc6c39f8815c608b91e6dc880276401adaf722d7fde1fe63a34c5c43"
+  },
+  "snapshot/shell/src/quickshell/singletons/theme/Matugen.qml": {
+    "mode": "100644",
+    "sha256": "bf11fd519b93d3f50bed6d7164fe03ed11c5c4d8cfdf3698fbdeb641981822ca"
+  },
+  "snapshot/shell/src/quickshell/singletons/theme/Scaler.qml": {
+    "mode": "100644",
+    "sha256": "0846c9a89cf5a6de85ef9de0c24e6d2213ca0dcdbd9f307d398a340f7e602436"
+  },
+  "snapshot/shell/src/quickshell/singletons/theme/ThemeBackend.qml": {
+    "mode": "100644",
+    "sha256": "bfe2c41219ca4356b7a2b9a73bc65ca4e46c05def720b8bce34f7a5fd10aa024"
+  },
+  "snapshot/shell/src/quickshell/singletons/theme/Wallpaper.qml": {
+    "mode": "100644",
+    "sha256": "8a52cf1965d57811e7664392a3656f1a0240866fa82ecae32229418ee71ce589"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/BarGeometry.qml": {
+    "mode": "100644",
+    "sha256": "6b54c3e2d30eb50e4d1ab6e9947ea12f6669e36ce62a9b6033bc64c4df2e01d6"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/ClipboardController.qml": {
+    "mode": "100644",
+    "sha256": "d40fa9c0910d56de8ea9e625fca8ce2d3156474f0851b2d8166c367157f3ed64"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/DesktopMenuController.qml": {
+    "mode": "100644",
+    "sha256": "f40c3f57a4c4138a9d366edcee519efefbe8c1289bfbc13ed43d342dae11a618"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/DockAppMenuController.qml": {
+    "mode": "100644",
+    "sha256": "463ad777d021e1a163c845e2d22aaef09bf5b4ea12015835d00ba28230a5ac35"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/FloatingController.qml": {
+    "mode": "100644",
+    "sha256": "8fcf48ca59a39468f4ba40a3d0a47dd3a405b4bcadf21bd9815467064afb437b"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/LauncherController.qml": {
+    "mode": "100644",
+    "sha256": "d40fa9c0910d56de8ea9e625fca8ce2d3156474f0851b2d8166c367157f3ed64"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/OsdController.qml": {
+    "mode": "100644",
+    "sha256": "c3466bbbaad8176141cb0bfb8f5ce6a789ea49398569ab632ea7abebfcea4524"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/PanelActions.qml": {
+    "mode": "100644",
+    "sha256": "6910915484415094d07156b02cb6c0119d1d58f8c9e9f4a512b978c4ef3e0c4e"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/SideMusicController.qml": {
+    "mode": "100644",
+    "sha256": "c33c9824839fb27aa15d707a07787ef886d699588522f76dc01ed211d36543a7"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/TrayMenuController.qml": {
+    "mode": "100644",
+    "sha256": "12fba3f3ae344fc5ceab0d2132329f4400d949ba6ef39f355225578b4eb6ac67"
+  },
+  "snapshot/shell/src/quickshell/singletons/widgetcontrols/WidgetSync.qml": {
+    "mode": "100644",
+    "sha256": "30a970f504a820258dc1835cda9ee351cd69cca0c269bd6b79b6c70b68213f55"
+  },
+  "snapshot/shell/src/quickshell/syspanel/SystemPanel.qml": {
+    "mode": "100644",
+    "sha256": "a544529290410e6cf59c9fc320e835f2bc14b59c936441c14b3cbe59170f1d52"
+  },
+  "snapshot/shell/src/quickshell/syspanel/SystemPanelNetworkDetails.qml": {
+    "mode": "100644",
+    "sha256": "c1eb8e1ee3747c1d4adf4c24ef4b5c1b22928238c3333f6ba8a4aa1adc1ff89a"
+  },
+  "snapshot/shell/src/quickshell/syspanel/SystemPanelPowerActions.qml": {
+    "mode": "100644",
+    "sha256": "631ac9fc8dd5e71b76cd65395c6fec5f6cfa28c9b5d8f56dd73489281e098604"
+  },
+  "snapshot/shell/src/quickshell/syspanel/SystemPanelQuickActions.qml": {
+    "mode": "100644",
+    "sha256": "37ffd73a72156b09b31c2a492115fe2ea5a8fab3a104e32c13a5001dd0c20ad5"
+  },
+  "snapshot/shell/src/quickshell/syspanel/SystemPanelSliders.qml": {
+    "mode": "100644",
+    "sha256": "b19fde9d1c3fcf552d94e363865002dc16f10144cb55a13480f19ccf61f8edfa"
+  },
+  "snapshot/shell/src/quickshell/syspanel/qmldir": {
+    "mode": "100644",
+    "sha256": "9a751278ba20f153c924f1b4cf66c33e501d290069273390881bbf88b22bf0dc"
+  },
+  "snapshot/shell/src/quickshell/volume/VolumePopup.qml": {
+    "mode": "100644",
+    "sha256": "ae028b34ee0fb0c3a90394688e0ee4a5a220a20966522fbd0772fa658c6475b8"
+  },
+  "snapshot/shell/src/quickshell/wallpaper/WallpaperEngine.qml": {
+    "mode": "100644",
+    "sha256": "7d41ad09715426657acb5c21ca9789cbc9acd9c21ee24c7bcc4952638f8e0bf4"
+  },
+  "snapshot/shell/src/quickshell/wallpaper/WallpaperPicker.qml": {
+    "mode": "100644",
+    "sha256": "00592663a5c6445df71bac9f25acbee7be019937cba716fcfc745401f9e9a1d6"
+  },
+  "snapshot/shell/src/quickshell/watchers/kb_locks.sh": {
+    "mode": "100755",
+    "sha256": "fa324b071852527a75da19e4c7288deda3a1427d2ab3559ebde9e71877749df1"
+  },
+  "snapshot/shell/src/quickshell/watchers/kb_wait.sh": {
+    "mode": "100755",
+    "sha256": "cd6e900aac085537b18ec8ee4e760b0e7d6b23f8f50af071911a01ef7f5f6d15"
+  },
+  "snapshot/shell/src/quickshell/watchers/sys_fetcher.sh": {
+    "mode": "100755",
+    "sha256": "37cdd570a198555675f509996f059fc01e3de58c6b601afc7179acf5d1bdc957"
+  },
+  "snapshot/shell/src/quickshell/widgets/SelectionOutline.qml": {
+    "mode": "100644",
+    "sha256": "de19b13df2a170724da19f6f135c0cce7801d6bb770c57cd7e392a81d26dc16d"
+  },
+  "snapshot/shell/src/quickshell/widgets/Widget.qml": {
+    "mode": "100644",
+    "sha256": "aaa2d7cd0c8ec4f30fd5b1d211f2d8ce7930f542e1fafa62ac1d85d614be6c1a"
+  },
+  "snapshot/shell/src/quickshell/widgets/WidgetLoader.qml": {
+    "mode": "100644",
+    "sha256": "c719580ef499021cc389f5448aa345884ff39b7f41a7fc37f320fb3fee94dca8"
+  },
+  "snapshot/shell/src/quickshell/widgets/WidgetRedactor.qml": {
+    "mode": "100644",
+    "sha256": "c49d0da7e74d11044b1a23ca68e15e1abf7c3b4ce36cc17cd66759e7db24b096"
+  },
+  "snapshot/shell/src/quickshell/widgets/WidgetRegistry.qml": {
+    "mode": "100644",
+    "sha256": "19d12397966d774b4482d2c1b7839d8c56ac62eff5ffeaf5444014463c99caa5"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/battery/BatteryFace.qml": {
+    "mode": "100644",
+    "sha256": "3822fe52560afe84bc3f0e345d0df8643992b821e4458e250ff1adbd60e83dd2"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/battery/BatteryFaceCircle.qml": {
+    "mode": "100644",
+    "sha256": "11a046e62f80b36d44bf95f6f839d58a0c2fde430d290d88f3702c52ff5c077b"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceAnalog.qml": {
+    "mode": "100644",
+    "sha256": "8e2660d2e752882dea2971a4a6fc7c688d60b893e149f20c4de44807d2a2d7d8"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceDigital.qml": {
+    "mode": "100644",
+    "sha256": "06abd41490e092e2d00419dd3a0ae055f690d001b434b78e352d00cb1e2d1270"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceLockscreen.qml": {
+    "mode": "100644",
+    "sha256": "cb0e9160c7d2b6af3dc2c8599cf6b328c545d6498c9bcbfd2723abfd0417adcc"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceMaterial.qml": {
+    "mode": "100644",
+    "sha256": "08eb250d348a21d2a79346fd557f8989dcda138949ad94b71a5216716002011f"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceMaterialAnalog.qml": {
+    "mode": "100644",
+    "sha256": "bc0cef375f94f74a6f35b403224ef36b481f4abb43d67cf3b255b4025ba13f34"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceMaterialLumen.qml": {
+    "mode": "100644",
+    "sha256": "702017be5536df3d8af8db30ba232931e1ea90e23ef2a1f27ccf88b7c0f20570"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceMinimal.qml": {
+    "mode": "100644",
+    "sha256": "8fc24b44c011a85565f3e2700ac66dbe85d54dd4cf8b2ec02bccd4e54f67fa19"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/clock/ClockFaceStretched.qml": {
+    "mode": "100644",
+    "sha256": "3bbc9fa8fde977c7a9a00898ac3fc1ceac89f09598821cb728c44081f17fa998"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/github/GithubFace.qml": {
+    "mode": "100644",
+    "sha256": "f1f5707c143960226efc402e3a4c29255720cd2f3afb0338f64539634ff73863"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/image/CropImage.qml": {
+    "mode": "100644",
+    "sha256": "757d41dd47809cb8ef190d99ea656b39ba3811b710865907ab45b352cafad6ec"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/image/ImageFaceRect.qml": {
+    "mode": "100644",
+    "sha256": "92c13f53316fc990951d10b75f097b2808e174c3289aa4ac02609111bc823c2f"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/image/ImageFaceRound.qml": {
+    "mode": "100644",
+    "sha256": "13486d1ba236f992f86fdd3bcccff2cae38c532dbe95b1abda794cdf2c8e808b"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/image/ImageFaceRounded.qml": {
+    "mode": "100644",
+    "sha256": "21a25671c4fa1afd267fdcd4e0369fb461d2b165d7e29e6f51ffac7503ac6c56"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/image/ImageFaceTile.qml": {
+    "mode": "100644",
+    "sha256": "616db279283d0cb3fb19afb9c9806136269ed913d4371527ea5f91588f7abfd0"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/image/qmldir": {
+    "mode": "100644",
+    "sha256": "a9f46c48d84bdfbd0768aea4f54669217bdf9a9dedf587b96dc983d6ecc93921"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/music/MusicFace.qml": {
+    "mode": "100644",
+    "sha256": "c058be91b06ce17e760e485f7ca774d2fad3c08774a79ceb3aba8de25dd5ee22"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/music/MusicFaceLyrics.qml": {
+    "mode": "100644",
+    "sha256": "6d5c94c3e9867f9fb63f27b3b7f50d29b55116ba4dbad2786ecbf8ad2f4067ac"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/music/MusicFaceLyricsSimple.qml": {
+    "mode": "100644",
+    "sha256": "f9b6c806222c6016635dc5da9378c59bf0785f749af77a83754d1db8b4ae9cf1"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/music/MusicFaceRound.qml": {
+    "mode": "100644",
+    "sha256": "9715cbb866b3c9859b57d61dd0ca69ebf4192dbd516c6fb81740ff5e94589c3e"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/notes/NotesFace.qml": {
+    "mode": "100644",
+    "sha256": "8e1e3c4b90c033f345f5c1edbf22aafac0f137a7d87140a327dbb2b4a124d5e0"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/qmldir": {
+    "mode": "100644",
+    "sha256": "f6d91bbb5748118f186889ff390e0573434a46fb7c6e3dadbfaa69d928277d41"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/CpuFace.qml": {
+    "mode": "100644",
+    "sha256": "9667485aecba836f9b04716773fa15c1f04d14d268f71169c9a79e062d4bfec6"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/CpuFaceCircle.qml": {
+    "mode": "100644",
+    "sha256": "8fdbb6fbc056a2b7b48d582da49f3f28588f8bf35c092dd1d5ad76f843b4c143"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/DiskFace.qml": {
+    "mode": "100644",
+    "sha256": "5c3c29e0993fb250aca57b14975a13a4dcc7325f9b59d3d9039b96159ec94311"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/DiskFaceCircle.qml": {
+    "mode": "100644",
+    "sha256": "8fcae4624b57976bb672040222ec6f651e3a94e8cb70bb688c0dba6c23dd2f8b"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/RamFace.qml": {
+    "mode": "100644",
+    "sha256": "3e09537edb18fb6aaea79415a9e77ec7d3db398185c0f79519b72fb2d750e086"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/RamFaceCircle.qml": {
+    "mode": "100644",
+    "sha256": "b6c20d9338933a9841ab066878e0a190426a603c6f89ad15a93ede1bbad03c0d"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/TempFace.qml": {
+    "mode": "100644",
+    "sha256": "38437e01353ed851ec3140eb957485daa7c6ebf52df46860cd25ae81104a17f5"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/usage/TempFaceCircle.qml": {
+    "mode": "100644",
+    "sha256": "09825774355cdc85f20d32de4f6b17f85cc4854452ec3c3a80ae999b4b932a65"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/user/UserFace.qml": {
+    "mode": "100644",
+    "sha256": "0ce1d6ad04bec06bfd46ac04b139dd9a36e7097af3bd3ea310d08849ca26f0c6"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/visualizer/VisualizerFace.qml": {
+    "mode": "100644",
+    "sha256": "318c3dab334a6a0c4fbdc2c3b02a56a6458ba2386a0f3bfb50d3fd08c806d83e"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/visualizer/VisualizerFaceContinuous.qml": {
+    "mode": "100644",
+    "sha256": "4d2bcea62d358260744fbd37446f8e1a1221edc6b95e44533a74d16680374ca1"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/weather/WeatherFaceCompact.qml": {
+    "mode": "100644",
+    "sha256": "9138721cfe7ae540c25afb26a1f1f2997d9c3fe4228365da0d61b367e1d804d9"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/weather/WeatherFaceFull.qml": {
+    "mode": "100644",
+    "sha256": "cb7b24dbfe8c9810b934efeb2a6fb589c5b50ea0263cfb3de5dcd14fa69bac03"
+  },
+  "snapshot/shell/src/quickshell/widgets/faces/weather/WeatherFaceRound.qml": {
+    "mode": "100644",
+    "sha256": "cfcada8e6de99e2e026cf43ed940abd7e1ab65e0b92bfa719ef5608cfbeb26f1"
+  },
+  "snapshot/shell/src/quickshell/widgets/qmldir": {
+    "mode": "100644",
+    "sha256": "ffc74bbf307bd61af491bc2c1a8307f94558d9effa744cd5c050abfc425d6025"
+  },
+  "snapshot/shell/src/scripts/blue_light_filter.sh": {
+    "mode": "100755",
+    "sha256": "c12572ec6bb992b0f13978a011f53523826701f92a264500755ca1d9a4db6fa1"
+  },
+  "snapshot/shell/src/scripts/brightness.sh": {
+    "mode": "100755",
+    "sha256": "e103159e920f028527518e5ae45bdf0412286f01dddc24153a67e2179dc8a898"
+  },
+  "snapshot/shell/src/scripts/caching.sh": {
+    "mode": "100755",
+    "sha256": "397b0b54cd79c5438f726694b09bc8c20fd4dd96b5211a78b51d8922a58cc830"
+  },
+  "snapshot/shell/src/scripts/clipboard_shelf.py": {
+    "mode": "100755",
+    "sha256": "106c4942c4a91ee023ec6aefafa6600499e11304381999c42347431d304675b9"
+  },
+  "snapshot/shell/src/scripts/config.sh": {
+    "mode": "100755",
+    "sha256": "07a3dff1e9d6c53d733d696e8e16e950ea5b99378c8878708839963bd6e7e614"
+  },
+  "snapshot/shell/src/scripts/current_focus.sh": {
+    "mode": "100755",
+    "sha256": "b9314fcf7f66e2a558ed2615177e8b04481b6a41ddda96e208914aaa14d34ba2"
+  },
+  "snapshot/shell/src/scripts/desktop-presets.py": {
+    "mode": "100755",
+    "sha256": "1fb9b737a21dd9d34d9495d1d445cc7ca09ee5f54a286be77ad9a69df649a2ca"
+  },
+  "snapshot/shell/src/scripts/first_launch.sh": {
+    "mode": "100755",
+    "sha256": "eb4982da0706693a04261211071eda4093275fa0bcc1692e7895bdbca5e57377"
+  },
+  "snapshot/shell/src/scripts/i18n.sh": {
+    "mode": "100755",
+    "sha256": "198190d6a9a0c006a4f4fe856c527828c233b0006c22ee3d7daf322acdc3dbc1"
+  },
+  "snapshot/shell/src/scripts/location.sh": {
+    "mode": "100755",
+    "sha256": "a5a30451b54fcfbe509c4e2d03662d2a49d3f76c979d15d522c410eafd8b10bf"
+  },
+  "snapshot/shell/src/scripts/location_manual.sh": {
+    "mode": "100755",
+    "sha256": "004c49ebdc0cd3f70f0a93bbe31d0db4e251011d599b0b5fc7f4a1426a2d347d"
+  },
+  "snapshot/shell/src/scripts/lock.sh": {
+    "mode": "100755",
+    "sha256": "9c10c610ee20b406f41a4603ac94d8884422911fa287b8f2b1bce5d3a64e158a"
+  },
+  "snapshot/shell/src/scripts/media_queue.py": {
+    "mode": "100755",
+    "sha256": "e332097e05ceb467fa0a20141002b50682b77294e97d8d63c0e64e56f6ca36cd"
+  },
+  "snapshot/shell/src/scripts/monitors_detect.sh": {
+    "mode": "100755",
+    "sha256": "584b4ef740c32f27823affe3b1482ed9561b3e145a89b83acd2a137ef7bdeba6"
+  },
+  "snapshot/shell/src/scripts/notes_paste_image.py": {
+    "mode": "100644",
+    "sha256": "f434635e3260c72ab7ca98b05533e72c5bce80fec8262aa3cf43c631faf9a38f"
+  },
+  "snapshot/shell/src/scripts/ocr_langs.sh": {
+    "mode": "100755",
+    "sha256": "849e94ae579ffb7bd52f50319960eefee42048136fbddd45bcec0fd253c0e951"
+  },
+  "snapshot/shell/src/scripts/qs_manager.sh": {
+    "mode": "100755",
+    "sha256": "81bc66b0a2c86ab07a9ae4c60a59180a623d030ebc4ac3337c09f8cb2b72335a"
+  },
+  "snapshot/shell/src/scripts/redactor.sh": {
+    "mode": "100755",
+    "sha256": "1a3bedcd70b5c1a74eafab3913b26f985d5928b777e0fc2c5f94afc4c46564ef"
+  },
+  "snapshot/shell/src/scripts/reload.sh": {
+    "mode": "100755",
+    "sha256": "7452bc272a218c3a33b8be215121266dcb8aa4f6e37c5cfbc9887d5a455aadef"
+  },
+  "snapshot/shell/src/scripts/screenshot.sh": {
+    "mode": "100755",
+    "sha256": "578a5fd9925df487ed516b8dc1afea8fb71946ddf763d8074370438df5f2cdd3"
+  },
+  "snapshot/shell/src/scripts/settings.sh": {
+    "mode": "100755",
+    "sha256": "ce2e222054b074cb35d93c04cb1497f95a94ec6bd78f09144dbd3352479c79bd"
+  },
+  "snapshot/shell/src/scripts/system/can_hibernate.sh": {
+    "mode": "100755",
+    "sha256": "ff081be97bdefd2b80dfe0fd822b1a2f3d522b69f5674338fc8ba5a4e18e7663"
+  },
+  "snapshot/shell/src/scripts/system/exit.sh": {
+    "mode": "100755",
+    "sha256": "5b62a8dcffb0d61f31a1cbc6f30b902f7c1c59fac51ea559fddef558f7322d80"
+  },
+  "snapshot/shell/src/scripts/system/fingerprint_available.sh": {
+    "mode": "100755",
+    "sha256": "c85ef043255ceeee826f9397a51a9cfd5dcf5671ad1d49a240101bb0880bdb52"
+  },
+  "snapshot/shell/src/scripts/system/hibernate.sh": {
+    "mode": "100755",
+    "sha256": "654af29ed548c461b2589fdd30e2849538f3061c1331aa788f01ea5e3fe68798"
+  },
+  "snapshot/shell/src/scripts/system/pam_without_fingerprint.sh": {
+    "mode": "100755",
+    "sha256": "a8869250203f9e1db296a08fd677db277e0e53d1c70c810d7bf69d5b7dce8f6d"
+  },
+  "snapshot/shell/src/scripts/system/poweroff.sh": {
+    "mode": "100755",
+    "sha256": "7e68f4bc83541f056a944f4c4129d060f22eee57e4db83aad55fa691e726ad8f"
+  },
+  "snapshot/shell/src/scripts/system/reboot.sh": {
+    "mode": "100755",
+    "sha256": "5cd5e5c265788eb50c8d0b0e75dd7db87c5f740090baaf17dafce2e6fc559667"
+  },
+  "snapshot/shell/src/scripts/system/suspend.sh": {
+    "mode": "100755",
+    "sha256": "bf16619a6b6e57e4fb397268a628e862531b1807855e013a5adbd56d70dc85df"
+  },
+  "snapshot/shell/src/scripts/updater.py": {
+    "mode": "100755",
+    "sha256": "9c415e5ff3132ff806e93949498b6f59089a8a6bf85b89f3951dcfad163c482b"
+  },
+  "snapshot/shell/src/scripts/volume.sh": {
+    "mode": "100755",
+    "sha256": "2b12faffc46cc95100720716128d79729abfc2d56c1be4b69a2ffeb3d4576e8b"
+  },
+  "snapshot/shell/src/scripts/wallpaper/indexer.py": {
+    "mode": "100755",
+    "sha256": "a27d3f246fc1a237b6e5d6c8eb94d8f6b577672040be3c84b5e4f6d86827998b"
+  },
+  "snapshot/shell/src/scripts/wallpaper/matugen_reload.sh": {
+    "mode": "100755",
+    "sha256": "b3ee7f3edb07efb1eeab43586efca846bd1319aa7a6612dad1d9db3b7dadb0fd"
+  },
+  "snapshot/shell/src/scripts/wallpaper/picker_thumbnails.py": {
+    "mode": "100644",
+    "sha256": "bb94d412b5b70d9d11a7424f0e51a0aea7e76586b030a62e864d2a9c87fc5030"
+  },
+  "snapshot/shell/src/scripts/weather.sh": {
+    "mode": "100755",
+    "sha256": "ded2c766055b3b2c587707f265061e0aaf4df4228a4467b7cecdd55ce5e70c05"
+  },
+  "snapshot/shell/src/version.txt": {
+    "mode": "120000",
+    "target": "../version.txt"
+  },
+  "snapshot/shell/version.txt": {
+    "mode": "100644",
+    "sha256": "ad8650bc9057d9dfd809961b69dbad640c288d809fa44437d44d83d3b118c821"
+  },
+  "snapshot/system/plymouth-theme/dialog.png": {
+    "mode": "100644",
+    "sha256": "a6cded327f24a4ecff9730eedc62d981e237a036550705183a3eb322b9622f8a"
+  },
+  "snapshot/system/plymouth-theme/dots.png": {
+    "mode": "100644",
+    "sha256": "6f43550731d99cc237cecc61a06197a463d3318b46a1b2a838b0b538555dce58"
+  },
+  "snapshot/system/plymouth-theme/evhos.plymouth": {
+    "mode": "100644",
+    "sha256": "6319d8dc1651da00d487297fd518a005d33104d68276c354ec9e5e6a20af8161"
+  },
+  "snapshot/system/plymouth-theme/evhos.script": {
+    "mode": "100644",
+    "sha256": "a1c8e43502fa4b5ef34dd56af51343011b708797967e7a488c6d94c74334f09a"
+  },
+  "snapshot/system/plymouth-theme/footer.png": {
+    "mode": "100644",
+    "sha256": "e9ae59500cd392bcd5945bf44c2a87dc56dfa2eaa9a169db1d1b8b5e214cb0d3"
+  },
+  "snapshot/system/plymouth-theme/intro-0.png": {
+    "mode": "100644",
+    "sha256": "c8df6baaaa3b316a96232a4c03c5452206be3a25913202855e92d337317cb779"
+  },
+  "snapshot/system/plymouth-theme/intro-1.png": {
+    "mode": "100644",
+    "sha256": "2b2cf241c6b9c4d95a2f1bb40db6993231cbfefee4256a215d6689fc58b8a172"
+  },
+  "snapshot/system/plymouth-theme/intro-10.png": {
+    "mode": "100644",
+    "sha256": "4ea3520b833a595a5d27979ed5f7337fd1eeeb95fbeadd2c2901378730456f80"
+  },
+  "snapshot/system/plymouth-theme/intro-100.png": {
+    "mode": "100644",
+    "sha256": "cc9a554620dee745a87d39f5afa1af311cdf1a64faca81b6fdf1df0574532a12"
+  },
+  "snapshot/system/plymouth-theme/intro-101.png": {
+    "mode": "100644",
+    "sha256": "9358e34dea1e872a639f179eaabe8443aaf6246f7c5bd83e036881dca650bb06"
+  },
+  "snapshot/system/plymouth-theme/intro-102.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-103.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-104.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-105.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-106.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-107.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-108.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-109.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-11.png": {
+    "mode": "100644",
+    "sha256": "8944a4e13fa0f6265bf8c9112d31962a1798c0e2b89f2ac01052abe90ea38c0a"
+  },
+  "snapshot/system/plymouth-theme/intro-110.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-111.png": {
+    "mode": "100644",
+    "sha256": "b9b24945f934fa473f165625ca8ca01550d3cf46b33d32243177fc3734f35e6a"
+  },
+  "snapshot/system/plymouth-theme/intro-12.png": {
+    "mode": "100644",
+    "sha256": "48fb182d399d0ef47c6f8006c0a8d7058e8f592dc060618b61390dc07ed25182"
+  },
+  "snapshot/system/plymouth-theme/intro-13.png": {
+    "mode": "100644",
+    "sha256": "4940911a14601850d063baccc336d57243e65e3a54b0db56764b85e8d55ad245"
+  },
+  "snapshot/system/plymouth-theme/intro-14.png": {
+    "mode": "100644",
+    "sha256": "8ddac8ec0ec3cf5d908d40fe4cd19ababe609a3c7e930e4ee8cd6042e02558ea"
+  },
+  "snapshot/system/plymouth-theme/intro-15.png": {
+    "mode": "100644",
+    "sha256": "322179ef2817df2cb447d6095ac69155439eb7dbb5f736ddbdb455fd410343b6"
+  },
+  "snapshot/system/plymouth-theme/intro-16.png": {
+    "mode": "100644",
+    "sha256": "3ff6e7e53a0d6fcc3e88970e0d5a8c4a6e78c6532d150c52b2d39ea7d58b4d45"
+  },
+  "snapshot/system/plymouth-theme/intro-17.png": {
+    "mode": "100644",
+    "sha256": "00963391b75bee565f02a08ad0bdab8cb6ae281eeb82dbd03953870bdc282fc9"
+  },
+  "snapshot/system/plymouth-theme/intro-18.png": {
+    "mode": "100644",
+    "sha256": "84a71ff246b807ceab7ca125f1ec8e25d4f1fcd2ff416bf78c5a417f5a58c534"
+  },
+  "snapshot/system/plymouth-theme/intro-19.png": {
+    "mode": "100644",
+    "sha256": "ed7e6da71838fd31f27bfca9c26669d665668a69dc6092c5abc4c36fcd239edc"
+  },
+  "snapshot/system/plymouth-theme/intro-2.png": {
+    "mode": "100644",
+    "sha256": "da26d87234014af2545e9cc530d2a31c03951daba6e4838c647e1092f8aec36b"
+  },
+  "snapshot/system/plymouth-theme/intro-20.png": {
+    "mode": "100644",
+    "sha256": "a0b67a65bd7ebba1cd92097abd248fc3a6cffd94df926491d944ec59a985ae6d"
+  },
+  "snapshot/system/plymouth-theme/intro-21.png": {
+    "mode": "100644",
+    "sha256": "fef4ddcef41ad9009626fa67d2387cd4988f621a40a9d80fe31cb50d7de2be05"
+  },
+  "snapshot/system/plymouth-theme/intro-22.png": {
+    "mode": "100644",
+    "sha256": "f14b87347a104cc75d445f291ab0e0d8f77e0058a6597d53560d0d15791957df"
+  },
+  "snapshot/system/plymouth-theme/intro-23.png": {
+    "mode": "100644",
+    "sha256": "ec09a416ebfaf5929b28695a9fd0649677d3d816f6661bdf1b2c11cabfc34d3a"
+  },
+  "snapshot/system/plymouth-theme/intro-24.png": {
+    "mode": "100644",
+    "sha256": "de6ee2c0c77e30794d2a62dd81d302cf6df3733b0c89c0504a368afa6b450b39"
+  },
+  "snapshot/system/plymouth-theme/intro-25.png": {
+    "mode": "100644",
+    "sha256": "e34d79cffb56ceb6d5d8d7d6d14c8961d9553dee1b52a79710f397d82bdef039"
+  },
+  "snapshot/system/plymouth-theme/intro-26.png": {
+    "mode": "100644",
+    "sha256": "b34d59acc297eac9776700d12a8db456cf35f39b9c57ba7dc16b743f28d52f0a"
+  },
+  "snapshot/system/plymouth-theme/intro-27.png": {
+    "mode": "100644",
+    "sha256": "269def66bd3278f2855b39d7747e72aa9d1b8b2789e8ecab5efe52a78e0f2b29"
+  },
+  "snapshot/system/plymouth-theme/intro-28.png": {
+    "mode": "100644",
+    "sha256": "215cdd42b7c3718df9260cb532fcd844839ba96d5644243c976e00a7005e65a4"
+  },
+  "snapshot/system/plymouth-theme/intro-29.png": {
+    "mode": "100644",
+    "sha256": "dacbc2c7c146222e349a08cd4ff3a1d06d242132c8c69d3cbb0fc56eab17ac86"
+  },
+  "snapshot/system/plymouth-theme/intro-3.png": {
+    "mode": "100644",
+    "sha256": "b56c1f0ae77171f9825ca1d50056f25db74087db0c55f3e337de9aba04b6652c"
+  },
+  "snapshot/system/plymouth-theme/intro-30.png": {
+    "mode": "100644",
+    "sha256": "a81b206c1fc86cc8d3bed8691b80c991e9aa8f809568722b712e460c8503ba00"
+  },
+  "snapshot/system/plymouth-theme/intro-31.png": {
+    "mode": "100644",
+    "sha256": "b7760324a4cddfb3901a23c4e91c158c42a5013f739e544fbf4299795a9337ed"
+  },
+  "snapshot/system/plymouth-theme/intro-32.png": {
+    "mode": "100644",
+    "sha256": "2ee98f5563363b5addbb2df6e8a372df5f498558107cfb283e531f106d41dc74"
+  },
+  "snapshot/system/plymouth-theme/intro-33.png": {
+    "mode": "100644",
+    "sha256": "4a9c451e65bb56b1ed72e3c3acca644291707f5a401258f40526bbbebcad00ae"
+  },
+  "snapshot/system/plymouth-theme/intro-34.png": {
+    "mode": "100644",
+    "sha256": "77414b5ae598d53020503a935d0120bf3f5fd37e712ecce44c489adc7ba5a507"
+  },
+  "snapshot/system/plymouth-theme/intro-35.png": {
+    "mode": "100644",
+    "sha256": "054f757b618c6ed025750ef64b972bc1a4404ab7f5a8f29a854fadd0699c8330"
+  },
+  "snapshot/system/plymouth-theme/intro-36.png": {
+    "mode": "100644",
+    "sha256": "cb5e87c17d6760a85e541210716c80c1db580d35f1db54b918aa40b5c325f3eb"
+  },
+  "snapshot/system/plymouth-theme/intro-37.png": {
+    "mode": "100644",
+    "sha256": "8167b6f11e80bfd50f47b3e2e4609d338fc85bab8e31d565d9d34bd72a5c96df"
+  },
+  "snapshot/system/plymouth-theme/intro-38.png": {
+    "mode": "100644",
+    "sha256": "100f92838dc8f2e0b19327c40de23bb4bf36c4944cf046486b72adbf8fd5e1f3"
+  },
+  "snapshot/system/plymouth-theme/intro-39.png": {
+    "mode": "100644",
+    "sha256": "f9df1f179cf42963443b8d2fb6d960b0af887df881823aa3f2830ddad05e9c3b"
+  },
+  "snapshot/system/plymouth-theme/intro-4.png": {
+    "mode": "100644",
+    "sha256": "ad162e21a031f123ee31bf470f8bce7b1cb83898288999b12bec7fa1fd815c16"
+  },
+  "snapshot/system/plymouth-theme/intro-40.png": {
+    "mode": "100644",
+    "sha256": "0d64164254c65e8f6722651edf3283f1f6b965de6a48ddb674fdef119d28fdc7"
+  },
+  "snapshot/system/plymouth-theme/intro-41.png": {
+    "mode": "100644",
+    "sha256": "3ade5820feefd69d6b14b16e66b48c39fc59a9a4198e4f80b55761ef98d60a99"
+  },
+  "snapshot/system/plymouth-theme/intro-42.png": {
+    "mode": "100644",
+    "sha256": "cb1cfc3c2bcfd0b1c793ced7245cb24bfd07b31ebc473644084fa0812325548a"
+  },
+  "snapshot/system/plymouth-theme/intro-43.png": {
+    "mode": "100644",
+    "sha256": "8f5628d39138ece7490acc31c8ba15eaf9cb00be9de9c4f97e0cb288fec4d261"
+  },
+  "snapshot/system/plymouth-theme/intro-44.png": {
+    "mode": "100644",
+    "sha256": "0a0daf4820a26868fb1d1f51de5d0a3ea13f1f341d82ec8ed3270273f93a90ec"
+  },
+  "snapshot/system/plymouth-theme/intro-45.png": {
+    "mode": "100644",
+    "sha256": "8295b7a38bd7a9c84dc5ee01d23af5f8d702baa28651c3dd0e6220e39595fa83"
+  },
+  "snapshot/system/plymouth-theme/intro-46.png": {
+    "mode": "100644",
+    "sha256": "d8cd033157ee586172d7ca3f4ff3881fbb14db20b1daa556480d98a405439d12"
+  },
+  "snapshot/system/plymouth-theme/intro-47.png": {
+    "mode": "100644",
+    "sha256": "cff326af41ca935fbceef9711e7a3fa64bd7eb371df3d15ba693207f75f84160"
+  },
+  "snapshot/system/plymouth-theme/intro-48.png": {
+    "mode": "100644",
+    "sha256": "429e59149b7684395004548c0e9ed3c119a6f9f982366e9d3a35c22b5bf7b8c1"
+  },
+  "snapshot/system/plymouth-theme/intro-49.png": {
+    "mode": "100644",
+    "sha256": "0bd1707d2255af8dc8084c3696e9f30ff05a2860a4942dfc3f64250e1fcd3f1c"
+  },
+  "snapshot/system/plymouth-theme/intro-5.png": {
+    "mode": "100644",
+    "sha256": "28dcb0ebb974508dc0ddac2ae1e14554e9d7306d73d3d64922f77e1cf1dd5951"
+  },
+  "snapshot/system/plymouth-theme/intro-50.png": {
+    "mode": "100644",
+    "sha256": "b51fd2b991703857878d8b25a0ffce21ca455da5d018fcd7a1add1fda4bb9315"
+  },
+  "snapshot/system/plymouth-theme/intro-51.png": {
+    "mode": "100644",
+    "sha256": "f81d8de17e99c7cb033698cb44f997a1bc65d3144b8de2679c69846a34851516"
+  },
+  "snapshot/system/plymouth-theme/intro-52.png": {
+    "mode": "100644",
+    "sha256": "1da174afa3a76d779ff9c2819f49659a0eb34d91f07c038a2bf47e06126c7945"
+  },
+  "snapshot/system/plymouth-theme/intro-53.png": {
+    "mode": "100644",
+    "sha256": "7118d7dcce113b28015e679f52a2cc49848e41bec613c2c00a96e3e61ae48720"
+  },
+  "snapshot/system/plymouth-theme/intro-54.png": {
+    "mode": "100644",
+    "sha256": "267898adbe462124d4278d1ef1cce68f744a5aa97328e3780dd187e6996016f1"
+  },
+  "snapshot/system/plymouth-theme/intro-55.png": {
+    "mode": "100644",
+    "sha256": "8eb24edea690d0e647518b07ff4144dafe175f8b9671efb57f079d34a302dc2e"
+  },
+  "snapshot/system/plymouth-theme/intro-56.png": {
+    "mode": "100644",
+    "sha256": "0cc2a850c3fb661c4a0a4d20244de6f09347318649d7b06f788b186dbfbb96b7"
+  },
+  "snapshot/system/plymouth-theme/intro-57.png": {
+    "mode": "100644",
+    "sha256": "d66ef40d44e2e5bcb1f32dc265d7902d0470a41c0446e00e54cdc7a1fa0d023a"
+  },
+  "snapshot/system/plymouth-theme/intro-58.png": {
+    "mode": "100644",
+    "sha256": "013aad34505db897bbd1b7598535253773107ba61a06b31f9145f2cc14270983"
+  },
+  "snapshot/system/plymouth-theme/intro-59.png": {
+    "mode": "100644",
+    "sha256": "28618961a1b709a327c0bf03506d75cf0524033cdd4ba0da54e33c1379c74d5f"
+  },
+  "snapshot/system/plymouth-theme/intro-6.png": {
+    "mode": "100644",
+    "sha256": "637ec09c5bfad1c9e2f3e25f93ca41a619bfd45a5d325e4247ceef8312e3851d"
+  },
+  "snapshot/system/plymouth-theme/intro-60.png": {
+    "mode": "100644",
+    "sha256": "ae05c409db969d71f0dc9c74b80b400ce1a4ab1ba6f15dc56ff883d4fdea4bd3"
+  },
+  "snapshot/system/plymouth-theme/intro-61.png": {
+    "mode": "100644",
+    "sha256": "e304f1f3c9f8f68c6668fb83b1ee7caceb84fd088d005a6357b36aa13343fac2"
+  },
+  "snapshot/system/plymouth-theme/intro-62.png": {
+    "mode": "100644",
+    "sha256": "5dd6ed6fa4f372497c848f8509788a587791f60f72daa06393f00effb533f8f8"
+  },
+  "snapshot/system/plymouth-theme/intro-63.png": {
+    "mode": "100644",
+    "sha256": "39dd7d78623d939da82dfdf30653317b26d4103f509da931b93182e765d26c94"
+  },
+  "snapshot/system/plymouth-theme/intro-64.png": {
+    "mode": "100644",
+    "sha256": "5a4bd6ad5a07cd731ac2e98dedbbb1e257f45ef3ff07cde72914db81158b4cbd"
+  },
+  "snapshot/system/plymouth-theme/intro-65.png": {
+    "mode": "100644",
+    "sha256": "0175bb54bec31f902b010a5683dcae6ffcb5ed6ec0c30cfbf803025bb64d9bf5"
+  },
+  "snapshot/system/plymouth-theme/intro-66.png": {
+    "mode": "100644",
+    "sha256": "0b089adee4628a13bcd20ee5612d4acd63465b9c5b127408bfe89ca2ee121b9f"
+  },
+  "snapshot/system/plymouth-theme/intro-67.png": {
+    "mode": "100644",
+    "sha256": "a97a4adc80987f474c4322a66d8a345e4b1c1c3aab1d7cc3d3203d63ad5e9cb5"
+  },
+  "snapshot/system/plymouth-theme/intro-68.png": {
+    "mode": "100644",
+    "sha256": "bf054d0e56cbc92a0605e9b1a770148bbc3c8ebe2fd1db59f82209f5a2ad131f"
+  },
+  "snapshot/system/plymouth-theme/intro-69.png": {
+    "mode": "100644",
+    "sha256": "84f3d113d9affe78362e3f516db0aa14be257804491ca44cf62fcdd041c26f24"
+  },
+  "snapshot/system/plymouth-theme/intro-7.png": {
+    "mode": "100644",
+    "sha256": "fe42a623899ae03771a08a7b63561693e3f79f3462ded1bb3c64857ad341cec7"
+  },
+  "snapshot/system/plymouth-theme/intro-70.png": {
+    "mode": "100644",
+    "sha256": "99d9aa84cd5317ccb71ac431f321cf7b395e4d28120c25ef0ee04de034e05077"
+  },
+  "snapshot/system/plymouth-theme/intro-71.png": {
+    "mode": "100644",
+    "sha256": "0ba1399c67129e9eb733847bbd011192ac5537ef408b1429ffa0110f1493b3dc"
+  },
+  "snapshot/system/plymouth-theme/intro-72.png": {
+    "mode": "100644",
+    "sha256": "1a6eb0c409b39e43c961d5a7763e56a614b83211eb6eb97f0d03fc3955701613"
+  },
+  "snapshot/system/plymouth-theme/intro-73.png": {
+    "mode": "100644",
+    "sha256": "68a3ca2497585ebe6695d723cace721760c0190b9c7696dc4408ddf70676832a"
+  },
+  "snapshot/system/plymouth-theme/intro-74.png": {
+    "mode": "100644",
+    "sha256": "6f1ca2d2aaebd6686bab5c02b246fb8d230db74b458155ec437f0e8af544793c"
+  },
+  "snapshot/system/plymouth-theme/intro-75.png": {
+    "mode": "100644",
+    "sha256": "dd195256a22e3bfc5ea302e0825bd1c9f36898274ea0ce0bb9b3c104d321f9b1"
+  },
+  "snapshot/system/plymouth-theme/intro-76.png": {
+    "mode": "100644",
+    "sha256": "0578d8d89d76ae5b048b548988da2bc05c9649c833abb410bab1854dcbb93cfa"
+  },
+  "snapshot/system/plymouth-theme/intro-77.png": {
+    "mode": "100644",
+    "sha256": "32713a3065540f3451aab341bdac92655c97e13c9eedc54fc769391f95eaf62e"
+  },
+  "snapshot/system/plymouth-theme/intro-78.png": {
+    "mode": "100644",
+    "sha256": "d674bd85dae96e2f55ec2313660b7ffd26dab1be3cc020fc5294ce92ef4b45fd"
+  },
+  "snapshot/system/plymouth-theme/intro-79.png": {
+    "mode": "100644",
+    "sha256": "70f77407752a0f3f96d3907dcbfd2befc46214db32cf3644a19661a11fe8b394"
+  },
+  "snapshot/system/plymouth-theme/intro-8.png": {
+    "mode": "100644",
+    "sha256": "1d5786fcec0931e0710b7d3a2ea8bd28d813ae7563857201ab1eda5d8292da3a"
+  },
+  "snapshot/system/plymouth-theme/intro-80.png": {
+    "mode": "100644",
+    "sha256": "f39f36075830c512da02b9bfd5dcd2e9c918e74036fc9c135006bfe6d8857372"
+  },
+  "snapshot/system/plymouth-theme/intro-81.png": {
+    "mode": "100644",
+    "sha256": "8697360f1d5446d317980a049a1d4abad4859d47c3c82eb73169ceaba75bc5a0"
+  },
+  "snapshot/system/plymouth-theme/intro-82.png": {
+    "mode": "100644",
+    "sha256": "2ea3e5f9ac0672c6658abb57c8e6b19f67be94c9f69cad3094401fe7cac47bc8"
+  },
+  "snapshot/system/plymouth-theme/intro-83.png": {
+    "mode": "100644",
+    "sha256": "fa29cbf4828d4dc145f35356fe405414e149ea2df54bcf7631baa928546b971e"
+  },
+  "snapshot/system/plymouth-theme/intro-84.png": {
+    "mode": "100644",
+    "sha256": "e69d40bc62221cde1bb32f68c7dfb6f4162e33e4ea73324b1ebb7ef34e6d22aa"
+  },
+  "snapshot/system/plymouth-theme/intro-85.png": {
+    "mode": "100644",
+    "sha256": "e99f3f86b864b9cf9ea946be76cf2d17baee468ce695fa55e5ad6652f708f4e8"
+  },
+  "snapshot/system/plymouth-theme/intro-86.png": {
+    "mode": "100644",
+    "sha256": "e360fbe494c041d425be5b3429ef0113fa632f5352ab8b613fbadadbe5a56089"
+  },
+  "snapshot/system/plymouth-theme/intro-87.png": {
+    "mode": "100644",
+    "sha256": "cac30171fe9091f7d0a8c6ee699f387f5a5f210452c2e14baa8ab9cb6a8a88b1"
+  },
+  "snapshot/system/plymouth-theme/intro-88.png": {
+    "mode": "100644",
+    "sha256": "55424a75deeb3dfb537ab290f23963e4cc56ee3dfb1521aa3abef3f5aa3ea650"
+  },
+  "snapshot/system/plymouth-theme/intro-89.png": {
+    "mode": "100644",
+    "sha256": "05f73dd4d7000cc2df3b5bcc44efb6eeeca3cba3bc8d637a1e39080e7a622c4e"
+  },
+  "snapshot/system/plymouth-theme/intro-9.png": {
+    "mode": "100644",
+    "sha256": "852219f53e47b3a6f2292b9ad60c41d9993efb8d066c062ddfa716df59788a8f"
+  },
+  "snapshot/system/plymouth-theme/intro-90.png": {
+    "mode": "100644",
+    "sha256": "f1e5b5fa8646de0bb5c12b51a2d1c507f8bc99b71c459b76f231395fb4bbf5ac"
+  },
+  "snapshot/system/plymouth-theme/intro-91.png": {
+    "mode": "100644",
+    "sha256": "4a5853b04120458a72f6b5ab2b089233f69a30c87692a0fac330d8c4d1804770"
+  },
+  "snapshot/system/plymouth-theme/intro-92.png": {
+    "mode": "100644",
+    "sha256": "ad892cb9abd55a52c4620a2a39631a0fb9e25dec44159913cd0f82f2239ab70a"
+  },
+  "snapshot/system/plymouth-theme/intro-93.png": {
+    "mode": "100644",
+    "sha256": "47fd80ed8710e980cb12c008934bd6a1853e76f876a50977beaa55d448332650"
+  },
+  "snapshot/system/plymouth-theme/intro-94.png": {
+    "mode": "100644",
+    "sha256": "d7a0d1dbd4d191705764f1df313c6945703b1df44b4e0d2c507b16058791b83f"
+  },
+  "snapshot/system/plymouth-theme/intro-95.png": {
+    "mode": "100644",
+    "sha256": "b20fe5e7b013046cb9c286683c7508739b019181a406ceeb24a3857759bea1c4"
+  },
+  "snapshot/system/plymouth-theme/intro-96.png": {
+    "mode": "100644",
+    "sha256": "2ba780956952d7ebcba410878b7cb4004c307fc992d90f2a44bd418d9f2e4e56"
+  },
+  "snapshot/system/plymouth-theme/intro-97.png": {
+    "mode": "100644",
+    "sha256": "764e40d3bf39495d5b096d9576c4580b9ed968482d924a13c45c17a59a6248cc"
+  },
+  "snapshot/system/plymouth-theme/intro-98.png": {
+    "mode": "100644",
+    "sha256": "5c994f3c0f153bf9a14dd220e9ef86f284c90498bdc502e1f5f48cf7f7d3f3ea"
+  },
+  "snapshot/system/plymouth-theme/intro-99.png": {
+    "mode": "100644",
+    "sha256": "533b40dd7ff3b24a74e47ecc7af40e0c67482fabe4c5fd6aacba3a344f5dbb34"
+  },
+  "snapshot/system/plymouth-theme/line-track.png": {
+    "mode": "100644",
+    "sha256": "b71f32410b8ab66b524ad40176cfe633508641ec5f82b9d2076cba4218c5fe2f"
+  },
+  "snapshot/system/plymouth-theme/line.png": {
+    "mode": "100644",
+    "sha256": "08012bfa83520175f0b829ce415ca1b74185eee00870006de09a4d24728c0abc"
+  },
+  "snapshot/system/sddm-theme/Main.qml": {
+    "mode": "100644",
+    "sha256": "c804d724331b74b3f912da9b50fb67214781b01917385cc6e04c75a326b808ab"
+  },
+  "snapshot/system/sddm-theme/metadata.desktop": {
+    "mode": "100644",
+    "sha256": "1914ae6a3f6614cb8b442e8f447efbf369fe04581f675c8b2ad4cf42f1ac09b8"
+  },
+  "snapshot/system/sddm-theme/profile.jpg": {
+    "mode": "100644",
+    "sha256": "0afcf942da35dc3afb3e3b5e79ab72663b56f1cd2ce8ef1df001629c11f1d509"
+  },
+  "snapshot/system/sddm-theme/theme.conf": {
+    "mode": "100644",
+    "sha256": "a371ee2822ab833c1349cbe193bf4b9292d6ab6b49a22b525fc1dcd95aa933c1"
+  },
+  "snapshot/system/sddm-theme/wallpaper.png": {
+    "mode": "100644",
+    "sha256": "b6119d8e9dc3dd4ee86c1491412e0e7de37a8287dbf2317c105cdd11ecc098e9"
+  }
+}

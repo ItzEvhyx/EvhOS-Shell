@@ -461,6 +461,121 @@ PanelWindow {
             visible: !desktopMenuWindow.isWidgetMode && desktopMenuWindow.ringWallpapers.length > 0
             anchors.fill: parent
             opacity: Math.max(0, Math.min(1, menuContainer.animProgress))
+            property int hoveredIndex: -1
+            onVisibleChanged: if (!visible) hoveredIndex = -1
+
+            // Geometry anchors for the network-style ribbons, behind the cards and menu.
+            Repeater {
+                id: webAnchors
+                model: desktopMenuWindow.ringWallpapers
+                delegate: Item {
+                    id: wallpaperLink
+                    objectName: "wallpaperConnector"
+                    required property var modelData
+                    required property int index
+                    anchors.fill: parent
+                    z: 0
+                    readonly property real theta: -Math.PI / 2 + index * 2 * Math.PI / Math.max(1, desktopMenuWindow.ringWallpapers.length)
+                    readonly property real cardWidth: desktopMenuWindow.s(114)
+                    readonly property real cardHeight: desktopMenuWindow.s(76)
+                    readonly property real dx: Math.cos(theta) * (desktopMenuWindow.menuWidth / 2 + desktopMenuWindow.ringSide - cardWidth / 2)
+                    readonly property real dy: Math.sin(theta) * (desktopMenuWindow.menuHeight / 2 + desktopMenuWindow.ringTop - cardHeight / 2)
+                    readonly property real cx: desktopMenuWindow.clampedX + desktopMenuWindow.menuWidth / 2
+                    readonly property real cy: desktopMenuWindow.clampedY + desktopMenuWindow.menuHeight / 2
+                    function roundedFraction(w, h, r) {
+                        let low = 0;
+                        let high = Math.min(w / 2 / Math.max(0.001, Math.abs(dx)), h / 2 / Math.max(0.001, Math.abs(dy)));
+                        for (let n = 0; n < 14; n++) {
+                            let mid = (low + high) / 2;
+                            let qx = Math.max(0, Math.abs(dx * mid) - (w / 2 - r));
+                            let qy = Math.max(0, Math.abs(dy * mid) - (h / 2 - r));
+                            if (qx*qx + qy*qy <= r*r) low = mid;
+                            else high = mid;
+                        }
+                        return low;
+                    }
+                    readonly property real menuFraction: roundedFraction(desktopMenuWindow.menuWidth, desktopMenuWindow.menuHeight, desktopMenuWindow.s(16))
+                    readonly property real cardFraction: roundedFraction(cardWidth, cardHeight, desktopMenuWindow.s(13))
+                    property real highlight: wallpaperRing.hoveredIndex === index ? 1 : 0
+                    Behavior on highlight { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+                    readonly property real openScale: Math.max(0, menuContainer.animProgress)
+                    readonly property real startX: desktopMenuWindow.targetX + (cx + dx * menuFraction - desktopMenuWindow.targetX) * openScale
+                    readonly property real startY: desktopMenuWindow.targetY + (cy + dy * menuFraction - desktopMenuWindow.targetY) * openScale
+                    readonly property real endX: cx + dx * (1 - cardFraction * (1 + highlight * 0.07))
+                    readonly property real endY: cy + dy * (1 - cardFraction * (1 + highlight * 0.07))
+                    readonly property real length: Math.max(1, Math.hypot(endX-startX, endY-startY))
+                    readonly property real bend: desktopMenuWindow.s(8) * (index % 2 === 0 ? 1 : -1)
+                    readonly property real bendX: -(endY-startY) / length * bend
+                    readonly property real bendY: (endX-startX) / length * bend
+                    readonly property real control1X: startX + (endX-startX) * 0.35 + bendX
+                    readonly property real control1Y: startY + (endY-startY) * 0.35 + bendY
+                    readonly property real control2X: startX + (endX-startX) * 0.72 + bendX
+                    readonly property real control2Y: startY + (endY-startY) * 0.72 + bendY
+                    readonly property color accent: modelData.color || ThemeBackend.text
+
+
+                }
+            }
+
+            // Reuse the Wi-Fi/Bluetooth popup's exact flowing three-strand shader.
+            // Beams run center-to-center; the menu and thumbnail surfaces cover their ends.
+            ShaderEffect {
+                id: wallpaperRibbons
+                objectName: "networkStyleWallpaperRibbons"
+                x: desktopMenuWindow.clampedX - desktopMenuWindow.ringSide - desktopMenuWindow.s(10)
+                y: desktopMenuWindow.clampedY - desktopMenuWindow.ringTop - desktopMenuWindow.s(10)
+                width: desktopMenuWindow.menuWidth + desktopMenuWindow.ringSide * 2 + desktopMenuWindow.s(20)
+                height: desktopMenuWindow.menuHeight + desktopMenuWindow.ringTop * 2 + desktopMenuWindow.s(20)
+                z: 0
+                readonly property bool animating: wallpaperRing.visible && desktopMenuWindow.isVisible
+                property real animTime: 0
+                NumberAnimation on animTime {
+                    running: wallpaperRibbons.animating
+                    loops: Animation.Infinite
+                    from: 0; to: 1000; duration: 1000000
+                }
+                property vector2d itemSize: Qt.vector2d(width, height)
+                property real time: animTime
+                property real strikeProg: Math.max(0, Math.min(1, menuContainer.animProgress))
+                property real scale: desktopMenuWindow.s(1)
+                property real coreRadius: 0
+                property color activeColor: ThemeBackend.text
+                function calcBeams() {
+                    let beams=[];
+                    for(let i=0;i<Math.min(16,webAnchors.count);i++) {
+                        let link=webAnchors.itemAt(i);
+                        if(!link)continue;
+                        beams.push(Qt.vector4d(link.cx-x, link.cy-y,
+                            link.cx+link.dx-x, link.cy+link.dy-y));
+                    }
+                    return beams;
+                }
+                property var activeBeams: {
+                    // The clock also refreshes geometry after asynchronous thumbnail creation.
+                    let tick=animTime;
+                    let count=webAnchors.count;
+                    let visible=desktopMenuWindow.isVisible;
+                    return calcBeams();
+                }
+                property real beamCount: Math.min(16,activeBeams.length)
+                property vector4d beam0: activeBeams.length > 0 ? activeBeams[0] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam1: activeBeams.length > 1 ? activeBeams[1] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam2: activeBeams.length > 2 ? activeBeams[2] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam3: activeBeams.length > 3 ? activeBeams[3] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam4: activeBeams.length > 4 ? activeBeams[4] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam5: activeBeams.length > 5 ? activeBeams[5] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam6: activeBeams.length > 6 ? activeBeams[6] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam7: activeBeams.length > 7 ? activeBeams[7] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam8: activeBeams.length > 8 ? activeBeams[8] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam9: activeBeams.length > 9 ? activeBeams[9] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam10: activeBeams.length > 10 ? activeBeams[10] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam11: activeBeams.length > 11 ? activeBeams[11] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam12: activeBeams.length > 12 ? activeBeams[12] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam13: activeBeams.length > 13 ? activeBeams[13] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam14: activeBeams.length > 14 ? activeBeams[14] : Qt.vector4d(-1,-1,-1,-1)
+                property vector4d beam15: activeBeams.length > 15 ? activeBeams[15] : Qt.vector4d(-1,-1,-1,-1)
+                fragmentShader: "file://" + Caching.serpantinumDir + "/assets/shaders/vfx/node_beams_clipped.frag.qsb"
+            }
 
             Repeater {
                 model: desktopMenuWindow.ringWallpapers
@@ -483,6 +598,12 @@ PanelWindow {
                     scale: previewMouse.pressed ? 0.96 : (previewMouse.containsMouse ? 1.07 : 1.0)
                     z: previewMouse.containsMouse ? 2 : 1
                     Behavior on scale { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+                    HoverHandler {
+                        onHoveredChanged: {
+                            if (hovered) wallpaperRing.hoveredIndex = preview.index;
+                            else if (wallpaperRing.hoveredIndex === preview.index) wallpaperRing.hoveredIndex = -1;
+                        }
+                    }
                     Rectangle {
                         id: previewMask
                         anchors.fill: parent

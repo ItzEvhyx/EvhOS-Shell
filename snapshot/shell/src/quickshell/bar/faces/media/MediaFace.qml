@@ -126,10 +126,21 @@ Item {
 
     function sc(v) { return barWindow ? barWindow.cs(v) : v; }
 
-    property real colWidth: barWindow ? barWindow.cs(configuredWidth - (isCompact ? 4 : 0)) : (configuredWidth - (isCompact ? 4 : 0))
-    property real innerSpacing: barWindow ? barWindow.cs(isCompact ? 6 : 8) : (isCompact ? 6 : 8)
-    property real btnSpacing: barWindow ? barWindow.cs(isCompact ? 3 : 4) : (isCompact ? 3 : 4)
-    property real sidePadding: barWindow ? barWindow.cs(isCompact ? 6 : 8) : (isCompact ? 6 : 8)
+    // local compact horizontal media v2
+    readonly property string horizontalTitle: root.isPreview ? I18n.t("guide.bar.media.preview.title", "Song title") : (isMediaActive ? (player ? player.trackTitle : "") : I18n.t("music.nothing_playing"))
+    TextMetrics {
+        id: compactTitleMetrics
+        text: root.horizontalTitle
+        font.family: ThemeBackend.fontFamily
+        font.weight: Font.Black
+        font.pixelSize: root.sc(root.isCompact ? 11 : 12)
+    }
+    readonly property real naturalColWidth: Math.ceil(Math.min(sc(Math.min(configuredWidth, 180)), Math.max(sc(60), compactTitleMetrics.advanceWidth)))
+    readonly property real soloMediaWidth: !isVertical && barWindow && barWindow.horizontalLayout ? (barWindow.horizontalLayout.notchSoloMediaWidth || 0) : 0
+    property real colWidth: Math.max(naturalColWidth, soloMediaWidth - (showControls ? sc(24) * 3 + btnSpacing * 2 + innerSpacing : 0) - sidePadding * 2 - controlHoverExtra)
+    property real innerSpacing: sc(4)
+    property real btnSpacing: sc(2)
+    property real sidePadding: sc(4)
 
     property real baseHeight: {
         let h = sc(isCompact ? 8 : 9);
@@ -151,7 +162,7 @@ Item {
         }
         let btnW = 0;
         if (showControls) {
-            btnW = (barWindow ? barWindow.cs(isCompact ? 28 : 30) : (isCompact ? 28 : 30)) * 3 + btnSpacing * 2 + innerSpacing;
+            btnW = sc(24) * 3 + btnSpacing * 2 + innerSpacing;
         }
         let margins = sidePadding * 2;
         return iconW + colWidth + btnW + margins + controlHoverExtra;
@@ -281,7 +292,7 @@ Item {
 
                                 MarqueeText {
                                     width: parent.width
-                                    text: root.isPreview ? I18n.t("guide.bar.media.preview.title", "Song title") : (isMediaActive ? (player ? player.trackTitle : "") : I18n.t("music.nothing_playing"))
+                                    text: root.horizontalTitle
                                     color: ThemeBackend.text
                                     font.family: ThemeBackend.fontFamily
                                     font.weight: Font.Black
@@ -331,7 +342,7 @@ Item {
                         IconButton {
                             id: prevMediaButton
                             height: barWindow ? barWindow.cs(root.isCompact ? 28 : 30) : (root.isCompact ? 28 : 30)
-                            width: root.sc(root.isCompact ? 28 : 30) + (isHoveredOrHighlighted ? root.sc(10) : 0)
+                            width: root.sc(24) + (isHoveredOrHighlighted ? root.sc(10) : 0)
                             Behavior on width { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                             scale: pressed ? 0.91 : (isHoveredOrHighlighted ? 1.2 : 1.0)
                             Behavior on scale { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
@@ -348,7 +359,7 @@ Item {
                         IconButton {
                             id: playMediaButton
                             height: barWindow ? barWindow.cs(root.isCompact ? 28 : 30) : (root.isCompact ? 28 : 30)
-                            width: root.sc(root.isCompact ? 28 : 30) + (isHoveredOrHighlighted ? root.sc(10) : 0)
+                            width: root.sc(24) + (isHoveredOrHighlighted ? root.sc(10) : 0)
                             Behavior on width { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                             scale: pressed ? 0.91 : (isHoveredOrHighlighted ? 1.2 : 1.0)
                             Behavior on scale { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
@@ -365,7 +376,7 @@ Item {
                         IconButton {
                             id: nextMediaButton
                             height: barWindow ? barWindow.cs(root.isCompact ? 28 : 30) : (root.isCompact ? 28 : 30)
-                            width: root.sc(root.isCompact ? 28 : 30) + (isHoveredOrHighlighted ? root.sc(10) : 0)
+                            width: root.sc(24) + (isHoveredOrHighlighted ? root.sc(10) : 0)
                             Behavior on width { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
                             scale: pressed ? 0.91 : (isHoveredOrHighlighted ? 1.2 : 1.0)
                             Behavior on scale { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }

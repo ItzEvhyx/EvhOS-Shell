@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=EvhOs Monochrome
+Description=Orbitron title, monochrome orbital reveal and faint dotted background
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/evhos
+ScriptFile=/usr/share/plymouth/themes/evhos/evhos.script

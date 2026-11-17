@@ -1,0 +1,137 @@
+# EvhOs: a single reveal followed by a quiet loading line. No boot delay.
+Window.SetBackgroundTopColor(0.02, 0.02, 0.02);
+Window.SetBackgroundBottomColor(0.02, 0.02, 0.02);
+Plymouth.SetRefreshRate(20);
+
+scale = Math.Clamp(Math.Min(Window.GetWidth() / 1100, Window.GetHeight() / 650), 0.65, 2);
+background.image = Image("dots.png").Tile(Window.GetWidth(), Window.GetHeight());
+background.sprite = Sprite(background.image);
+background.sprite.SetPosition(Window.GetX(), Window.GetY(), -1000);
+
+reveal.sprite = Sprite();
+reveal.sprite.SetZ(0);
+reveal.last_frame = -1;
+tick = 0;
+status = "normal";
+
+track.image = Image("line-track.png").Scale(Math.Int(60 * scale), Math.Max(1, Math.Int(scale)));
+track.sprite = Sprite(track.image);
+track.sprite.SetPosition(Window.GetX() + Window.GetWidth() / 2 - track.image.GetWidth() / 2,
+                         Window.GetY() + Window.GetHeight() * 0.84, 2);
+line.image = Image("line.png").Scale(Math.Int(24 * scale), Math.Max(1, Math.Int(scale)));
+line.sprite = Sprite(line.image);
+line.sprite.SetZ(3);
+footer.image = Image("footer.png").Scale(Math.Int(240 * scale), Math.Int(22 * scale));
+footer.sprite = Sprite(footer.image);
+footer.sprite.SetPosition(Window.GetX() + Window.GetWidth() / 2 - footer.image.GetWidth() / 2,
+                          Window.GetY() + Window.GetHeight() * 0.94, 2);
+track.sprite.SetOpacity(0);
+line.sprite.SetOpacity(0);
+footer.sprite.SetOpacity(0);
+
+fun show_frame(index)
+{
+    if (index != reveal.last_frame)
+    {
+        image = Image("intro-" + index + ".png");
+        reveal.image = image.Scale(Math.Int(image.GetWidth() * scale), Math.Int(image.GetHeight() * scale));
+        reveal.sprite.SetImage(reveal.image);
+        reveal.sprite.SetPosition(Window.GetX() + Window.GetWidth() / 2 - reveal.image.GetWidth() / 2,
+                                  Window.GetY() + Window.GetHeight() / 2 - reveal.image.GetHeight() / 2, 0);
+        reveal.last_frame = index;
+    }
+}
+
+fun refresh_callback()
+{
+    global.tick++;
+    show_frame(Math.Min(tick, 111));
+    opacity = 0;
+    if (status == "normal") opacity = 1;
+    reveal.sprite.SetOpacity(opacity);
+    detail_opacity = opacity * Math.Clamp((tick - 70) / 30, 0, 1);
+    footer.sprite.SetOpacity(detail_opacity);
+    track.sprite.SetOpacity(detail_opacity);
+    line.sprite.SetOpacity(detail_opacity);
+    line.sprite.SetPosition(Window.GetX() + Window.GetWidth() / 2 - line.image.GetWidth() / 2 +
+                            Math.Sin(tick * Math.Pi / 18) * 18 * scale,
+                            Window.GetY() + Window.GetHeight() * 0.84, 3);
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+# Prompts use native text, and password input is represented only by asterisks.
+dialog.background = Sprite(Image("dialog.png"));
+dialog.background.SetPosition(Window.GetX() + Window.GetWidth() / 2 - 300,
+                               Window.GetY() + Window.GetHeight() / 2 - 70, 100);
+dialog.prompt = Sprite();
+dialog.prompt.SetZ(101);
+dialog.entry = Sprite();
+dialog.entry.SetZ(101);
+
+fun dialog_opacity(opacity)
+{
+    dialog.background.SetOpacity(opacity);
+    dialog.prompt.SetOpacity(opacity);
+    dialog.entry.SetOpacity(opacity);
+}
+dialog_opacity(0);
+
+fun show_prompt(prompt, entry)
+{
+    prompt_image = Image.Text(prompt, 1, 1, 1);
+    if (prompt_image.GetWidth() > Window.GetWidth() - 40)
+        prompt_image = prompt_image.Scale(Window.GetWidth() - 40,
+            Math.Int(prompt_image.GetHeight() * (Window.GetWidth() - 40) / prompt_image.GetWidth()));
+    dialog.prompt.SetImage(prompt_image);
+    dialog.prompt.SetPosition(Window.GetX() + Window.GetWidth() / 2 - prompt_image.GetWidth() / 2,
+                              Window.GetY() + Window.GetHeight() / 2 - 30, 101);
+    entry_image = Image.Text(entry, 1, 1, 1);
+    dialog.entry.SetImage(entry_image);
+    dialog.entry.SetPosition(Window.GetX() + Window.GetWidth() / 2 - entry_image.GetWidth() / 2,
+                             Window.GetY() + Window.GetHeight() / 2 + 10, 101);
+    dialog_opacity(1);
+}
+
+fun display_password_callback(prompt, bullets)
+{
+    global.status = "password";
+    entry = "";
+    for (index = 0; index < bullets; index++) entry += "*";
+    show_prompt(prompt, entry);
+}
+fun display_question_callback(prompt, entry)
+{
+    global.status = "question";
+    show_prompt(prompt, entry);
+}
+fun display_normal_callback()
+{
+    global.status = "normal";
+    dialog_opacity(0);
+}
+Plymouth.SetDisplayPasswordFunction(display_password_callback);
+Plymouth.SetDisplayQuestionFunction(display_question_callback);
+Plymouth.SetDisplayNormalFunction(display_normal_callback);
+
+message.sprite = Sprite();
+message.sprite.SetZ(200);
+fun display_message_callback(text)
+{
+    image = Image.Text(text, 0.8, 0.8, 0.8);
+    message.sprite.SetImage(image);
+    message.sprite.SetPosition(Window.GetX() + Window.GetWidth() / 2 - image.GetWidth() / 2,
+                                Window.GetY() + Window.GetHeight() - 40, 200);
+    message.sprite.SetOpacity(1);
+}
+fun hide_message_callback(text)
+{
+    message.sprite.SetOpacity(0);
+}
+Plymouth.SetDisplayMessageFunction(display_message_callback);
+Plymouth.SetHideMessageFunction(hide_message_callback);
+
+fun quit_callback()
+{
+    show_frame(111);
+}
+Plymouth.SetQuitFunction(quit_callback);

@@ -6,3 +6,7 @@ __pycache__/
 *.p12
 *.pfx
 secrets/
+*.bak
+*.before-*
+*.log
+**/*backup-*/

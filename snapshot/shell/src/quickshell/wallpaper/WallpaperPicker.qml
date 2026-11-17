@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import Qt.labs.folderlistmodel
@@ -11,15 +12,17 @@ import "../reusables"
 
 Item {
     id: window
+    // local offline wallpaper picker v1
     visible: false
     width: Screen.width
     focus: true
 
     function s(val) {
-        return Scaler.s(val);
+        return Scaler.s(val) * 1.12;
     }
 
-    readonly property string scriptDir: Caching.serpantinumDir + "/scripts/wallpaper"
+    // local reliable wallpaper refresh v3
+    readonly property string scriptDir: (Caching.serpantinumDir || (Quickshell.env("HOME") + "/.local/share/serpantinum/src")) + "/scripts/wallpaper"
 
     property string widgetArg: ""
     property string targetWallName: ""
@@ -30,19 +33,12 @@ Item {
 
     property string currentFilter: "All"
     property string _lastFilter: "All"
-    property string searchQuery: ""
-    property bool isOnlineSearch: false
-    property bool isSearchPaused: false
-    property bool hasSearched: false
     property var colorMap: ({})
     property var bucketMap: ({})
     property var thumbLookup: ({})
     property var srcNameLookup: ({})
     property int cacheVersion: 0
-    property int searchSessionId: 0
 
-    property bool isDownloadingWallpaper: false
-    property string currentDownloadName: ""
 
     property bool isApplying: false
     property bool isMonitorSelectorOpen: false
@@ -53,23 +49,31 @@ Item {
     property bool _refreshedForDisplay: false
     property string _lastFilterApplied: ""
     property int _lastProxyVersion: -1
+    property bool indexRequested: false
 
     property var configSettings: Config.rawSettings
+    function libraryRoot(path) {
+        let clean = String(path).replace(/\/+$/, "");
+        return clean.replace(/\/Wallpapers\/(Pictures|Videos)$/, "/Wallpapers");
+    }
     property string srcDir: {
         let dummy = configSettings;
-        return Config.getSetting("wallpaperDir", "") || Config.getSetting("wallpaper_dir", "") || Quickshell.env("WALLPAPER_DIR") || (Quickshell.env("HOME") + "/Pictures/Wallpapers");
+        return libraryRoot(Config.getSetting("wallpaperDir", "") || Config.getSetting("wallpaper_dir", "") || Quickshell.env("WALLPAPER_DIR") || (Quickshell.env("HOME") + "/Pictures/Wallpapers"));
     }
+    readonly property string pictureDir: window.srcDir + "/Pictures"
+    readonly property string videoDir: window.srcDir + "/Videos"
 
     onSrcDirChanged: {
         window.initialFocusSet = false;
         window.syncFromSrcModel();
         window.triggerIndexer();
+        libraryWatcherRestart.restart();
     }
 
     Connections {
         target: Config
         function onSettingsLoaded() {
-            let dir = Config.getSetting("wallpaperDir", "") || Config.getSetting("wallpaper_dir", "") || Quickshell.env("WALLPAPER_DIR") || (Quickshell.env("HOME") + "/Pictures/Wallpapers");
+            let dir = window.libraryRoot(Config.getSetting("wallpaperDir", "") || Config.getSetting("wallpaper_dir", "") || Quickshell.env("WALLPAPER_DIR") || (Quickshell.env("HOME") + "/Pictures/Wallpapers"));
             if (dir && dir !== window.srcDir) {
                 window.srcDir = dir;
             }
@@ -81,12 +85,7 @@ Item {
         interval: 50
         repeat: false
         onTriggered: {
-            if (window.currentFilter === "Search" && !window.hasSearched) {
-                if (typeof searchInput.forceInputFocus === "function") searchInput.forceInputFocus();
-                else searchInput.forceActiveFocus();
-            } else {
-                view.forceActiveFocus();
-            }
+            view.forceActiveFocus();
         }
     }
 
@@ -96,7 +95,76 @@ Item {
         onTriggered: window.isAnchorScrolling = false
     }
 
-    readonly property real dynamicCacheBuffer: window.itemWidth * 3
+    // Thumbnails are independent from the wallpaper originals and desktop selection.
+    property var previewThumbnails: ({})
+    property var nearbyPreviewSources: []
+
+    function requestPreviewThumbnails() {
+        if (!window.visible || displayModel.count === 0) return;
+        let center = Math.max(0, view.currentIndex);
+        let sources = [];
+        function add(index) {
+            if (index < 0 || index >= displayModel.count) return;
+            let item = displayModel.get(index);
+            let source = String(item.isVideo ? (item.posterUrl || "") : (item.fileUrl || ""));
+            if (source !== "" && sources.indexOf(source) < 0) sources.push(source);
+        }
+        add(center);
+        for (let distance = 1; distance <= 20; distance++) {
+            add(center + distance);
+            add(center - distance);
+        }
+        window.nearbyPreviewSources = sources.slice(0, 5);
+        if (previewThumbProcess.running) previewThumbProcess.write(JSON.stringify(sources) + "\n");
+    }
+
+    Timer {
+        id: previewRequestTimer
+        interval: 75
+        onTriggered: window.requestPreviewThumbnails()
+    }
+
+    Connections {
+        target: displayModel
+        function onCountChanged() { previewRequestTimer.restart(); }
+    }
+
+    Process {
+        id: previewThumbProcess
+        running: window.visible
+        stdinEnabled: true
+        command: ["python3", window.scriptDir + "/picker_thumbnails.py", "--cache-dir", Caching.getCacheDir("wallpaper") + "/picker-previews"]
+        onStarted: previewRequestTimer.restart()
+        stdout: SplitParser {
+            onRead: line => {
+                try {
+                    let result = JSON.parse(line);
+                    if (result.source && result.thumbnail) {
+                        let updated = Object.assign({}, window.previewThumbnails);
+                        updated[result.source] = result.thumbnail;
+                        window.previewThumbnails = updated;
+                    }
+                } catch (error) { console.warn("Wallpaper preview response:", error); }
+            }
+        }
+    }
+
+    // Prime Qt's shared image cache for the selection and its nearest neighbors.
+    Repeater {
+        model: window.visible ? window.nearbyPreviewSources : []
+        delegate: Image {
+            required property string modelData
+            visible: false
+            source: window.previewThumbnails[modelData] || modelData
+            sourceSize: Qt.size(1280, 720)
+            fillMode: Image.PreserveAspectCrop
+            autoTransform: true
+            asynchronous: true
+            cache: true
+        }
+    }
+
+    readonly property real dynamicCacheBuffer: window.itemWidth * 1.25
 
     Timer {
         id: applyUnlockTimer
@@ -137,25 +205,13 @@ Item {
         }
     }
 
-    property bool _rawSearchLoading: searchFolderModel.status === FolderListModel.Loading
-    property bool isSearchActive: false
-    Timer {
-        id: searchActiveDebounce
-        interval: 150
-        onTriggered: window.isSearchActive = window._rawSearchLoading
-    }
-    on_RawSearchLoadingChanged: searchActiveDebounce.restart()
 
-    property string lastSearchName: ""
+
     property bool isModelChanging: false
-    property bool searchIndexRestored: false
-    property bool trackerResolved: false
 
-    property bool isScrollingBlocked: window.currentFilter === "Search" && window.hasSearched && window.isSearchActive && !window.isSearchPaused
     property bool jumpToLastOnFilterChange: false
 
     property var historyList: []
-    property int _lastSearchFolderCount: 0
 
     readonly property var filterData: [
         { name: "All", hex: "", label: I18n.t("wallpaper.filters.all") },
@@ -200,22 +256,7 @@ Item {
         }
     }
 
-    Process {
-        id: wallpaperDownloader
-        running: false
-        property string targetDestFile: ""
-        property string targetTransition: "fade"
 
-        onExited: (exitCode) => {
-            window.isDownloadingWallpaper = false;
-            if (exitCode === 0) {
-                window.setWallpaperOnMonitors(targetDestFile, targetTransition);
-                if (typeof Matugen !== "undefined" && typeof Matugen.generate === "function") {
-                    Matugen.generate(targetDestFile);
-                }
-            }
-        }
-    }
 
     Process {
         id: videoSnapshotProcess
@@ -278,7 +319,7 @@ Item {
                     let scName = masterWindow.screen ? masterWindow.screen.name : "";
                     activeWallpaper = Wallpaper.getWallpaper(scName);
                 }
-                window.trackerResolved = true;
+
                 let newTarget = (window.widgetArg !== "") ? window.widgetArg : (activeWallpaper !== "" ? activeWallpaper : window.targetWallName);
                 let targetChanged = (newTarget !== window.targetWallName);
                 if (newTarget !== "") {
@@ -338,12 +379,7 @@ Item {
         return false;
     }
 
-    function isDownloaded(safeFileName) {
-        if (!safeFileName) return false;
-        let clean = window.getCleanName(safeFileName);
-        let base = window.getCleanBaseName(safeFileName);
-        return !!(window.srcNameLookup[safeFileName] || window.srcNameLookup[clean] || window.srcNameLookup[base]);
-    }
+
 
     function loadMonitors() {
         monitorDetector.running = false;
@@ -471,47 +507,10 @@ Item {
 
         wallpaperHistoryReader.reload();
 
-        if (window.currentFilter === "Search" && window.hasSearched) {
-            let alreadyExists = window.isDownloaded(safeFileName);
-            let destFile = window.srcDir + "/" + safeFileName;
-            let mapFile = Caching.getCacheDir("wallpaper") + "/search_map.txt";
 
-            if (alreadyExists) {
-                window.setWallpaperOnMonitors(destFile, randomTransition);
-                if (typeof Matugen !== "undefined" && typeof Matugen.generate === "function") {
-                    Matugen.generate(destFile);
-                }
-            } else {
-                window.isDownloadingWallpaper = true;
-                window.currentDownloadName = safeFileName;
-
-                let downloadScript =
-                    "URL=$(awk -F'|' -v fname=\"$1\" '$1 == fname {print $2; exit}' \"$2\")\n" +
-                    "if [ -n \"$URL\" ]; then\n" +
-                    "  curl -s -L -A 'Mozilla/5.0' \"$URL\" -o \"$3.tmp\"\n" +
-                    "  if file \"$3.tmp\" | grep -iq 'webp'; then\n" +
-                    "    magick \"$3.tmp\" \"$3\" 2>/dev/null || convert \"$3.tmp\" \"$3\" 2>/dev/null || mv \"$3.tmp\" \"$3\"\n" +
-                    "    rm -f \"$3.tmp\"\n" +
-                    "  else\n" +
-                    "    mv \"$3.tmp\" \"$3\"\n" +
-                    "  fi\n" +
-                    "  exit 0\n" +
-                    "fi\n" +
-                    "exit 1\n";
-
-                wallpaperDownloader.targetDestFile = destFile;
-                wallpaperDownloader.targetTransition = randomTransition;
-                wallpaperDownloader.command = [
-                    "bash", "-c", downloadScript, "_",
-                    safeFileName, mapFile, destFile
-                ];
-                wallpaperDownloader.running = true;
-            }
-            return;
-        }
 
         let lookup = window.thumbLookup[safeFileName] || window.thumbLookup[window.getCleanBaseName(safeFileName)] || {};
-        let finalPath = lookup.filePath || (window.srcDir + "/" + realFileName);
+        let finalPath = lookup.filePath || ((isVideo || window.isVideoTarget(safeFileName) ? window.videoDir : window.pictureDir) + "/" + realFileName);
         let posterPath = lookup.posterPath || "";
 
         window.setWallpaperOnMonitors(finalPath, randomTransition);
@@ -541,33 +540,9 @@ Item {
         }
     }
 
-    QtObject {
-        id: searchState
-        property string query: ""
-        property bool searched: false
-        property string lastName: ""
-        property int sessionId: 0
 
-        readonly property string filePath: Caching.getCacheDir("wallpaper") + "/search_state.json"
 
-        function save() {
-            let data = JSON.stringify({
-                query: searchState.query,
-                searched: searchState.searched,
-                lastName: searchState.lastName,
-                sessionId: searchState.sessionId
-            });
-            Quickshell.execDetached(["sh", "-c", "printf '%s\\n' \"$1\" > \"$2\"", "_", data, filePath]);
-        }
-    }
 
-    onIsSearchPausedChanged: {
-        Quickshell.execDetached([
-            window.scriptDir + "/search_control.sh",
-            isSearchPaused ? "pause" : "run",
-            Caching.getRunDir("wallpaper")
-        ]);
-    }
 
     function selectCurrentWallpaperTabAndFocus() {
         if (!window.targetWallName) {
@@ -583,7 +558,7 @@ Item {
                 window._silentFilterChange = false;
             }
         } else {
-            if (window.currentFilter === "Video" || window.currentFilter === "Search") {
+            if (window.currentFilter === "Video") {
                 window._silentFilterChange = true;
                 window.currentFilter = "All";
                 window._silentFilterChange = false;
@@ -600,31 +575,21 @@ Item {
     }
 
     function refreshForDisplay() {
+        window.triggerIndexer();
         window._refreshedForDisplay = true;
         if (!window.targetWallName) {
-            let scName = masterWindow.screen ? masterWindow.screen.name : "";
-            let current = (typeof Wallpaper !== "undefined") ? Wallpaper.getWallpaper(scName) : "";
+            let screenName = masterWindow.screen ? masterWindow.screen.name : "";
+            let current = (typeof Wallpaper !== "undefined") ? Wallpaper.getWallpaper(screenName) : "";
             if (current) window.targetWallName = current;
         }
         window.initialFocusSet = false;
-        window.trackerResolved = false;
         wallpaperMonitorTracker.running = false;
         wallpaperMonitorTracker.running = true;
         wallpaperHistoryReader.reload();
         window.isFilterAnimating = true;
         filterAnimationTimer.restart();
-
-        if (window.currentFilter !== "Search") {
-            if (displayModel.count === 0) {
-                window.syncFromSrcModel();
-            }
-            window.selectCurrentWallpaperTabAndFocus();
-        } else if (window.hasSearched) {
-            window.searchIndexRestored = false;
-            window.isSearchPaused = true;
-            window.trySearchFocus();
-            window.syncSearchModel();
-        }
+        if (displayModel.count === 0) window.syncFromSrcModel();
+        window.selectCurrentWallpaperTabAndFocus();
     }
 
     onVisibleChanged: {
@@ -634,58 +599,23 @@ Item {
             exitAnim.stop();
             window.initialFocusSet = false;
             window.allowAddAnimation = false;
-            window.searchIndexRestored = false;
             window.isApplying = false;
             window.isMonitorSelectorOpen = false;
             window.resetPreviewPlayer();
-            if (window.hasSearched) {
-                window.isSearchPaused = true;
-                searchState.query = searchInput.text;
-                searchState.searched = window.hasSearched;
-                searchState.lastName = window.lastSearchName;
-                searchState.sessionId = window.searchSessionId;
-                searchState.save();
-                Quickshell.execDetached([
-                    window.scriptDir + "/search_control.sh",
-                    "pause",
-                    Caching.getRunDir("wallpaper")
-                ]);
-            } else {
-                searchState.save();
-                Quickshell.execDetached([
-                    window.scriptDir + "/search_control.sh",
-                    "stop",
-                    Caching.getRunDir("wallpaper")
-                ]);
-            }
         } else {
             window.isExiting = false;
             exitAnim.stop();
+            window.triggerIndexer();
             window.loadMonitors();
-            if (!window._refreshedForDisplay) {
-                window.refreshForDisplay();
-            } else if (displayModel.count > 0 && view.currentIndex >= 0) {
-                view.positionViewAtIndex(view.currentIndex, ListView.Center);
-            }
+            if (!window._refreshedForDisplay) window.refreshForDisplay();
+            else if (displayModel.count > 0 && view.currentIndex >= 0) view.positionViewAtIndex(view.currentIndex, ListView.Center);
             focusTimer.restart();
         }
     }
 
-    property bool isLoading: srcModel.status === FolderListModel.Loading ||
-                             (window.currentFilter === "Search" && searchFolderModel.status === FolderListModel.Loading)
-
-    property bool showSpinner: window.isDownloadingWallpaper ||
-                               (window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused) ||
-                               (window.currentFilter !== "Search" && window.isLoading)
-
+    property bool isLoading: srcModel.status === FolderListModel.Loading || videoFolderModel.status === FolderListModel.Loading
+    property bool showSpinner: window.isLoading
     property string currentNotification: {
-        if (window.isDownloadingWallpaper) return I18n.t("wallpaper.notifications.downloading");
-        if (window.currentFilter === "Search") {
-            if (!window.hasSearched) return I18n.t("wallpaper.notifications.type_to_search");
-            if (window.isSearchPaused) return I18n.t("wallpaper.notifications.search_paused");
-            if (window.visibleItemCount === 0) return I18n.t("wallpaper.notifications.searching_ddg");
-            return I18n.t("wallpaper.notifications.generating_thumbnails");
-        }
         if (isLoading) return I18n.t("wallpaper.notifications.generating_thumbnails");
         if (window.visibleItemCount === 0) return I18n.t("wallpaper.notifications.no_wallpapers_found");
         if (window.currentFilter === "All") return "";
@@ -710,72 +640,20 @@ Item {
         onTriggered: window.allowAddAnimation = true
     }
 
-    function trySearchFocus() {
-        if (window.searchIndexRestored || searchProxyModel.count === 0) return;
-        if (window.lastSearchName === "") {
-             window.searchIndexRestored = true;
-             return;
-        }
-        window.applyFilters(true);
-        window.searchIndexRestored = true;
-    }
+
 
     function updateVisibleCount() {
         window.visibleItemCount = displayModel.count;
     }
 
-    function triggerOnlineSearch() {
-        if (searchInput.text.trim() === "" || window.isApplying) return;
 
-        searchInput.focus = false;
-        window.allowAddAnimation = false;
-        window.isModelChanging = true;
-        window.searchSessionId++;
-        searchProxyModel.clear();
-        displayModel.clear();
-        window._lastSearchFolderCount = 0;
-        window.lastSearchName = "";
-        searchState.lastName = "";
-        searchState.sessionId = window.searchSessionId;
-        window.isModelChanging = false;
 
-        window.searchIndexRestored = true;
-        window.isOnlineSearch = true;
-        window.hasSearched = true;
-        window.visibleItemCount = 0;
-        searchState.searched = true;
-        searchState.query = searchInput.text.trim();
-        searchState.save();
-        window.isSearchPaused = false;
-        window.searchQuery = searchInput.text.trim();
-        window._lastFilter = window.currentFilter;
-        window.currentFilter = "Search";
 
-        let rawSearchDir = decodeURIComponent(window.searchDir.replace(/^file:\/\//, ""));
-        let currentSession = window.searchSessionId;
-
-        Quickshell.execDetached([
-            window.scriptDir + "/trigger_search.sh",
-            window.searchQuery,
-            String(currentSession),
-            rawSearchDir,
-            Caching.getCacheDir("wallpaper"),
-            Caching.getRunDir("wallpaper"),
-            Caching.logDir,
-            Caching.serpantinumDir + "/scripts/wallpaper/ddg_search.sh"
-        ]);
-        view.forceActiveFocus();
-    }
-
-    readonly property string homeDir: "file://" + Quickshell.env("HOME")
-    readonly property string searchDir: "file://" + Caching.getCacheDir("wallpaper") + "/search_thumbs"
-
-    readonly property real itemWidth: window.s(400)
-    readonly property real itemHeight: window.s(420)
-    readonly property real borderWidth: window.s(3)
-    readonly property real spacing: window.s(10)
-    readonly property real skewFactor: -0.35
-    readonly property real selectedCenterOffset: (window.skewFactor * (window.itemHeight)) / 2 
+    // Larger cover previews with a stable decode size throughout navigation.
+    readonly property real itemWidth: Math.max(1, Math.min(window.s(800), width * 0.60, height * 0.63 * 16 / 9))
+    readonly property real itemHeight: itemWidth * 9 / 16
+    readonly property real borderWidth: window.s(2)
+    readonly property real spacing: window.s(12)
 
     Timer { id: scrollThrottle; interval: 140 }
     property bool isFilterAnimating: false
@@ -828,95 +706,51 @@ Item {
     }
 
     function syncFromSrcModel() {
-        if (srcModel.status !== FolderListModel.Ready || srcModel.count === 0) return;
-
-        if ((localProxyModel.count > 0 || videoProxyModel.count > 0) &&
-            srcModel.count === (localProxyModel.count + videoProxyModel.count)) {
-            return;
+        if (!window.visible) return;
+        let models = [srcModel, videoFolderModel, rootFolderModel];
+        let ready = false;
+        for (let model of models) {
+            if (!model) continue;
+            if (model.status === FolderListModel.Loading) return;
+            if (model.status === FolderListModel.Ready) ready = true;
         }
-
-        let localItems = [];
-        let videoItems = [];
-        let seen = {};
-        let newSrcLookup = Object.assign({}, window.srcNameLookup);
-        let newThumbLookup = Object.assign({}, window.thumbLookup);
-        let newColorMap = Object.assign({}, window.colorMap);
-        let newBucketMap = Object.assign({}, window.bucketMap);
-
-        for (let i = 0; i < srcModel.count; i++) {
-            let fn = srcModel.get(i, "fileName");
-            let fu = srcModel.get(i, "fileUrl");
-            if (!fn) continue;
-            let sFn = String(fn);
-            if (seen[sFn]) continue;
-            seen[sFn] = true;
-
-            let sFu = String(fu);
-            let clean = window.getCleanName(sFn);
-            let base = window.getCleanBaseName(sFn);
-            let isVid = window.isVideoTarget(sFn) || sFn.toLowerCase().match(/\.(mp4|mkv|mov|webm)$/) !== null;
-
-            let cached = newThumbLookup[sFn] || newThumbLookup[clean] || newThumbLookup[base];
-            let item = cached ? cached : {
-                "fileName": sFn,
-                "filePath": decodeURIComponent(sFu.replace("file://", "")),
-                "fileUrl": sFu,
-                "isVideo": isVid,
-                "posterPath": "",
-                "posterUrl": "",
-                "hex": "#808080",
-                "bucket": isVid ? "Video" : "Monochrome"
-            };
-
-            newSrcLookup[sFn] = sFn;
-            newSrcLookup[clean] = sFn;
-            newSrcLookup[base] = sFn;
-
-            newThumbLookup[sFn] = item;
-            newThumbLookup[clean] = item;
-            newThumbLookup[base] = item;
-
-            newColorMap[sFn] = item.hex;
-            newBucketMap[sFn] = item.bucket;
-
-            if (isVid) videoItems.push(item);
-            else localItems.push(item);
-        }
-
-        window.srcNameLookup = newSrcLookup;
-        window.thumbLookup = newThumbLookup;
-        window.colorMap = newColorMap;
-        window.bucketMap = newBucketMap;
-        window.cacheVersion++;
-
-        if (localProxyModel.count === 0 && videoProxyModel.count === 0) {
-            const order = { "Red": 1, "Orange": 2, "Yellow": 3, "Green": 4, "Blue": 5, "Purple": 6, "Pink": 7, "Monochrome": 8 };
-            localItems.sort((a, b) => {
-                let oA = order[a.bucket] || 10;
-                let oB = order[b.bucket] || 10;
-                if (oA !== oB) return oA - oB;
-                return String(a.fileName).localeCompare(String(b.fileName));
-            });
-            videoItems.sort((a, b) => String(a.fileName).localeCompare(String(b.fileName)));
-            if (localItems.length > 0) localProxyModel.append(localItems);
-            if (videoItems.length > 0) videoProxyModel.append(videoItems);
-            if (window.currentFilter !== "Search") {
-                window.selectCurrentWallpaperTabAndFocus();
+        if (!ready) return;
+        let items = [], seen = {};
+        for (let model of models) {
+            if (!model || model.status !== FolderListModel.Ready) continue;
+            for (let i = 0; i < model.count; i++) {
+                let name = String(model.get(i, "fileName") || "");
+                if (!name || seen[name]) continue;
+                seen[name] = true;
+                let url = String(model.get(i, "fileUrl"));
+                let path = decodeURIComponent(url.replace(/^file:\/\//, ""));
+                let cached = window.thumbLookup[name];
+                let video = /\.(mp4|mkv|mov|webm)$/i.test(name);
+                let item = cached ? Object.assign({}, cached) : {
+                    fileName: name, posterPath: "", posterUrl: "", hex: "#808080",
+                    bucket: video ? "Video" : "Monochrome"
+                };
+                item.fileName = name;
+                item.filePath = path;
+                // Retain the indexer's versioned image URLs until it refreshes.
+                item.fileUrl = cached && cached.filePath === path ? cached.fileUrl : url;
+                item.isVideo = video;
+                if (video) item.bucket = "Video";
+                items.push(item);
             }
         }
+        window.loadIndexData({items: items});
     }
 
     FolderListModel {
         id: srcModel
-        folder: "file://" + window.srcDir
+        folder: "file://" + window.pictureDir
         nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.webp", "*.gif", "*.bmp", "*.mp4", "*.mkv", "*.mov", "*.webm", "*.JPG", "*.JPEG", "*.PNG", "*.WEBP", "*.GIF", "*.BMP", "*.MP4", "*.MKV", "*.MOV", "*.WEBM"]
-        caseSensitive: true
+        caseSensitive: false
         showDirs: false
         onCountChanged: {
             window.syncFromSrcModel();
-            if (window.isDownloadingWallpaper && window.isDownloaded(window.currentDownloadName)) {
-                window.isDownloadingWallpaper = false;
-            }
+
             indexerDebounceTimer.restart();
         }
         onStatusChanged: {
@@ -927,6 +761,28 @@ Item {
         }
     }
 
+    // Keep the video library live when clips are added or removed.
+    FolderListModel {
+        id: videoFolderModel
+        caseSensitive: false
+        folder: "file://" + window.videoDir
+        nameFilters: ["*.mp4", "*.mkv", "*.mov", "*.webm", "*.MP4", "*.MKV", "*.MOV", "*.WEBM"]
+        showDirs: false
+        onCountChanged: { window.syncFromSrcModel(); indexerDebounceTimer.restart(); }
+        onStatusChanged: if (status === FolderListModel.Ready) { window.syncFromSrcModel(); indexerDebounceTimer.restart(); }
+    }
+
+    // Retain support for media stored directly in the library root.
+    FolderListModel {
+        id: rootFolderModel
+        folder: "file://" + window.srcDir
+        nameFilters: srcModel.nameFilters
+        caseSensitive: false
+        showDirs: false
+        onCountChanged: { window.syncFromSrcModel(); indexerDebounceTimer.restart(); }
+        onStatusChanged: if (status === FolderListModel.Ready) { window.syncFromSrcModel(); indexerDebounceTimer.restart(); }
+    }
+
     Timer {
         id: indexerDebounceTimer
         interval: 150
@@ -934,36 +790,35 @@ Item {
         onTriggered: window.triggerIndexer()
     }
 
+    // Metadata watching runs only while the picker is open. Opening always rescans.
+    Timer { id: libraryWatcherRestart; interval: 500 }
     Process {
-        id: searchStateReader
-        running: false
-        command: ["sh", "-c", "[ -f \"$1\" ] && cat \"$1\"", "_", Caching.getCacheDir("wallpaper") + "/search_state.json"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                let trimmed = this.text ? this.text.trim() : "";
-                if (trimmed.length > 0) {
-                    try {
-                        let data = JSON.parse(trimmed);
-                        if (data && typeof data === "object") {
-                            searchState.query = data.query || "";
-                            searchState.searched = !!data.searched;
-                            searchState.lastName = data.lastName || "";
-                            searchState.sessionId = data.sessionId || 0;
-
-                            if (searchState.searched) {
-                                searchInput.text = searchState.query;
-                                window.searchQuery = searchState.query;
-                                window.hasSearched = true;
-                                window.lastSearchName = searchState.lastName;
-                                window.searchSessionId = searchState.sessionId;
-                                window.isSearchPaused = true;
-                            }
-                        }
-                    } catch(e) {}
-                }
+        id: libraryWatcher
+        running: window.visible && !libraryWatcherRestart.running
+        command: ["python3", window.scriptDir + "/indexer.py", "--watch", window.srcDir]
+        stdout: SplitParser {
+            onRead: line => {
+                try {
+                    let change = JSON.parse(line);
+                    if (change.srcDir === window.srcDir) window.triggerIndexer();
+                } catch (error) { console.warn("Wallpaper watcher response:", error); }
             }
         }
+        onExited: if (window.visible && !libraryWatcherRestart.running) libraryWatcherRestart.restart()
     }
+
+    Timer {
+        id: indexLaunchTimer
+        interval: 0
+        onTriggered: {
+            if (!window.visible || !window.indexRequested || indexProcess.running) return;
+            window.indexRequested = false;
+            indexProcess.running = true;
+        }
+    }
+    Timer { id: indexRetryTimer; interval: 500; onTriggered: window.triggerIndexer() }
+
+
 
     Process {
         id: indexDiskReader
@@ -975,7 +830,7 @@ Item {
                 if (trimmed.length > 0) {
                     try {
                         let data = JSON.parse(trimmed);
-                        if (data && data.srcDir === window.srcDir) {
+                        if (data && data.srcDir === window.srcDir && data.layoutVersion === 2) {
                             window.loadIndexData(data);
                         }
                     } catch(e) {}
@@ -987,6 +842,13 @@ Item {
     Process {
         id: indexProcess
         running: false
+        stderr: StdioCollector {
+            onStreamFinished: if (this.text.trim()) console.warn("Wallpaper indexer:", this.text.trim());
+        }
+        onExited: code => {
+            if (code !== 0) { console.warn("Wallpaper indexing exited:", code); window.syncFromSrcModel(); }
+            if (window.visible && window.indexRequested) indexLaunchTimer.restart();
+        }
         command: [
             "python3",
             window.scriptDir + "/indexer.py",
@@ -1000,7 +862,10 @@ Item {
                 if (trimmed.length > 0) {
                     try {
                         let data = JSON.parse(trimmed);
-                        window.loadIndexData(data);
+                        if (data.srcDir === window.srcDir && data.layoutVersion === 2) {
+                            window.loadIndexData(data);
+                            if (data.indexingPending) indexRetryTimer.restart();
+                        }
                     } catch(e) {}
                 }
             }
@@ -1008,10 +873,8 @@ Item {
     }
 
     function triggerIndexer() {
-        if (indexProcess.running) {
-            indexProcess.running = false;
-        }
-        indexProcess.running = true;
+        window.indexRequested = true;
+        if (window.visible && !indexProcess.running) indexLaunchTimer.restart();
     }
 
     function itemsEqualToModel(model, newItems) {
@@ -1106,9 +969,7 @@ Item {
             if (videoItems.length > 0) videoProxyModel.append(videoItems);
         }
 
-        if (window.currentFilter !== "Search") {
-            window.selectCurrentWallpaperTabAndFocus();
-        }
+        window.selectCurrentWallpaperTabAndFocus();
 
         if (wasAllowing) allowAddAnimationTimer.restart();
         window.isModelChanging = false;
@@ -1126,7 +987,7 @@ Item {
 
     function cycleFilter(direction) {
         let currentIdx = -1;
-        let allFilterNames = window.filterData.map(f => f.name).concat(["Search"]);
+        let allFilterNames = window.filterData.map(f => f.name);
         for (let i = 0; i < allFilterNames.length; i++) {
             if (allFilterNames[i] === window.currentFilter) { currentIdx = i; break; }
         }
@@ -1150,37 +1011,24 @@ Item {
     }
 
     function setFilter(newFilter) {
-        if (window.isApplying || (window.currentFilter === newFilter && !window._silentFilterChange)) return;
-        if (window._silentFilterChange) return;
-
+        if (!window.filterData.some(filter => filter.name === newFilter)) return;
+        if (window.isApplying || window.currentFilter === newFilter || window._silentFilterChange) return;
         let localModes = ["All", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Pink", "Monochrome"];
         let isAnchorSwitch = localModes.indexOf(window.currentFilter) !== -1 && localModes.indexOf(newFilter) !== -1;
-
         window.allowAddAnimation = false;
-
-        let returningFromSearch = (window.currentFilter === "Search" && newFilter !== "Search");
         window._lastFilter = window.currentFilter;
         window.currentFilter = newFilter;
-
-        if (newFilter === "History") {
-            wallpaperHistoryReader.reload();
-        }
-
+        if (newFilter === "History") wallpaperHistoryReader.reload();
         Qt.callLater(() => {
-            if (newFilter === "Search" && !window.hasSearched) {
-                if (typeof searchInput.forceInputFocus === "function") searchInput.forceInputFocus();
-                else searchInput.forceActiveFocus();
-            } else {
-                view.forceActiveFocus();
-            }
+            view.forceActiveFocus();
             if (isAnchorSwitch) {
                 window.isAnchorScrolling = true;
                 anchorScrollTimer.restart();
                 window.scrollToAnchor(newFilter);
             } else {
                 window.isModelChanging = true;
-                window.isFilterAnimating = true; filterAnimationTimer.restart();
-                if (returningFromSearch) window.searchIndexRestored = false;
+                window.isFilterAnimating = true;
+                filterAnimationTimer.restart();
                 window.applyFilters(true);
                 window.isModelChanging = false;
             }
@@ -1193,7 +1041,7 @@ Item {
         window.isModelChanging = true;
         window.resetPreviewPlayer();
 
-        let focusName = (window.currentFilter === "Search" && window.hasSearched && !window.trackerResolved) ? window.lastSearchName : window.targetWallName;
+        let focusName = window.targetWallName;
         let cleanTarget = window.getCleanBaseName(focusName);
         let fullTarget = window.getCleanName(focusName);
 
@@ -1258,7 +1106,6 @@ Item {
                     }
                 }
 
-                if (window.currentFilter === "Search") window.searchIndexRestored = true;
                 allowAddAnimationTimer.restart();
             }
 
@@ -1336,7 +1183,7 @@ Item {
                     }
                 }
             }
-        } else if (window.currentFilter === "Search" || window.currentFilter === "Video") {
+        } else if (window.currentFilter === "Video") {
             if (sourceModel && sourceModel.count > 0) {
                 for (let i = 0; i < sourceModel.count; i++) {
                     let it = sourceModel.get(i);
@@ -1437,20 +1284,17 @@ Item {
                 }
             }
 
-            if (window.currentFilter === "Search") window.searchIndexRestored = true;
             allowAddAnimationTimer.restart();
-        } else if (window.currentFilter === "Search") {
-            window.searchIndexRestored = true;
         }
 
         window.isModelChanging = false;
     }
 
-    Shortcut { sequence: "Left"; enabled: window.visible && !searchInput.hasFocus && !window.isScrollingBlocked && !window.isApplying; onActivated: window.stepToNextValidIndex(-1) }
-    Shortcut { sequence: "Right"; enabled: window.visible && !searchInput.hasFocus && !window.isScrollingBlocked && !window.isApplying; onActivated: window.stepToNextValidIndex(1) }
+    Shortcut { sequence: "Left"; enabled: window.visible && !window.isApplying; onActivated: window.stepToNextValidIndex(-1) }
+    Shortcut { sequence: "Right"; enabled: window.visible && !window.isApplying; onActivated: window.stepToNextValidIndex(1) }
     Shortcut {
         sequence: "Return"
-        enabled: window.visible && !searchInput.hasFocus && !window.isScrollingBlocked && !window.isApplying
+        enabled: window.visible && !window.isApplying
         onActivated: {
             if (view.currentIndex >= 0 && view.currentIndex < displayModel.count) {
                 let item = displayModel.get(view.currentIndex);
@@ -1463,85 +1307,13 @@ Item {
 
     ListModel { id: localProxyModel }
     ListModel { id: videoProxyModel }
-    ListModel { id: searchProxyModel }
+
     ListModel { id: displayModel }
-    readonly property var activeModel: window.currentFilter === "Search" ? searchProxyModel : (window.currentFilter === "Video" ? videoProxyModel : localProxyModel)
+    readonly property var activeModel: window.currentFilter === "Video" ? videoProxyModel : localProxyModel
 
-    function syncSearchModel() {
-        let currentPrefix = "ddg_" + window.searchSessionId + "_";
 
-        if (searchFolderModel.count < window._lastSearchFolderCount) {
-            window.isModelChanging = true;
-            searchProxyModel.clear();
-            displayModel.clear();
-            window.isModelChanging = false;
-        }
-        window._lastSearchFolderCount = searchFolderModel.count;
 
-        let existingProxyNames = {};
-        for (let i = 0; i < searchProxyModel.count; i++) {
-            let item = searchProxyModel.get(i);
-            if (item && item.fileName) existingProxyNames[item.fileName] = true;
-        }
 
-        let existingDisplayNames = {};
-        if (window.currentFilter === "Search") {
-            for (let i = 0; i < displayModel.count; i++) {
-                let item = displayModel.get(i);
-                if (item && item.fileName) existingDisplayNames[item.fileName] = true;
-            }
-        }
-
-        let batchProxy = [];
-        let batchDisplay = [];
-
-        for (let i = 0; i < searchFolderModel.count; i++) {
-            let fn = searchFolderModel.get(i, "fileName");
-            let fu = searchFolderModel.get(i, "fileUrl");
-            if (fn === undefined || String(fn).length === 0 || String(fn) === "search_map.txt") continue;
-
-            let sFn = String(fn);
-            if (window.hasSearched && !sFn.startsWith(currentPrefix)) continue;
-            if (existingProxyNames[sFn]) continue;
-
-            let item = { "fileName": sFn, "filePath": decodeURIComponent(String(fu).replace("file://", "")), "fileUrl": String(fu), "posterPath": "", "posterUrl": "", "isVideo": false, "hex": "#808080", "bucket": "Search" };
-
-            batchProxy.push(item);
-            existingProxyNames[sFn] = true;
-
-            if (window.currentFilter === "Search" && !existingDisplayNames[sFn]) {
-                batchDisplay.push(item);
-                existingDisplayNames[sFn] = true;
-            }
-        }
-
-        if (batchProxy.length > 0) {
-            searchProxyModel.append(batchProxy);
-        }
-
-        if (window.currentFilter === "Search" && batchDisplay.length > 0) {
-            let isFirstBatch = displayModel.count === 0;
-            displayModel.append(batchDisplay);
-            window.updateVisibleCount();
-
-            if (isFirstBatch) {
-                view.forceLayout();
-                view.currentIndex = 0;
-                view.positionViewAtIndex(0, ListView.Center);
-            }
-        }
-    }
-
-    FolderListModel {
-        id: searchFolderModel
-        folder: window.searchDir
-        nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.webp", "*.gif", "*.bmp", "*.mp4", "*.mkv", "*.mov", "*.webm", "*.JPG", "*.JPEG", "*.PNG", "*.WEBP", "*.GIF", "*.BMP", "*.MP4", "*.MKV", "*.MOV", "*.WEBM"]
-        caseSensitive: true
-        showDirs: false
-        sortField: FolderListModel.Name
-        onCountChanged: window.syncSearchModel()
-        onStatusChanged: { if (status === FolderListModel.Ready) window.syncSearchModel() }
-    }
 
     ListView {
         id: view
@@ -1551,29 +1323,24 @@ Item {
         Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
         Behavior on anchors.margins { NumberAnimation { duration: 650; easing.type: Easing.OutQuint } }
 
-        spacing: 0; orientation: ListView.Horizontal; clip: false
-        interactive: !window.isScrollingBlocked && !window.isApplying
+        spacing: window.spacing; orientation: ListView.Horizontal; clip: true
+        interactive: !window.isApplying
         cacheBuffer: window.dynamicCacheBuffer
-        reuseItems: true
+        reuseItems: false
 
         highlightRangeMode: ListView.StrictlyEnforceRange
-        preferredHighlightBegin: (width / 2) - ((window.itemWidth * 1.5 + window.s(4)) / 2) + window.selectedCenterOffset
-        preferredHighlightEnd: (width / 2) + ((window.itemWidth * 1.5 + window.s(4)) / 2) + window.selectedCenterOffset
+        preferredHighlightBegin: (width - window.itemWidth) / 2
+        preferredHighlightEnd: (width + window.itemWidth) / 2
 
-        highlightMoveDuration: (window.isFilterAnimating || window.isModelChanging) ? 0 : 400
+        highlightMoveDuration: (window.isFilterAnimating || window.isModelChanging) ? 0 : 460
+        highlightResizeDuration: 460
         focus: true
 
         onCurrentIndexChanged: {
+            previewRequestTimer.restart();
             window.isItemAnimating = true; itemAnimationTimer.restart();
 
-            if (window.currentFilter === "Search") {
-                if (!window.isModelChanging && window.hasSearched && window.searchIndexRestored) {
-                    if (currentIndex >= 0 && currentIndex < displayModel.count) {
-                        let fname = displayModel.get(currentIndex).fileName;
-                        if (fname !== undefined && fname !== "") { window.lastSearchName = String(fname); searchState.lastName = String(fname); }
-                    }
-                }
-            } else {
+
                 let localModes = ["All", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Pink", "Monochrome"];
                 if (!window.isModelChanging && !window.isFilterAnimating && !window.isAnchorScrolling && localModes.indexOf(window.currentFilter) !== -1) {
                     if (currentIndex >= 0 && currentIndex < displayModel.count) {
@@ -1586,46 +1353,46 @@ Item {
                         }
                     }
                 }
-            }
+            
         }
 
         add: Transition {
-            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating && !(window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused)
+            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic }
         }
         addDisplaced: Transition {
-            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating && !(window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused)
+            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic }
         }
         move: Transition {
-            enabled: !window.isModelChanging && !window.isFilterAnimating && !(window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused)
+            enabled: !window.isModelChanging && !window.isFilterAnimating
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic }
         }
         moveDisplaced: Transition {
-            enabled: !window.isModelChanging && !window.isFilterAnimating && !(window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused)
+            enabled: !window.isModelChanging && !window.isFilterAnimating
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic }
         }
         remove: Transition {
-            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating && !(window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused)
+            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic }
         }
         removeDisplaced: Transition {
-            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating && !(window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused)
+            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic }
         }
         displaced: Transition {
-            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating && !(window.currentFilter === "Search" && window.hasSearched && !window.isSearchPaused)
+            enabled: window.allowAddAnimation && !window.isModelChanging && !window.isFilterAnimating
             NumberAnimation { properties: "x,y"; duration: 400; easing.type: Easing.OutCubic }
         }
 
-        header: Item { width: Math.max(0, (view.width / 2) - ((window.itemWidth * 1.5) / 2) + window.selectedCenterOffset) }
-        footer: Item { width: Math.max(0, (view.width / 2) - ((window.itemWidth * 1.5) / 2) - window.selectedCenterOffset) }
+        header: Item { width: Math.max(0, (view.width - window.itemWidth) / 2 - view.spacing) }
+        footer: Item { width: Math.max(0, (view.width - window.itemWidth) / 2 - view.spacing) }
         model: displayModel
 
         MouseArea {
             anchors.fill: parent; acceptedButtons: Qt.NoButton
             onWheel: (wheel) => {
-                if (window.isScrollingBlocked || window.isApplying || scrollThrottle.running) { wheel.accepted = true; return; }
+                if (window.isApplying || scrollThrottle.running) { wheel.accepted = true; return; }
                 let dx = wheel.angleDelta.x; let dy = wheel.angleDelta.y;
                 let delta = Math.abs(dx) > Math.abs(dy) ? dx : dy;
                 scrollAccum += delta;
@@ -1654,11 +1421,7 @@ Item {
                 if (view.currentIndex >= displayModel.count) {
                     view.currentIndex = Math.max(0, displayModel.count - 1);
                 }
-                for (let i = searchProxyModel.count - 1; i >= 0; i--) {
-                    if (searchProxyModel.get(i).fileName === fn) {
-                        searchProxyModel.remove(i);
-                    }
-                }
+
                 for (let i = localProxyModel.count - 1; i >= 0; i--) {
                     if (localProxyModel.get(i).fileName === fn) {
                         localProxyModel.remove(i);
@@ -1690,25 +1453,18 @@ Item {
             readonly property string itemPosterUrl: posterUrl !== undefined ? String(posterUrl) : ""
             readonly property bool isVideo: (model.isVideo !== undefined && model.isVideo !== null) ? !!model.isVideo : (safeFileName.toLowerCase().match(/\.(mp4|mkv|mov|webm)$/) !== null || safeFileName.startsWith("000_"))
 
-            readonly property bool isCurrent: ListView.isCurrentItem && !window.isScrollingBlocked
-            readonly property bool isFakeSelected: window.isScrollingBlocked && index === 0
-            readonly property bool isVisuallyEnlarged: isCurrent || isFakeSelected
+            readonly property bool isCurrent: ListView.isCurrentItem
+            readonly property bool isVisuallyEnlarged: isCurrent
 
-            readonly property int dist: Math.abs(index - (window.isScrollingBlocked ? 0 : view.currentIndex))
-            readonly property real sideScale: Math.max(0.58, Math.pow(0.88, Math.max(0, dist - 1)))
-            readonly property real sideOpacity: 1.0
-
-            readonly property real dynamicRadius: {
-                let baseR = ThemeBackend.borderRadius;
-                if (baseR <= 0) return 0;
-                let k = Math.min(1.0, Math.pow(baseR / 48, 2));
-                let decay = Math.max(0.45, Math.pow(0.85, dist));
-                return baseR * (1.0 - k * (1.0 - decay));
-            }
-
-            readonly property real cellWidth: isVisuallyEnlarged ? (window.itemWidth * 1.5 + window.s(4)) : (window.itemWidth * 0.48 * sideScale)
-            readonly property real targetWidth: isVisuallyEnlarged ? (window.itemWidth * 1.5) : (window.itemWidth * 0.48 * sideScale)
-            readonly property real targetHeight: isVisuallyEnlarged ? (window.itemHeight + window.s(30)) : (window.itemHeight * Math.max(0.62, Math.pow(0.90, Math.max(0, dist - 1))))
+            readonly property int dist: Math.abs(index - view.currentIndex)
+            readonly property real sideScale: Math.max(0.32, Math.pow(0.70, Math.max(0, dist - 1)))
+            readonly property real sideOpacity: isVisuallyEnlarged ? 1.0 : Math.max(0.52, 0.92 - dist * 0.07)
+            property real enterOpacity: 0
+            Component.onCompleted: enterOpacity = 1
+            Behavior on enterOpacity { NumberAnimation { duration: 340; easing.type: Easing.OutCubic } }
+            readonly property real dynamicRadius: window.s(22)
+            readonly property real cellWidth: isVisuallyEnlarged ? window.itemWidth : window.itemWidth * 0.25 * sideScale
+            readonly property real targetHeight: isVisuallyEnlarged ? window.itemHeight : window.itemHeight * Math.max(0.68, 0.89 - Math.max(0, dist - 1) * 0.055)
             property bool isPlayingVideo: false
 
             function toggleVideoPlay() {
@@ -1720,7 +1476,7 @@ Item {
                     let player = window.ensurePreviewPlayer();
                     isPlayingVideo = true;
                     player.videoOutput = previewOutputLoader.item;
-                    player.source = delegateRoot.itemFileUrl !== "" ? delegateRoot.itemFileUrl : ("file://" + window.srcDir + "/" + window.getOriginalFileName(delegateRoot.safeFileName));
+                    player.source = delegateRoot.itemFileUrl !== "" ? delegateRoot.itemFileUrl : ("file://" + window.videoDir + "/" + window.getOriginalFileName(delegateRoot.safeFileName));
                     player.play();
                 }
             }
@@ -1736,32 +1492,24 @@ Item {
 
             width: isFailed ? 0 : cellWidth
             visible: (opacity > 0.01) && !isFailed
-            opacity: isFailed ? 0.0 : sideOpacity
+            opacity: isFailed ? 0.0 : sideOpacity * enterOpacity
             height: isFailed ? 0 : targetHeight
             anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-            anchors.verticalCenterOffset: window.s(25)
+            anchors.verticalCenterOffset: window.s(38)
             z: isVisuallyEnlarged ? 100 : Math.max(1, 50 - dist)
 
-            Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
-            Behavior on width { enabled: window.initialFocusSet && !window.isModelChanging && !window.isFilterAnimating; NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
-            Behavior on height { enabled: window.initialFocusSet && !window.isModelChanging && !window.isFilterAnimating; NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
+            Behavior on opacity { NumberAnimation { duration: 460; easing.type: Easing.OutCubic } }
+            Behavior on width { enabled: window.initialFocusSet && !window.isModelChanging && !window.isFilterAnimating; NumberAnimation { duration: 460; easing.type: Easing.OutCubic } }
+            Behavior on height { enabled: window.initialFocusSet && !window.isModelChanging && !window.isFilterAnimating; NumberAnimation { duration: 460; easing.type: Easing.OutCubic } }
 
             Item {
-                id: skewedWrapper
+                id: cardWrapper
                 anchors.centerIn: parent
-
-                readonly property real targetCenterIndex: window.isScrollingBlocked ? 0 : view.currentIndex
-                anchors.horizontalCenterOffset: -(window.skewFactor * height) / 2
-
-                property real targetPadding: 0
-                Behavior on targetPadding { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
-
-                width: parent.width - targetPadding
-                height: parent ? parent.height : 0
-                transform: Matrix4x4 { property real s: window.skewFactor; matrix: Qt.matrix4x4(1, s, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) }
+                width: parent.width
+                height: parent.height
 
                 MouseArea {
-                    anchors.fill: parent; enabled: !window.isScrollingBlocked && !window.isApplying && !delegateRoot.isFailed
+                    anchors.fill: parent; enabled: !window.isApplying && !delegateRoot.isFailed
                     onClicked: { window.initialFocusSet = true; view.currentIndex = index; window.applyWallpaper(delegateRoot.safeFileName, delegateRoot.isVideo); }
                 }
 
@@ -1786,6 +1534,7 @@ Item {
 
                     Item {
                         anchors.fill: parent
+                        clip: true
                         layer.enabled: true
                         layer.effect: MultiEffect {
                             maskEnabled: true
@@ -1794,18 +1543,23 @@ Item {
 
                         Image {
                             id: paperImage
+                            objectName: "wallpaper-preview"
                             anchors.centerIn: parent ? parent : undefined
-                            anchors.horizontalCenterOffset: window.s(-50)
-                            width: (window.itemWidth * 1.5) + ((window.itemHeight + window.s(30)) * Math.abs(window.skewFactor)) + window.s(50)
-                            height: window.itemHeight + window.s(30)
+                            width: Math.max(1, window.itemWidth - 2 * window.borderWidth)
+                            height: Math.max(1, window.itemHeight - 2 * window.borderWidth)
                             fillMode: Image.PreserveAspectCrop
-                            source: delegateRoot.isVideo ? (delegateRoot.itemPosterUrl !== "" ? delegateRoot.itemPosterUrl : "") : delegateRoot.itemFileUrl
+                            readonly property string originalSource: delegateRoot.isVideo ? delegateRoot.itemPosterUrl : delegateRoot.itemFileUrl
+                            source: window.previewThumbnails[originalSource] || ((delegateRoot.dist <= 2 || !previewThumbProcess.running) ? originalSource : "")
+                            retainWhileLoading: true
+                            autoTransform: true
+                            smooth: true
                             asynchronous: true
                             cache: true
-                            opacity: (status === Image.Ready && source.toString() !== "") ? 1.0 : 0.0
-                            Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
-                            sourceSize.width: Math.round((window.itemWidth * 1.5) + ((window.itemHeight + window.s(30)) * 0.35) + window.s(50))
-                            sourceSize.height: Math.round(window.itemHeight + window.s(30))
+                            // Never blank a loaded texture while its replacement is decoding.
+                            property bool hasShownImage: false
+                            opacity: hasShownImage ? 1.0 : 0.0
+                            Behavior on opacity { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+                            sourceSize: Qt.size(1280, 720)
 
                             property int retryCount: 0
                             onStatusChanged: {
@@ -1818,6 +1572,7 @@ Item {
                                     }
                                 } else if (status === Image.Ready) {
                                     retryCount = 0;
+                                    hasShownImage = true;
                                 }
                             }
                             Timer {
@@ -1831,18 +1586,15 @@ Item {
                                     }
                                 }
                             }
-                            transform: Matrix4x4 { property real s: -window.skewFactor; matrix: Qt.matrix4x4(1, s, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) }
                         }
 
                         Loader {
                             id: previewOutputLoader
                             anchors.centerIn: parent ? parent : undefined
-                            anchors.horizontalCenterOffset: window.s(-50)
-                            width: (window.itemWidth * 1.5) + ((window.itemHeight + window.s(30)) * Math.abs(window.skewFactor)) + window.s(50)
-                            height: window.itemHeight + window.s(30)
+                            width: Math.max(1, window.itemWidth - 2 * window.borderWidth)
+                            height: Math.max(1, window.itemHeight - 2 * window.borderWidth)
                             active: delegateRoot.isPlayingVideo
                             visible: delegateRoot.isPlayingVideo && window.previewPlaying
-                            transform: Matrix4x4 { property real s: -window.skewFactor; matrix: Qt.matrix4x4(1, s, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) }
                             sourceComponent: Component {
                                 VideoOutput {
                                     fillMode: VideoOutput.PreserveAspectCrop
@@ -1865,7 +1617,6 @@ Item {
                             Behavior on opacity { NumberAnimation { duration: 250 } }
                             enabled: !window.isApplying
                             onClicked: delegateRoot.toggleVideoPlay()
-                            transform: Matrix4x4 { property real s: -window.skewFactor; matrix: Qt.matrix4x4(1, s, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) }
                         }
                     }
 
@@ -1873,6 +1624,9 @@ Item {
                         anchors.fill: parent
                         radius: delegateRoot.dynamicRadius
                         color: "transparent"
+                        border.width: delegateRoot.isVisuallyEnlarged ? window.s(2) : window.s(1)
+                        border.color: Qt.alpha(ThemeBackend.text, delegateRoot.isVisuallyEnlarged ? 0.78 : 0.14)
+                        Behavior on border.color { ColorAnimation { duration: 250 } }
                     }
                 }
             }
@@ -1885,24 +1639,57 @@ Item {
         opacity: window.isReady ? 1.0 : 0.0
         Behavior on anchors.topMargin { NumberAnimation { duration: 650; easing.type: Easing.OutQuint } }
         Behavior on opacity { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
-        anchors.horizontalCenter: parent.horizontalCenter; z: 200; height: window.s(48); width: filterRow.width + window.s(20); radius: ThemeBackend.borderRadius
-        color: Qt.alpha(ThemeBackend.base, ThemeBackend.elementOpacity)
+        anchors.horizontalCenter: parent.horizontalCenter
+        z: 200
+        height: window.s(56)
+        width: Math.min(window.width - window.s(32), filterRow.implicitWidth + window.s(28))
+        radius: window.s(18)
+        color: toolbarGlass.active ? "transparent" : Qt.alpha(ThemeBackend.base, Math.min(0.62, ThemeBackend.elementOpacity))
+        border.width: 1
+        border.color: Qt.alpha(ThemeBackend.text, 0.14)
+        readonly property Item glassBackdropItem: filterBackdrop
 
         WallpaperBlur {
+            id: filterBackdrop
             z: -1
             anchors.fill: parent
             radius: parent.radius
         }
 
+        GlassFill {
+            id: toolbarGlass
+            anchors.fill: parent
+            radius: parent.radius
+            tintColor: ThemeBackend.base
+            tintAmount: 0.34
+            frost: 2.2
+            rim: 0.32
+            shadow: 0
+        }
+
+        Flickable {
+            id: filterScroll
+            anchors.fill: parent
+            anchors.leftMargin: window.s(14)
+            anchors.rightMargin: window.s(14)
+            contentWidth: filterRow.implicitWidth
+            contentHeight: height
+            clip: true
+            interactive: contentWidth > width
+            flickableDirection: Flickable.HorizontalFlick
+            boundsBehavior: Flickable.StopAtBounds
+
         Row {
-            id: filterRow; anchors.centerIn: parent ? parent : undefined; spacing: window.s(8)
+            id: filterRow
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: window.s(10)
 
             Rectangle {
                 id: notifDrawer; height: window.s(34)
                 property real paddingLeft: window.showSpinner ? window.s(36) : window.s(12)
                 property real targetWidth: window.showNotification ? Math.min(notifTextDrawer.implicitWidth + paddingLeft + window.s(16), window.s(300)) : 0
-                width: targetWidth; visible: width > 0.1; radius: ThemeBackend.borderRadius; clip: true; anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-                color: Qt.alpha(ThemeBackend.surface0, ThemeBackend.elementOpacity)
+                width: targetWidth; visible: width > 0.1; radius: window.s(10); clip: true; anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+                color: Qt.alpha(ThemeBackend.text, 0.06)
                 Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
                 Behavior on color { ColorAnimation { duration: 250 } }
 
@@ -1997,304 +1784,143 @@ Item {
                 }
             }
 
-            Repeater {
-                model: window.filterData
-                delegate: Item {
-                    width: (modelData.name === "Video" || modelData.name === "All" || modelData.name === "History") ? window.s(34) : (modelData.hex === "" ? filterText.contentWidth + window.s(16) : window.s(34))
-                    height: window.s(34); anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+            Rectangle {
+                height: window.s(38)
+                width: modeRow.implicitWidth + window.s(8)
+                anchors.verticalCenter: parent.verticalCenter
+                radius: window.s(12)
+                color: Qt.alpha(ThemeBackend.text, 0.045)
+                border.width: 1
+                border.color: Qt.alpha(ThemeBackend.text, 0.07)
 
-                    CanvasIconButton {
-                        glassShadow: 0
-                        visible: modelData.name === "All"
-                        anchors.fill: parent
-                        size: window.s(34)
-                        cornerRadius: window.s(10)
-                        iconSize: window.s(14)
-                        accentColor: window.currentFilter === modelData.name ? ThemeBackend.surface2 : ThemeBackend.surface0
-                        bgOpacity: ThemeBackend.elementOpacity
-                        textColor: window.currentFilter === modelData.name ? ThemeBackend.text : ThemeBackend.subtext0
-                        action_highlight: window.currentFilter === modelData.name
-                        paintCanvas: function(ctx, canvas) {
-                            var s = window.s;
-                            ctx.fillStyle = textColor;
-                            ctx.fillRect(0, 0, s(5), s(5));
-                            ctx.fillRect(s(7), 0, s(5), s(5));
-                            ctx.fillRect(0, s(7), s(5), s(5));
-                            ctx.fillRect(s(7), s(7), s(5), s(5));
-                        }
-                        onClicked: window.setFilter(modelData.name)
-                    }
-
-                    CanvasIconButton {
-                        glassShadow: 0
-                        visible: modelData.name === "History"
-                        anchors.fill: parent
-                        size: window.s(34)
-                        cornerRadius: window.s(10)
-                        iconSize: window.s(14)
-                        accentColor: window.currentFilter === modelData.name ? ThemeBackend.surface2 : ThemeBackend.surface0
-                        bgOpacity: ThemeBackend.elementOpacity
-                        textColor: window.currentFilter === modelData.name ? ThemeBackend.text : ThemeBackend.subtext0
-                        action_highlight: window.currentFilter === modelData.name
-                        paintCanvas: function(ctx, canvas) {
-                            var s = window.s;
-                            ctx.strokeStyle = textColor;
-                            ctx.lineWidth = s(1.5);
-                            ctx.lineCap = "round";
-                            ctx.beginPath();
-                            ctx.arc(s(6), s(6), s(4.5), 0, Math.PI * 2);
-                            ctx.stroke();
-                            ctx.beginPath();
-                            ctx.moveTo(s(6), s(3));
-                            ctx.lineTo(s(6), s(6));
-                            ctx.lineTo(s(8.5), s(6));
-                            ctx.stroke();
-                        }
-                        onClicked: window.setFilter(modelData.name)
-                    }
-
-                    CanvasIconButton {
-                        glassShadow: 0
-                        visible: modelData.name === "Video"
-                        anchors.fill: parent
-                        size: window.s(34)
-                        cornerRadius: window.s(10)
-                        iconSize: window.s(12)
-                        accentColor: window.currentFilter === modelData.name ? ThemeBackend.surface2 : ThemeBackend.surface0
-                        bgOpacity: ThemeBackend.elementOpacity
-                        textColor: window.currentFilter === modelData.name ? ThemeBackend.text : ThemeBackend.subtext0
-                        action_highlight: window.currentFilter === modelData.name
-                        paintCanvas: function(ctx, canvas) {
-                            var s = window.s;
-                            ctx.fillStyle = textColor;
-                            ctx.beginPath();
-                            ctx.moveTo(0, 0);
-                            ctx.lineTo(s(10), s(6));
-                            ctx.lineTo(0, s(12));
-                            ctx.closePath();
-                            ctx.fill();
-                        }
-                        onClicked: window.setFilter(modelData.name)
-                    }
-
-                    Rectangle {
-                        visible: modelData.hex === "" && modelData.name !== "Video" && modelData.name !== "All" && modelData.name !== "History"
-                        anchors.fill: parent
-                        radius: ThemeBackend.borderRadius
-                        color: Qt.alpha(window.currentFilter === modelData.name ? ThemeBackend.surface2 : (filterMouse.containsMouse ? ThemeBackend.surface1 : ThemeBackend.surface0), ThemeBackend.elementOpacity)
-                        scale: window.currentFilter === modelData.name ? 1.05 : (filterMouse.containsMouse ? 1.03 : 1.0)
-                        Behavior on scale { NumberAnimation { duration: 250; easing.type: Easing.OutQuint } }
-                        Behavior on color { ColorAnimation { duration: 250 } }
-
-                        Text {
-                            id: filterText
-                            text: modelData.label
-                            anchors.centerIn: parent
-                            color: window.currentFilter === modelData.name ? ThemeBackend.text : ThemeBackend.subtext0
-                            font.family: ThemeBackend.fontFamily
-                            font.pixelSize: window.s(12)
-                            font.bold: window.currentFilter === modelData.name
-                            Behavior on color { ColorAnimation { duration: 250 } }
-                        }
-
-                        MouseArea {
-                            id: filterMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            enabled: !window.isApplying
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: window.setFilter(modelData.name)
-                        }
-                    }
-
-                    Rectangle {
-                        visible: modelData.hex !== ""
-                        anchors.fill: parent
-                        radius: ThemeBackend.borderRadius
-                        color: modelData.hex
-                        scale: window.currentFilter === modelData.name ? 1.05 : (colorMouse.containsMouse ? 1.03 : 1.0)
-                        Behavior on scale { NumberAnimation { duration: 250; easing.type: Easing.OutQuint } }
-
-                        MouseArea {
-                            id: colorMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            enabled: !window.isApplying
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: window.setFilter(modelData.name)
-                        }
-                    }
-                }
-            }
-
-            Item {
-                id: searchControlContainer
-                property bool shouldShow: window.currentFilter === "Search" && window.hasSearched
-                width: shouldShow ? window.s(34) : 0
-                height: window.s(34)
-                clip: true
-                visible: width > 0.1
-                anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-                Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
-
-                CanvasIconButton {
-                    glassShadow: 0
-                    id: searchControlBtn
+                Row {
+                    id: modeRow
                     anchors.centerIn: parent
-                    size: window.s(34)
-                    cornerRadius: window.s(10)
-                    iconSize: window.s(34)
-                    accentColor: window.isSearchPaused ? ThemeBackend.surface2 : ThemeBackend.surface0
-                    bgOpacity: ThemeBackend.elementOpacity
-                    textColor: window.isSearchPaused ? ThemeBackend.text : ThemeBackend.subtext0
-                    action_highlight: window.isSearchPaused
-                    paintCanvas: function(ctx, canvas) {
-                        var s = window.s;
-                        ctx.fillStyle = searchControlBtn.textColor;
-                        if (!window.isSearchPaused) {
-                            ctx.fillRect(s(12), s(11), s(3), s(12));
-                            ctx.fillRect(s(19), s(11), s(3), s(12));
-                        } else {
-                            ctx.beginPath();
-                            ctx.moveTo(s(13), s(10));
-                            ctx.lineTo(s(24), s(17));
-                            ctx.lineTo(s(13), s(24));
-                            ctx.closePath();
-                            ctx.fill();
+                    spacing: window.s(2)
+                    Repeater {
+                        model: window.filterData.slice(0, 3)
+                        delegate: Rectangle {
+                            id: modeButton
+                            width: window.s(34)
+                            height: window.s(30)
+                            radius: window.s(9)
+                            readonly property bool selected: window.currentFilter === modelData.name
+                            color: Qt.alpha(ThemeBackend.text, selected ? 0.18 : (modeMouse.containsMouse ? 0.08 : 0))
+                            border.width: 1
+                            border.color: Qt.alpha(ThemeBackend.text, selected ? 0.15 : 0)
+                            Behavior on color { ColorAnimation { duration: 160 } }
+                            ToolTip.visible: modeMouse.containsMouse
+                            ToolTip.text: modelData.label || modelData.name
+                            Accessible.role: Accessible.Button
+                            Accessible.name: modelData.label || modelData.name
+                            Accessible.onPressAction: window.setFilter(modelData.name)
+                            Canvas {
+                                id: modeIcon
+                                anchors.centerIn: parent
+                                width: window.s(14)
+                                height: window.s(14)
+                                property color ink: Qt.alpha(ThemeBackend.text, modeButton.selected ? 1 : 0.70)
+                                onInkChanged: requestPaint()
+                                onPaint: {
+                                    let ctx = getContext("2d");
+                                    ctx.reset();
+                                    ctx.scale(width / 14, height / 14);
+                                    ctx.fillStyle = ink;
+                                    ctx.strokeStyle = ink;
+                                    ctx.lineWidth = 1.5;
+                                    ctx.lineCap = "round";
+                                    ctx.lineJoin = "round";
+                                    if (modelData.name === "All") {
+                                        ctx.fillRect(1,1,5,5); ctx.fillRect(8,1,5,5);
+                                        ctx.fillRect(1,8,5,5); ctx.fillRect(8,8,5,5);
+                                    } else if (modelData.name === "History") {
+                                        ctx.beginPath(); ctx.arc(7,7,5,0,Math.PI*2); ctx.stroke();
+                                        ctx.beginPath(); ctx.moveTo(7,4); ctx.lineTo(7,7); ctx.lineTo(10,8); ctx.stroke();
+                                    } else {
+                                        ctx.beginPath(); ctx.moveTo(3,1); ctx.lineTo(12,7); ctx.lineTo(3,13); ctx.closePath(); ctx.fill();
+                                    }
+                                }
+                            }
+                            MouseArea {
+                                id: modeMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                enabled: !window.isApplying
+                                onClicked: window.setFilter(modelData.name)
+                            }
                         }
                     }
-                    onClicked: {
-                        if (!window.isApplying) {
-                            window.isSearchPaused = !window.isSearchPaused;
+                }
+            }
+
+            Rectangle {
+                width: 1
+                height: window.s(22)
+                anchors.verticalCenter: parent.verticalCenter
+                color: Qt.alpha(ThemeBackend.text, 0.13)
+            }
+
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: window.s(5)
+                Repeater {
+                    model: window.filterData.slice(3)
+                    delegate: Item {
+                        id: swatch
+                        width: window.s(30)
+                        height: window.s(34)
+                        readonly property bool selected: window.currentFilter === modelData.name
+                        ToolTip.visible: swatchMouse.containsMouse
+                        ToolTip.text: modelData.name
+                        Accessible.role: Accessible.Button
+                        Accessible.name: modelData.name + " wallpapers"
+                        Accessible.onPressAction: window.setFilter(modelData.name)
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width: window.s(29)
+                            height: width
+                            radius: width / 2
+                            color: "transparent"
+                            border.width: swatch.selected ? window.s(1.5) : 0
+                            border.color: Qt.alpha(ThemeBackend.text, 0.90)
+                            scale: swatchMouse.containsMouse ? 1.07 : 1
+                            Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+                            Rectangle {
+                                anchors.centerIn: parent
+                                width: window.s(21)
+                                height: width
+                                radius: width / 2
+                                border.width: 1
+                                border.color: Qt.alpha("white", 0.22)
+                                gradient: Gradient {
+                                    GradientStop { position: 0; color: Qt.lighter(modelData.hex, 1.18) }
+                                    GradientStop { position: 1; color: Qt.darker(modelData.hex, 1.10) }
+                                }
+                            }
+                        }
+                        MouseArea {
+                            id: swatchMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            enabled: !window.isApplying
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: window.setFilter(modelData.name)
                         }
                     }
                 }
             }
 
-            Item {
-                id: searchContainer
-                property bool isSearchOpen: window.currentFilter === "Search"
-                property real openWidth: window.s(34) + window.s(6) + window.s(220) + window.s(6) + window.s(34)
-                property real closedWidth: window.s(34)
-                width: isSearchOpen ? openWidth : closedWidth
-                height: window.s(34)
-                clip: true
-                anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-                Behavior on width { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
 
-                CanvasIconButton {
-                    glassShadow: 0
-                    id: searchToggleBtn
-                    size: window.s(34)
-                    cornerRadius: window.s(10)
-                    iconSize: window.s(14)
-                    accentColor: searchContainer.isSearchOpen ? ThemeBackend.surface2 : ThemeBackend.surface0
-                    bgOpacity: ThemeBackend.elementOpacity
-                    textColor: searchContainer.isSearchOpen ? ThemeBackend.text : ThemeBackend.subtext0
-                    action_highlight: searchContainer.isSearchOpen
-                    paintCanvas: function(ctx, canvas) {
-                        var s = window.s;
-                        ctx.lineWidth = s(1.5);
-                        ctx.lineCap = "round";
-                        ctx.strokeStyle = searchToggleBtn.textColor;
-                        ctx.beginPath();
-                        ctx.arc(s(5.5), s(5.5), s(3.5), 0, Math.PI * 2);
-                        ctx.stroke();
-                        ctx.beginPath();
-                        ctx.moveTo(s(8), s(8));
-                        ctx.lineTo(s(12.5), s(12.5));
-                        ctx.stroke();
-                    }
-                    onClicked: {
-                        if (window.currentFilter === "Search") {
-                            window.setFilter("All");
-                        } else {
-                            window.setFilter("Search");
-                        }
-                    }
-                }
 
-                Input {
-                    id: searchInput
-                    anchors.left: searchToggleBtn.right
-                    anchors.leftMargin: window.s(6)
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: window.s(220)
-                    implicitWidth: window.s(220)
-                    implicitHeight: window.s(34)
-                    height: window.s(34)
-                    opacity: searchContainer.isSearchOpen ? 1.0 : 0.0
-                    visible: opacity > 0.01
-                    Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
-                    cornerRadius: ThemeBackend.borderRadius
-                    baseColor: Qt.alpha(ThemeBackend.surface0, ThemeBackend.elementOpacity)
-                    borderColor: ThemeBackend.text
-                    textColor: ThemeBackend.text
-                    subTextColor: ThemeBackend.subtext0
-                    accentColor: ThemeBackend.text
-                    fontFamily: ThemeBackend.fontFamily
-                    fontPixelSize: window.s(12)
-                    placeholderText: I18n.t("wallpaper.notifications.type_to_search")
-                    showClearButton: true
 
-                    onTextEdited: function(newText) {
-                        window.hasSearched = false;
-                        searchState.searched = false;
-                        searchState.save();
-                    }
-
-                    onAccepted: function(finalText) {
-                        searchInput.focus = false;
-                        window.triggerOnlineSearch();
-                        view.forceActiveFocus();
-                    }
-                }
-
-                CanvasIconButton {
-                    glassShadow: 0
-                    id: submitBtn
-                    anchors.left: searchInput.right
-                    anchors.leftMargin: window.s(6)
-                    anchors.verticalCenter: parent.verticalCenter
-                    opacity: searchContainer.isSearchOpen ? 1.0 : 0.0
-                    visible: opacity > 0.01
-                    Behavior on opacity { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
-                    size: window.s(34)
-                    cornerRadius: ThemeBackend.borderRadius
-                    iconSize: window.s(34)
-                    accentColor: ThemeBackend.surface1
-                    bgOpacity: ThemeBackend.elementOpacity
-                    textColor: ThemeBackend.text
-                    paintCanvas: function(ctx, canvas) {
-                        var s = window.s;
-                        ctx.lineWidth = s(1.5);
-                        ctx.lineCap = "round";
-                        ctx.lineJoin = "round";
-                        ctx.strokeStyle = submitBtn.textColor;
-                        ctx.beginPath();
-                        ctx.moveTo(s(12), s(17));
-                        ctx.lineTo(s(22), s(17));
-                        ctx.moveTo(s(18), s(13));
-                        ctx.lineTo(s(22), s(17));
-                        ctx.lineTo(s(18), s(21));
-                        ctx.stroke();
-                    }
-                    onClicked: {
-                        if (!window.isApplying) {
-                            searchInput.focus = false;
-                            window.triggerOnlineSearch();
-                            view.forceActiveFocus();
-                        }
-                    }
-                }
-            }
+        }
         }
     }
 
     Component.onCompleted: {
-        Quickshell.execDetached(["bash", "-c", "mkdir -p '" + decodeURIComponent(window.searchDir.replace("file://", "")) + "'"]);
 
-        searchStateReader.running = true;
+
         indexDiskReader.running = true;
         window.syncFromSrcModel();
         window.triggerIndexer();

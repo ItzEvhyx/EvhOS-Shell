@@ -116,7 +116,7 @@ Item {
             let curMin = Qt.formatDateTime(d, minuteFormat);
             if (root.minute !== curMin) root.minute = curMin;
 
-            let curHour = Qt.formatDateTime(d, hourFormat);
+            let curHour = root.is12Hour ? String(d.getHours() % 12 || 12).padStart(hourFormat.length, "0") : Qt.formatDateTime(d, hourFormat);
             if (root.hour !== curHour) root.hour = curHour;
 
             let curAmPm = amPmFormat !== "" ? Qt.formatDateTime(d, amPmFormat) : "";

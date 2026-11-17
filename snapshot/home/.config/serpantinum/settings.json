@@ -64,12 +64,11 @@
     "autohideTimeout": 1000,
     "modules": {
       "left": [
-        "left",
         "media",
-        "tray"
+        "tray",
+        "info"
       ],
       "center": [
-        "info",
         "timedate"
       ],
       "right": [
@@ -100,8 +99,9 @@
       "format": "hh:mm AP"
     },
     "menuStyle": "icon",
-    "menuShowSettings": true,
-    "menuShowLauncher": false
+    "menuShowSettings": false,
+    "menuShowLauncher": false,
+    "mediaWidth": 220
   },
   "launcher": {
     "position": "center",
@@ -187,7 +187,7 @@
   },
   "idle": {
     "enabled": true,
-    "manualInhibit": true,
+    "manualInhibit": false,
     "actions": {
       "dim": {
         "id": "dim",
@@ -241,8 +241,8 @@
       }
     },
     "customActions": [],
-    "caffeineStartTime": 1794469698725,
-    "caffeineEndTime": 1794480498725
+    "caffeineStartTime": 0,
+    "caffeineEndTime": 0
   },
   "display": {
     "monitors": {

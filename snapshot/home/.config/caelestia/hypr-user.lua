@@ -70,3 +70,26 @@ hl.bind("ALT + Q", hl.dsp.send_shortcut({ mods = "", key = "1" }))
 hl.bind("ALT + W", hl.dsp.send_shortcut({ mods = "", key = "2" }))
 hl.bind("SHIFT + Q", hl.dsp.send_shortcut({ mods = "SHIFT", key = "1" }))
 hl.bind("SHIFT + W", hl.dsp.send_shortcut({ mods = "SHIFT", key = "2" }))
+
+-- Workspace overview keyboard shortcut
+hl.unbind("SUPER + S")
+hl.unbind("SUPER + W")
+hl.bind("SUPER + W", hl.dsp.exec_cmd("qs -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call workspaceOverview toggle"))
+
+-- Live backdrop for the workspace overview.
+hl.layer_rule({
+    name = "serp-workspace-overview-backdrop",
+    match = { namespace = "^serpantinum-workspace-overview$" },
+    blur = true,
+    xray = false,
+    ignore_alpha = 0.01,
+    no_anim = true,
+})
+
+-- Serpantinum settings: Super+I
+hl.unbind("SUPER + I")
+hl.bind("SUPER + I", hl.dsp.exec_cmd("serpantinum settings"))
+
+-- Wallpaper selector: Super+S
+hl.unbind("SUPER + S")
+hl.bind("SUPER + S", hl.dsp.exec_cmd("quickshell -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call main handleCommand toggle wallpaper \"\""))

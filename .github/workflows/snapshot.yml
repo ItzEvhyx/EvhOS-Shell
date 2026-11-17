@@ -1,0 +1,17 @@
+name: Snapshot checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pil ffmpeg lua5.4
+      - name: Verify captured desktop and recovery
+        run: python3 tools/run-checks.py

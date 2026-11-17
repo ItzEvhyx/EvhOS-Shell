@@ -10,6 +10,16 @@ Item {
     readonly property string userConfigDir: homeDir + "/.config/serpantinum"
     readonly property string settingsJsonPath: Quickshell.env("QS_SETTINGS") ? Quickshell.env("QS_SETTINGS") : (userConfigDir + "/settings.json")
 
+    property bool desktopPresetApplying: false
+    property string writeError: ""
+    signal desktopPresetTransactionStarted()
+
+    Timer {
+        id: presetWatchdog
+        interval: 120000
+        onTriggered: config.desktopPresetApplying = false
+    }
+
     property bool dataReady: false
     property var rawSettings: ({})
     property bool isWriting: false
@@ -141,6 +151,8 @@ Item {
         command: []
         onExited: function(exitCode, exitStatus) {
             config.isWriting = false;
+            config.writeError = exitCode === 0 ? "" : "Could not save desktop settings";
+            if (exitCode !== 0) config.lastWrittenContent = "";
             if (config.pendingPayload !== null) {
                 let next = config.pendingPayload;
                 config.pendingPayload = null;
@@ -190,6 +202,25 @@ Item {
     // Desktop presets must update the live configuration, not just replace its file.
     IpcHandler {
         target: "desktopPresetConfig"
+        function monitors(): string {
+            return JSON.stringify(Quickshell.screens.map(s => s.name));
+        }
+        function ready(): string {
+            if (config.writeError) return config.writeError;
+            return config.dataReady && !config.isWriting && config.pendingPayload === null ? "ok" : "busy";
+        }
+        function beginTransaction(): string {
+            if (!config.dataReady) return "Configuration is not ready";
+            config.desktopPresetApplying = true;
+            presetWatchdog.restart();
+            config.desktopPresetTransactionStarted();
+            return "ok";
+        }
+        function endTransaction(): string {
+            config.desktopPresetApplying = false;
+            presetWatchdog.stop();
+            return "ok";
+        }
         function get(): string {
             return config.dataReady ? JSON.stringify(config.rawSettings) : "";
         }

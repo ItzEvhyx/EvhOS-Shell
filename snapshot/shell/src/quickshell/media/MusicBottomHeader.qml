@@ -5,7 +5,7 @@ import QtQuick.Layouts
 import "../"
 import "../reusables"
 
-RowLayout {
+ColumnLayout {
     id: bottomHeader
     required property var root
     property alias bottomSectionSwitch: bottomSectionSwitch
@@ -20,7 +20,6 @@ RowLayout {
         readonly property var options: [
             typeof I18n !== "undefined" ? I18n.t("music.equalizer", "Equalizer") : "Equalizer",
             typeof I18n !== "undefined" ? I18n.t("music.audio.title", "Audio") : "Audio",
-            typeof I18n !== "undefined" ? I18n.t("music.lyrics", "Lyrics") : "Lyrics",
             "Queue"
         ]
         Layout.preferredHeight: root.s(30)
@@ -50,6 +49,7 @@ RowLayout {
                 root.toEqAnim.restart();
             }
         }
+        readonly property var tabIndices: [0, 1, 3]
         Row {
             id: tabsRow
             anchors.fill: parent
@@ -60,6 +60,7 @@ RowLayout {
                     id: tab
                     required property int index
                     required property string modelData
+                    readonly property int sectionIndex: bottomSectionSwitch.tabIndices[index]
                     width: tabLabel.implicitWidth
                     height: tabsRow.height
                     Text {
@@ -70,8 +71,8 @@ RowLayout {
                         text: tab.modelData
                         font.family: ThemeBackend.fontFamily
                         font.pixelSize: root.s(11.5)
-                        font.weight: bottomSectionSwitch.currentIndex === tab.index ? Font.DemiBold : Font.Normal
-                        color: bottomSectionSwitch.currentIndex === tab.index || tabMouse.containsMouse ? ThemeBackend.text : ThemeBackend.subtext0
+                        font.weight: bottomSectionSwitch.currentIndex === tab.sectionIndex ? Font.DemiBold : Font.Normal
+                        color: bottomSectionSwitch.currentIndex === tab.sectionIndex || tabMouse.containsMouse ? ThemeBackend.text : ThemeBackend.subtext0
                         Behavior on color { ColorAnimation { duration: 150 } }
                     }
                     Rectangle {
@@ -81,7 +82,7 @@ RowLayout {
                         height: root.s(2)
                         radius: height / 2
                         color: ThemeBackend.mauve
-                        opacity: bottomSectionSwitch.currentIndex === tab.index ? 1 : 0
+                        opacity: bottomSectionSwitch.currentIndex === tab.sectionIndex ? 1 : 0
                         Behavior on opacity { NumberAnimation { duration: 150 } }
                     }
                     MouseArea {
@@ -89,13 +90,16 @@ RowLayout {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: bottomSectionSwitch.currentIndex = tab.index
+                        onClicked: bottomSectionSwitch.currentIndex = tab.sectionIndex
                     }
                 }
             }
         }
     }
 
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: root.s(8)
     Item { Layout.fillWidth: true }
 
     ClickButton {
@@ -209,5 +213,6 @@ RowLayout {
             font.pixelSize: root.s(13)
             font.bold: true
         }
+    }
     }
 }

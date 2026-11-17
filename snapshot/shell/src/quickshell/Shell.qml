@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "widgets"
+import "desktop"
 
 ShellRoot {
     readonly property bool performanceMode: !!(Config.getSetting("general", {}).performance)
@@ -42,6 +43,9 @@ ShellRoot {
         }
     }
 
+    WorkspaceOverviewWindow {}
+    PrivacyOverlay {}
+    DesktopPresetOverlay {}
     Main {}
     Bar {}
     Lock {}

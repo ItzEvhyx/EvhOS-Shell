@@ -263,21 +263,21 @@ Item {
         return false;
     }
 
-    property real wLeft: (isModuleActive("left") && leftWidget) ? (leftWidget.targetWidth !== undefined ? leftWidget.targetWidth : leftWidget.width) : 0
-    property real wWorkspaces: (isModuleActive("workspaces") && workspacesWidget) ? (workspacesWidget.targetWidth !== undefined ? workspacesWidget.targetWidth : workspacesWidget.width) : 0
-    property real wFocus: (isModuleActive("focus") && focusWidget) ? (focusWidget.targetWidth !== undefined ? focusWidget.targetWidth : focusWidget.width) : 0
-    property real wMedia: (isModuleActive("media") && mediaWidget) ? (mediaWidget.targetWidth !== undefined ? mediaWidget.targetWidth : mediaWidget.width) : 0
-    property real wVis: (isModuleActive("vis") && visWidget) ? (visWidget.targetWidth !== undefined ? visWidget.targetWidth : visWidget.width) : 0
-    property real wTray: (isModuleActive("tray") && trayWidget) ? (trayWidget.targetWidth !== undefined ? trayWidget.targetWidth : trayWidget.width) : 0
-    property real wSysmon: (isModuleActive("sysmon") && sysMonWidget) ? (sysMonWidget.targetWidth !== undefined ? sysMonWidget.targetWidth : sysMonWidget.width) : 0
-    property real wKb: (isModuleActive("kb") && kbWidget) ? (kbWidget.targetWidth !== undefined ? kbWidget.targetWidth : kbWidget.width) : 0
-    property real wWifi: (isModuleActive("wifi") && wifiWidget) ? (wifiWidget.targetWidth !== undefined ? wifiWidget.targetWidth : wifiWidget.width) : 0
-    property real wBt: (isModuleActive("bt") && btWidget) ? (btWidget.targetWidth !== undefined ? btWidget.targetWidth : btWidget.width) : 0
-    property real wVol: (isModuleActive("vol") && volWidget) ? (volWidget.targetWidth !== undefined ? volWidget.targetWidth : volWidget.width) : 0
-    property real wBat: (isModuleActive("bat") && batWidget) ? (batWidget.targetWidth !== undefined ? batWidget.targetWidth : batWidget.width) : 0
-    property real wTimedate: (isModuleActive("timedate") && timeDateWidget) ? (timeDateWidget.targetWidth !== undefined ? timeDateWidget.targetWidth : timeDateWidget.width) : 0
-    property real wInfo: (isModuleActive("info") && infoWidget) ? (infoWidget.targetWidth !== undefined ? infoWidget.targetWidth : infoWidget.width) : 0
-    property real wWeather: (isModuleActive("weather") && weatherWidget) ? (weatherWidget.targetWidth !== undefined ? weatherWidget.targetWidth : weatherWidget.width) : 0
+    property real wLeft: (isModuleActive("left") && leftWidget) ? (contentWrapper.isTopNotch ? leftWidget.width : (leftWidget.targetWidth !== undefined ? leftWidget.targetWidth : leftWidget.width)) : 0
+    property real wWorkspaces: (isModuleActive("workspaces") && workspacesWidget) ? (contentWrapper.isTopNotch ? workspacesWidget.width : (workspacesWidget.targetWidth !== undefined ? workspacesWidget.targetWidth : workspacesWidget.width)) : 0
+    property real wFocus: (isModuleActive("focus") && focusWidget) ? (contentWrapper.isTopNotch ? focusWidget.width : (focusWidget.targetWidth !== undefined ? focusWidget.targetWidth : focusWidget.width)) : 0
+    property real wMedia: (isModuleActive("media") && mediaWidget) ? (contentWrapper.isTopNotch ? mediaWidget.width : (mediaWidget.targetWidth !== undefined ? mediaWidget.targetWidth : mediaWidget.width)) : 0
+    property real wVis: (isModuleActive("vis") && visWidget) ? (contentWrapper.isTopNotch ? visWidget.width : (visWidget.targetWidth !== undefined ? visWidget.targetWidth : visWidget.width)) : 0
+    property real wTray: (isModuleActive("tray") && trayWidget) ? (contentWrapper.isTopNotch ? trayWidget.width : (trayWidget.targetWidth !== undefined ? trayWidget.targetWidth : trayWidget.width)) : 0
+    property real wSysmon: (isModuleActive("sysmon") && sysMonWidget) ? (contentWrapper.isTopNotch ? sysMonWidget.width : (sysMonWidget.targetWidth !== undefined ? sysMonWidget.targetWidth : sysMonWidget.width)) : 0
+    property real wKb: (isModuleActive("kb") && kbWidget) ? (contentWrapper.isTopNotch ? kbWidget.width : (kbWidget.targetWidth !== undefined ? kbWidget.targetWidth : kbWidget.width)) : 0
+    property real wWifi: (isModuleActive("wifi") && wifiWidget) ? (contentWrapper.isTopNotch ? wifiWidget.width : (wifiWidget.targetWidth !== undefined ? wifiWidget.targetWidth : wifiWidget.width)) : 0
+    property real wBt: (isModuleActive("bt") && btWidget) ? (contentWrapper.isTopNotch ? btWidget.width : (btWidget.targetWidth !== undefined ? btWidget.targetWidth : btWidget.width)) : 0
+    property real wVol: (isModuleActive("vol") && volWidget) ? (contentWrapper.isTopNotch ? volWidget.width : (volWidget.targetWidth !== undefined ? volWidget.targetWidth : volWidget.width)) : 0
+    property real wBat: (isModuleActive("bat") && batWidget) ? (contentWrapper.isTopNotch ? batWidget.width : (batWidget.targetWidth !== undefined ? batWidget.targetWidth : batWidget.width)) : 0
+    property real wTimedate: (isModuleActive("timedate") && timeDateWidget) ? (contentWrapper.isTopNotch ? timeDateWidget.width : (timeDateWidget.targetWidth !== undefined ? timeDateWidget.targetWidth : timeDateWidget.width)) : 0
+    property real wInfo: (isModuleActive("info") && infoWidget) ? (contentWrapper.isTopNotch ? infoWidget.width : (infoWidget.targetWidth !== undefined ? infoWidget.targetWidth : infoWidget.width)) : 0
+    property real wWeather: (isModuleActive("weather") && weatherWidget) ? (contentWrapper.isTopNotch ? weatherWidget.width : (weatherWidget.targetWidth !== undefined ? weatherWidget.targetWidth : weatherWidget.width)) : 0
 
     function getW(moduleId) {
         let norm = BarModuleRegistry.normalizeId(moduleId);
@@ -297,16 +297,16 @@ Item {
         if (norm === "info") return wInfo;
         if (norm === "weather") return wWeather;
         let w = getModuleItem(norm);
-        return (w && isModuleActive(norm)) ? (w.targetWidth !== undefined ? w.targetWidth : w.width) : 0;
+        return (w && isModuleActive(norm)) ? (contentWrapper.isTopNotch ? w.width : (w.targetWidth !== undefined ? w.targetWidth : w.width)) : 0;
     }
 
-    property real gap: barWindow ? barWindow.s(2) : 2
-    property real groupGap: barWindow ? -barWindow.s(4) : -4
+    property real gap: barWindow ? barWindow.s(4) : 4
+    property real groupGap: barWindow ? barWindow.s(4) : 4
     property real gap8: barWindow ? barWindow.s(10) : 10
     property real groupPad: (!isSolid || distinctPills) ? (barWindow ? barWindow.s(4) : 4) : 0
 
-    property real rightGap: barWindow ? barWindow.s(6) : 6
-    property real rightGroupGap: barWindow ? barWindow.s(3) : 3
+    property real rightGap: barWindow ? barWindow.s(4) : 4
+    property real rightGroupGap: barWindow ? barWindow.s(4) : 4
 
     function calcTargetWidth(arr, rightSide) {
         let itemGap = rightSide ? rightGap : gap;
@@ -354,7 +354,26 @@ Item {
     // Keep enough equal space on both sides of the centered clock when modules grow.
     readonly property real clockCenterOffset: (flatCenterArr.indexOf("timedate") !== -1 && wTimedate > 0) ? (getModuleX("timedate", layoutState, 0) + wTimedate / 2) : cWidthTarget / 2
     readonly property real centeredNotchSpan: 2 * Math.max(lWidthTarget + lcGap + clockCenterOffset, rWidthTarget + crGap + cWidthTarget - clockCenterOffset) + edgeInset * 2
-    property real edgeSpan: centerByEdges ? Math.min(contentWrapper.width, Math.max(barWindow.effectiveBarWidth, packedSpan, isTopNotch ? centeredNotchSpan : 0)) : 0
+    readonly property bool balancedNotch: isTopNotch && flatCenterArr.indexOf("timedate") !== -1 && wTimedate > 0
+    // local symmetric notch v2
+    readonly property real balancedSideWidth: Math.max(lWidthTarget, rWidthTarget)
+    readonly property real notchSoloMediaWidth: {
+        if (!balancedNotch || flatLeftArr.indexOf("media") === -1
+                || flatRightArr.indexOf("media") !== -1) return 0;
+        for (let i = 0; i < flatLeftArr.length; i++) {
+            if (BarModuleRegistry.normalizeId(flatLeftArr[i]) !== "media" && getW(flatLeftArr[i]) > 0) return 0;
+        }
+        return rWidthTarget;
+    }
+    readonly property real balancedMinGap: Math.max(50,
+        clockCenterOffset - wTimedate / 2 + lcGap,
+        cWidthTarget - clockCenterOffset - wTimedate / 2 + crGap)
+    readonly property real balancedSpan: 2 * (Math.max(lWidthTarget, rWidthTarget) + wTimedate / 2 + balancedMinGap + edgeInset)
+    property real edgeSpan: balancedNotch
+        ? Math.min(contentWrapper.width, balancedSpan)
+        : (centerByEdges ? Math.min(contentWrapper.width, Math.max(barWindow.effectiveBarWidth, packedSpan, isTopNotch ? centeredNotchSpan : 0)) : 0)
+    readonly property real balancedGap: Math.max(0, Math.min(balancedMinGap,
+        (edgeSpan - 2 * edgeInset - wTimedate) / 2 - Math.max(lWidthTarget, rWidthTarget)))
     property real edgeStart: (contentWrapper.width - edgeSpan) / 2
 
     property real baseMinLeft: centerByEdges ? (edgeStart + edgeInset) : (barWindow ? (barWindow.horizontalOffset + borderInset + distinctEdgePadding) : distinctEdgePadding)
@@ -382,6 +401,7 @@ Item {
     property real effectiveMaxRight: (layoutState === "sys") ? sysEffectiveMaxRight : screenMaxRight
 
     property real rawCNaturalX: {
+        if (balancedNotch) return contentWrapper.width / 2 - clockCenterOffset;
         if (layoutState === "settings") return screenMaxRight - rWidthTarget - crGap - cWidthTarget;
         if (layoutState === "sys") {
             // Center the clock within the shortened notch, not the remaining screen.
@@ -401,6 +421,7 @@ Item {
     property real absMaxC: (rWidthTarget > 0) ? (maxBoundC - rWidthTarget - crGap - cWidthTarget) : (maxBoundC - cWidthTarget)
 
     property real cResolvedX: {
+        if (balancedNotch) return rawCNaturalX;
         if (absMinC <= absMaxC) {
             return Math.max(absMinC, Math.min(absMaxC, rawCNaturalX));
         }
@@ -410,6 +431,7 @@ Item {
     property real cFinalX: cResolvedX
 
     property real lFinalX: {
+        if (balancedNotch) return contentWrapper.width / 2 - wTimedate / 2 - balancedGap - balancedSideWidth;
         if (lWidthTarget <= 0) return baseMinLeft;
         if (layoutState === "settings") {
             return Math.max(screenMinLeft, cFinalX - lcGap - lWidthTarget);
@@ -419,33 +441,38 @@ Item {
     }
 
     property real rFinalX: {
+        if (balancedNotch) return contentWrapper.width / 2 + wTimedate / 2 + balancedGap;
         if (rWidthTarget <= 0) return (layoutState === "sys" ? sysEffectiveMaxRight : baseMaxRight);
         let naturalR = (layoutState === "sys") ? (sysEffectiveMaxRight - rWidthTarget) : (baseMaxRight - rWidthTarget);
         let minR = (cWidthTarget > 0) ? (cFinalX + cWidthTarget + crGap) : ((lWidthTarget > 0) ? (lFinalX + lWidthTarget + lcGap) : screenMinLeft);
         let pushedX = Math.max(naturalR, minR);
         return Math.min(screenMaxRight - rWidthTarget, pushedX);
     }
-    property real rFinalClampedX: Math.max(screenMinLeft, Math.min(screenMaxRight - rWidthTarget, rFinalX))
+    property real rFinalClampedX: balancedNotch ? rFinalX : Math.max(screenMinLeft, Math.min(screenMaxRight - rWidthTarget, rFinalX))
 
     property real dynamicMinX: {
+        if (balancedNotch) return edgeStart;
+        // Fit the notch to current content, including unequal side widths.
         let m = contentWrapper.width;
         let hasModules = (lWidthTarget > 0 || cWidthTarget > 0 || rWidthTarget > 0);
         if (lWidthTarget > 0) m = Math.min(m, lFinalX - borderInset - distinctEdgePadding);
         if (cWidthTarget > 0) m = Math.min(m, cFinalX - borderInset - distinctEdgePadding);
         if (rWidthTarget > 0) m = Math.min(m, rFinalClampedX - borderInset - distinctEdgePadding);
-        if (layoutState !== "default") {
+        if (isTopNotch || layoutState !== "default") {
             return hasModules ? Math.max(0, m) : contentWrapper.width / 2;
         }
         return Math.max(0, Math.min(m, barWindow ? barWindow.horizontalOffset : 0));
     }
 
     property real dynamicMaxX: {
+        if (balancedNotch) return edgeStart + edgeSpan;
+        // Fit the notch to current content, including unequal side widths.
         let m = 0;
         let hasModules = (lWidthTarget > 0 || cWidthTarget > 0 || rWidthTarget > 0);
         if (lWidthTarget > 0) m = Math.max(m, lFinalX + lWidthTarget + borderInset + distinctEdgePadding);
         if (cWidthTarget > 0) m = Math.max(m, cFinalX + cWidthTarget + borderInset + distinctEdgePadding);
         if (rWidthTarget > 0) m = Math.max(m, rFinalClampedX + rWidthTarget + borderInset + distinctEdgePadding);
-        if (layoutState !== "default") {
+        if (isTopNotch || layoutState !== "default") {
             return hasModules ? Math.min(contentWrapper.width, m) : contentWrapper.width / 2;
         }
         return Math.min(contentWrapper.width, Math.max(m, barWindow ? (barWindow.horizontalOffset + barWindow.effectiveBarWidth) : contentWrapper.width));
@@ -456,6 +483,26 @@ Item {
         if (id === "timedate" && (item === "time" || item === "clock")) return true;
         if (id === "info" && (item === "indicator" || item === "indicators" || item === "record")) return true;
         return false;
+    }
+
+    // Share any shorter side's spare length between visible modules.
+    // Its first and last modules stay against the same symmetric edge padding.
+    function notchSpreadOffset(id) {
+        if (!balancedNotch) return 0;
+        let norm = BarModuleRegistry.normalizeId(id);
+        let left = flatLeftArr.some(value => BarModuleRegistry.normalizeId(value) === norm);
+        let right = flatRightArr.some(value => BarModuleRegistry.normalizeId(value) === norm);
+        if (!left && !right) return 0;
+        let arr = left ? flatLeftArr : flatRightArr;
+        let count = 0, before = 0, found = false;
+        for (let i = 0; i < arr.length; i++) {
+            if (getW(arr[i]) <= 0) continue;
+            if (BarModuleRegistry.normalizeId(arr[i]) === norm) found = true;
+            else if (!found) before++;
+            count++;
+        }
+        let extra = Math.max(0, balancedSideWidth - (left ? lWidthTarget : rWidthTarget));
+        return found && count > 1 ? extra * before / (count - 1) : 0;
     }
 
     function getModuleX(id, state, centerBase) {
@@ -492,7 +539,7 @@ Item {
                     let w = getW(mId);
                     if (matchId(mId, id)) {
                         if (gItems > 0) groupOffset += innerGap;
-                        return baseX + groupOffset;
+                        return baseX + groupOffset + notchSpreadOffset(id);
                     }
                     if (w > 0) {
                         if (gItems > 0) groupOffset += innerGap;
@@ -505,7 +552,7 @@ Item {
                 }
             } else {
                 if (matchId(item, id)) {
-                    return baseX + offset;
+                    return baseX + offset + notchSpreadOffset(id);
                 }
                 let w = getW(item);
                 if (w > 0) {
@@ -602,12 +649,12 @@ Item {
         }
 
         Behavior on x {
-            enabled: contentWrapper.layoutAnimationsEnabled
+            enabled: contentWrapper.layoutAnimationsEnabled && !contentWrapper.balancedNotch
             NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
         }
 
         Behavior on width {
-            enabled: contentWrapper.layoutAnimationsEnabled
+            enabled: contentWrapper.layoutAnimationsEnabled && !contentWrapper.balancedNotch
             NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
         }
 
@@ -894,7 +941,7 @@ Item {
             providedBackdrop: { void groupBgRepeater.count; void contentWrapper.groupRev; return contentWrapper ? contentWrapper.backdropFor(modelData) : null; }
             targetX: contentWrapper.getModuleX(modelData, contentWrapper.layoutState)
             suppressAnimation: contentWrapper.suppressAnimation
-            layoutAnimationsEnabled: contentWrapper.layoutAnimationsEnabled
+            layoutAnimationsEnabled: contentWrapper.layoutAnimationsEnabled && !contentWrapper.balancedNotch
             isRightAligned: (modelData === "tray") ? contentWrapper.trayAlignRight : false
 
             Component.onCompleted: {

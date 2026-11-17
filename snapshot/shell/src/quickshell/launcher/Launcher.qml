@@ -37,6 +37,10 @@ PanelWindow {
     }
 
     function closeLauncher() {
+        if (launcherWindow.projectPromptOpen) {
+            launcherWindow.cancelProjectPrompt();
+            return;
+        }
         LauncherController.hide();
     }
 
@@ -355,6 +359,7 @@ PanelWindow {
     property string pendingQuery: ""
 
     function grabInputFocus() {
+        if (launcherWindow.projectPromptOpen) { editorPicker.forceActiveFocus(); return; }
         searchInput.forceActiveFocus();
         if (typeof searchInput.forceInputFocus === "function") {
             searchInput.forceInputFocus();
@@ -384,48 +389,139 @@ PanelWindow {
         }
     }
 
-    property string fileSearchScript: "import os, sys, json\nq = sys.argv[1] if len(sys.argv) > 1 else ''\nhome = os.path.expanduser('~')\nres = []\nif q.startswith('/') or q.startswith('~'):\n    p = os.path.expanduser(q)\n    d = p if (os.path.isdir(p) and (q.endswith('/') or q.endswith('\\\\'))) else (os.path.dirname(p) or home)\n    pref = '' if (os.path.isdir(p) and (q.endswith('/') or q.endswith('\\\\'))) else os.path.basename(p).lower()\n    if os.path.isdir(d):\n        try:\n            entries = sorted(os.listdir(d), key=lambda x: (not os.path.isdir(os.path.join(d, x)), x.lower()))\n            for item in entries:\n                if item.startswith('.') and not pref.startswith('.'):\n                    continue\n                if not pref or pref in item.lower():\n                    full = os.path.join(d, item)\n                    res.append({'name': item, 'path': full, 'isDir': os.path.isdir(full)})\n                    if len(res) >= 40: break\n        except Exception: pass\nelse:\n    s = q.lower().strip()\n    targets = [home, os.path.join(home, 'Desktop'), os.path.join(home, 'Documents'), os.path.join(home, 'Downloads'), os.path.join(home, 'Pictures'), os.path.join(home, 'Videos'), os.path.join(home, 'Music')]\n    seen = set()\n    for t in targets:\n        if not os.path.isdir(t): continue\n        try:\n            for root, dirs, files in os.walk(t):\n                rel = os.path.relpath(root, t)\n                if rel != '.' and rel.count(os.sep) >= 2:\n                    dirs.clear()\n                    continue\n                dirs[:] = [dr for dr in dirs if not dr.startswith('.') and dr not in ('node_modules', '.git', '.cache', 'target', 'build', '.local')]\n                if s:\n                    for dr in dirs:\n                        if s in dr.lower():\n                            full = os.path.join(root, dr)\n                            if full not in seen:\n                                seen.add(full)\n                                res.append({'name': dr, 'path': full, 'isDir': True})\n                                if len(res) >= 40: break\n                for fn in files:\n                    if fn.startswith('.'): continue\n                    if not s or s in fn.lower():\n                        full = os.path.join(root, fn)\n                        if full not in seen:\n                            seen.add(full)\n                            res.append({'name': fn, 'path': full, 'isDir': False})\n                            if len(res) >= 40: break\n                if len(res) >= 40: break\n        except Exception: pass\n        if len(res) >= 40: break\nprint(json.dumps(res[:40]))"
+    readonly property string projectHelper: Caching.qsDir + "/launcher/project_search.py"
+    property int pathSearchGeneration: 0
+    property int pathSearchTab: 0
+    property var applicationMatches: []
+    property string applicationQuery: ""
+    property bool projectPromptOpen: false
+    property string selectedProjectPath: ""
+    property var projectEditors: []
+    property bool projectEditorsLoading: false
+    property bool projectLaunching: false
+    property string projectError: ""
+
+    function cancelProjectPrompt() {
+        if (launcherWindow.projectLaunching) return;
+        launcherWindow.projectPromptOpen = false;
+        launcherWindow.projectError = "";
+        launcherWindow.grabInputFocus();
+    }
+
+    function showProjectPrompt(path) {
+        launcherWindow.selectedProjectPath = path;
+        launcherWindow.projectError = "";
+        launcherWindow.projectLaunching = false;
+        launcherWindow.projectPromptOpen = true;
+        launcherWindow.projectEditorsLoading = true;
+        editorDiscovery.running = true;
+        Qt.callLater(() => editorPicker.forceActiveFocus());
+    }
+
+    function openProject(editorId) {
+        if (launcherWindow.projectLaunching) return;
+        launcherWindow.projectLaunching = true;
+        launcherWindow.projectError = "";
+        editorLaunch.command = ["python3", launcherWindow.projectHelper, "open", "--editor", editorId, "--path", launcherWindow.selectedProjectPath];
+        editorLaunch.running = true;
+    }
+
+    function pathResultItem(item) {
+        return {
+            name: item.name,
+            description: (item.isProject ? "Project · " : item.isDir ? "Folder · " : "File · ") + item.path,
+            desktop_id: "", icon: "",
+            fontIcon: item.isProject ? "󰅩" : launcherWindow.getFileFontIcon(item.name, item.isDir),
+            score: item.score || 0, isCommand: false, command: "", isCalc: false,
+            isSearch: false, searchUrl: "", calcResult: "", isWidget: false,
+            widgetTarget: "", isFile: true, filePath: item.path,
+            isDir: !!item.isDir, isProject: !!item.isProject
+        };
+    }
+
+    function queuePathSearch(query, tab) {
+        launcherWindow.pathSearchGeneration++;
+        launcherWindow.pathSearchTab = tab;
+        if (fileSearchProcess.running) fileSearchProcess.running = false;
+        let value = query ? query.trim() : "";
+        if (!launcherWindow.isVisible || launcherWindow.projectPromptOpen) return;
+        if (tab === 0 && (value.length < 2 || value.startsWith(">") || value.startsWith("?"))) return;
+        fileSearchProcess.command = ["python3", launcherWindow.projectHelper, "search",
+            "--query=" + value, "--request", String(launcherWindow.pathSearchGeneration),
+            "--mode", tab === 1 ? "files" : "all", "--cache-dir", Caching.getCacheDir("launcher")];
+        fileSearchProcess.running = true;
+    }
+
+    Process {
+        id: projectIndexer
+        command: ["python3", launcherWindow.projectHelper, "index", "--cache-dir", Caching.getCacheDir("launcher")]
+        onExited: code => {
+            if (code === 0 && launcherWindow.isVisible && !launcherWindow.projectPromptOpen && launcherWindow.currentTabIndex < 2)
+                launcherWindow.queuePathSearch(searchInput.text, launcherWindow.currentTabIndex);
+        }
+    }
 
     Process {
         id: fileSearchProcess
         running: false
         command: []
-
         stdout: StdioCollector {
             onStreamFinished: {
                 try {
-                    if (this.text && this.text.trim().length > 0) {
-                        let parsed = JSON.parse(this.text);
-                        let items = [];
-                        for (let i = 0; i < parsed.length; i++) {
-                            let p = parsed[i];
-                            items.push({
-                                name: p.name,
-                                description: p.path,
-                                desktop_id: "",
-                                icon: "",
-                                fontIcon: launcherWindow.getFileFontIcon(p.name, p.isDir),
-                                score: 0,
-                                isCommand: false,
-                                command: "",
-                                isCalc: false,
-                                isSearch: false,
-                                searchUrl: "",
-                                calcResult: "",
-                                isWidget: false,
-                                widgetTarget: "",
-                                isFile: true,
-                                filePath: p.path,
-                                isDir: p.isDir
-                            });
-                        }
-                        if (launcherWindow.currentTabIndex === 1) {
-                            launcherWindow.applyModelItems(items);
-                        }
-                    } else if (launcherWindow.currentTabIndex === 1) {
-                        launcherWindow.applyModelItems([]);
+                    let response = JSON.parse(this.text);
+                    if (!launcherWindow.isVisible || launcherWindow.projectPromptOpen ||
+                        response.request !== launcherWindow.pathSearchGeneration ||
+                        response.query !== searchInput.text.trim() ||
+                        launcherWindow.currentTabIndex !== launcherWindow.pathSearchTab) return;
+                    let items = response.items.map(item => launcherWindow.pathResultItem(item));
+                    if (launcherWindow.currentTabIndex === 0) {
+                        if (launcherWindow.applicationQuery !== response.query) return;
+                        items = launcherWindow.applicationMatches.concat(items);
+                        items.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
                     }
-                } catch(e) {}
+                    let selected = appList.currentIndex >= 0 && appList.currentIndex < appModel.count ? appModel.get(appList.currentIndex) : null;
+                    let key = selected ? (selected.filePath || selected.desktop_id || selected.name) : "";
+                    let preserve = launcherWindow.isKeyboardNav;
+                    launcherWindow.applyModelItems(items);
+                    if (preserve && key) {
+                        for (let i = 0; i < items.length; i++) {
+                            if ((items[i].filePath || items[i].desktop_id || items[i].name) === key) {
+                                appList.currentIndex = i; break;
+                            }
+                        }
+                    }
+                } catch (error) { console.warn("Launcher file search:", error); }
+            }
+        }
+    }
+
+    Process {
+        id: editorDiscovery
+        command: ["python3", launcherWindow.projectHelper, "editors"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                launcherWindow.projectEditorsLoading = false;
+                try { launcherWindow.projectEditors = JSON.parse(this.text); }
+                catch (error) { launcherWindow.projectEditors = []; launcherWindow.projectError = "Could not read installed editors."; }
+            }
+        }
+        onExited: code => {
+            launcherWindow.projectEditorsLoading = false;
+            if (code !== 0) launcherWindow.projectError = "Could not read installed editors.";
+        }
+    }
+
+    Process {
+        id: editorLaunch
+        stderr: StdioCollector { id: editorLaunchErrors }
+        onExited: code => {
+            launcherWindow.projectLaunching = false;
+            if (code === 0) {
+                launcherWindow.projectPromptOpen = false;
+                launcherWindow.closeLauncher();
+            } else {
+                launcherWindow.projectError = editorLaunchErrors.text.trim() || "Could not open this project. Try another editor.";
+                editorPicker.forceActiveFocus();
             }
         }
     }
@@ -508,6 +604,7 @@ PanelWindow {
 
     onIsVisibleChanged: {
         if (isVisible) {
+            if (!projectIndexer.running) projectIndexer.running = true;
             tabSwitch.currentIndex = launcherWindow.currentTabIndex;
             restartItemsIntro();
             if (!launcherWindow.appsLoaded) {
@@ -539,6 +636,9 @@ PanelWindow {
             focusRetryTimer.restart();
             focusFinalTimer.restart();
         } else {
+            launcherWindow.projectPromptOpen = false;
+            launcherWindow.projectError = "";
+            launcherWindow.pathSearchGeneration++;
             itemsIntroSequence.stop();
             introItems = 0.0;
             launcherWindow.appsLoaded = false;
@@ -820,11 +920,7 @@ PanelWindow {
     function executeFileSearch(query) {
         launcherWindow.isKeyboardNav = false;
         if (keyboardNavTimer.running) keyboardNavTimer.stop();
-        if (fileSearchProcess.running) {
-            fileSearchProcess.running = false;
-        }
-        fileSearchProcess.command = ["python3", "-c", launcherWindow.fileSearchScript, query ? query.trim() : ""];
-        fileSearchProcess.running = true;
+        launcherWindow.queuePathSearch(query, 1);
     }
 
     function isSubsequence(sub, str) {
@@ -840,6 +936,7 @@ PanelWindow {
     }
 
     function applyModelItems(filtered) {
+        filtered = filtered.map(item => Object.assign({isProject: false}, item));
         let minCount = Math.min(appModel.count, filtered.length);
         for (let i = 0; i < minCount; i++) {
             let cur = appModel.get(i);
@@ -860,7 +957,8 @@ PanelWindow {
                 || cur.widgetTarget !== target.widgetTarget
                 || cur.isFile !== target.isFile
                 || cur.filePath !== target.filePath
-                || cur.isDir !== target.isDir) {
+                || cur.isDir !== target.isDir
+                || cur.isProject !== target.isProject) {
                 appModel.set(i, target);
             }
         }
@@ -1053,7 +1151,10 @@ PanelWindow {
             });
         }
 
+        launcherWindow.applicationMatches = filtered;
+        launcherWindow.applicationQuery = query.trim();
         applyModelItems(filtered);
+        launcherWindow.queuePathSearch(query, 0);
     }
 
     function activateIndex(index) {
@@ -1062,26 +1163,12 @@ PanelWindow {
         if (!item) return;
 
         if (item.isFile) {
-            let script = "p=\"$1\"\n"
-                + "if [ -d \"$p\" ]; then\n"
-                + "  xdg-open \"$p\"\n"
-                + "  exit 0\n"
-                + "fi\n"
-                + "mime=$(xdg-mime query filetype \"$p\" 2>/dev/null)\n"
-                + "handler=\"\"\n"
-                + "if [ -n \"$mime\" ]; then\n"
-                + "  handler=$(xdg-mime query default \"$mime\" 2>/dev/null)\n"
-                + "fi\n"
-                + "if [ -n \"$handler\" ]; then\n"
-                + "  xdg-open \"$p\" 2>/dev/null && exit 0\n"
-                + "fi\n"
-                + "if command -v ski >/dev/null 2>&1; then\n"
-                + "  ski \"$p\" >/dev/null 2>&1 &\n"
-                + "else\n"
-                + "  xdg-open \"$(dirname \"$p\")\" >/dev/null 2>&1 &\n"
-                + "fi";
-            Quickshell.execDetached(["bash", "-c", script, "_", item.filePath]);
-            closeLauncher();
+            if (item.isDir && item.isProject) {
+                launcherWindow.showProjectPrompt(item.filePath);
+            } else {
+                Quickshell.execDetached(["python3", launcherWindow.projectHelper, "file", "--path", item.filePath]);
+                closeLauncher();
+            }
             return;
         }
 
@@ -1185,6 +1272,7 @@ PanelWindow {
 
     Item {
         id: container
+        enabled: !launcherWindow.projectPromptOpen
 
         MouseArea {
             anchors.fill: parent
@@ -1339,6 +1427,7 @@ PanelWindow {
 
                 Input {
                     id: searchInput
+                    enabled: !launcherWindow.projectPromptOpen
                     z: 10
                     focus: true
                     Keys.priority: Keys.BeforeItem
@@ -1368,7 +1457,7 @@ PanelWindow {
                     showClearButton: true
 
                     onHasFocusChanged: {
-                        if (!searchInput.hasFocus && launcherWindow.isVisible) {
+                        if (!searchInput.hasFocus && launcherWindow.isVisible && !launcherWindow.projectPromptOpen) {
                             if (launcherWindow.currentTabIndex === 2) {
                                 emojiGrid.forceActiveFocus();
                             } else {
@@ -2199,4 +2288,19 @@ PanelWindow {
             }
         }
     }
+    ProjectEditorPicker {
+        id: editorPicker
+        anchors.fill: parent
+        z: 1000
+        visible: launcherWindow.projectPromptOpen && launcherWindow.isVisible
+        enabled: visible
+        projectPath: launcherWindow.selectedProjectPath
+        editors: launcherWindow.projectEditors
+        loading: launcherWindow.projectEditorsLoading
+        launching: launcherWindow.projectLaunching
+        errorText: launcherWindow.projectError
+        onChosen: editorId => launcherWindow.openProject(editorId)
+        onCanceled: launcherWindow.cancelProjectPrompt()
+    }
+
 }

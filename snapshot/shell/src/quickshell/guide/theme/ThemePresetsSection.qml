@@ -35,8 +35,8 @@ Rectangle {
             rootObj: section.tab.rootObj
             settingId: "colors"
             icon: "󰏘"
-            title: I18n.t("guide.theme.colors.title")
-            description: I18n.t("guide.theme.colors.desc")
+            title: "Color schemes"
+            description: "Colors only · Complete desktop layouts are saved above"
             searchKeywords: "colors theme presets scheme palette matugen catppuccin"
             baseColor: "transparent"
             hoverColor: "transparent"

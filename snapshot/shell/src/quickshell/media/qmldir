@@ -11,3 +11,5 @@ MusicPopup 1.0 MusicPopup.qml
 MusicPresetButton 1.0 MusicPresetButton.qml
 MusicTrackControls 1.0 MusicTrackControls.qml
 MusicQueueView 1.0 MusicQueueView.qml
+MusicTrackInfo 1.0 MusicTrackInfo.qml
+MusicWaveform 1.0 MusicWaveform.qml

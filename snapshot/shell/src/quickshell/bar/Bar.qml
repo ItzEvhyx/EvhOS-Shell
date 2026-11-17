@@ -202,7 +202,7 @@ Variants {
                 function onHoveredChanged() { barWindowRoot.checkHideTimer(); }
             }
 
-            readonly property bool localPanelOpen: isNotifOpen || isSysOpen || (TrayMenuController.isVisible && TrayMenuController.screen === barWindowRoot.screen)
+            readonly property bool localPanelOpen: isNotifOpen || isSysOpen || BarGeometry.holdsOpen(screen ? screen.name : "") || (TrayMenuController.isVisible && TrayMenuController.screen === barWindowRoot.screen)
             onLocalPanelOpenChanged: checkHideTimer()
 
             // Only the hidden panel's thin input strip catches the double-click.
@@ -304,6 +304,23 @@ Variants {
             }
 
             property bool isVertical: barPosition === "left" || barPosition === "right"
+
+            readonly property var publishedGeometry: {
+                if (!screen) return null;
+                let sw = screen.width, sh = screen.height;
+                let margin = (isFill || autohide) ? 0 : s(4);
+                let thick = barHeight + edgePadding + margin;
+                return {
+                    position: barPosition,
+                    x: isVertical ? (barPosition === "right" ? sw - thick : margin) : currentBarMinX,
+                    y: isVertical ? currentBarMinY : (barPosition === "bottom" ? sh - thick : margin),
+                    width: isVertical ? barHeight + edgePadding : Math.max(1, currentBarMaxX - currentBarMinX),
+                    height: isVertical ? Math.max(1, currentBarMaxY - currentBarMinY) : barHeight + edgePadding,
+                    revealed: isRevealed && !shouldHideForRedact
+                };
+            }
+            onPublishedGeometryChanged: if (screen && publishedGeometry) BarGeometry.publish(screen.name, publishedGeometry)
+            Component.onDestruction: if (screen) BarGeometry.remove(screen.name)
 
             property real baseScale: Scaler.baseScale
 

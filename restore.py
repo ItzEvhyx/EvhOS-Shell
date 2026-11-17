@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Restore a reviewed EvhOS snapshot into a user's home; backups are mandatory."""
-import argparse, datetime, os, shutil, sys
+import argparse, datetime, json, os, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SOURCE_HOME = '/home/yhvhan'
+SOURCE_HOME = json.loads((ROOT/'snapshot/metadata.json').read_text()).get('source_home', '/home/yhvhan') if (ROOT/'snapshot/metadata.json').exists() else '/home/yhvhan'
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
@@ -16,6 +16,8 @@ def main():
         ap.error('Run as the desktop user, not root.')
     if not (ROOT/'snapshot/shell/src/quickshell/Shell.qml').is_file():
         ap.error('Snapshot is incomplete; extract all repository files first.')
+    if (ROOT/'tools/check-snapshot.py').is_file():
+        subprocess.run([sys.executable, str(ROOT/'tools/check-snapshot.py')], check=True)
     backup=home/'.local/state/evhos-backups'/datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
     mappings=[(ROOT/'snapshot/shell',home/'.local/share/serpantinum'),(ROOT/'snapshot/home',home)]
     items=[]
@@ -38,7 +40,7 @@ def main():
             elif target.is_file(): shutil.copy2(target,saved)
             else: raise SystemExit('Refusing to overwrite non-file: '+str(target))
         if source.is_symlink():
-            target.symlink_to(os.readlink(source)); continue
+            target.symlink_to(os.readlink(source).replace(SOURCE_HOME,str(home))); continue
         data=source.read_bytes()
         if b'\x00' not in data:
             try:
