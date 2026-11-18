@@ -1,50 +1,34 @@
 <div align="center">
-  <img src="docs/icons/header.svg" alt="EvhOS — a personal Wayland desktop built with Hyprland and Quickshell" width="100%">
-  <p><strong>A monochrome desktop, made personal.</strong><br>Built around Hyprland, Quickshell, and a customized Serpantinum shell.</p>
-  <p><a href="#preview">Preview</a> &nbsp; / &nbsp; <a href="#features">Features</a> &nbsp; / &nbsp; <a href="#installation">Installation</a> &nbsp; / &nbsp; <a href="#configuration">Configuration</a> &nbsp; / &nbsp; <a href="#recovery">Recovery</a></p>
+  <img src="docs/icons/header.svg" alt="EvhOS, a personal Wayland desktop built with Hyprland and Quickshell" width="100%">
+  <p>A customized Serpantinum shell with a floating bar, workspaces, desktop themes, and built-in tools.</p>
+  <p><a href="#preview">Screenshots</a> &nbsp; / &nbsp; <a href="#features">Features</a> &nbsp; / &nbsp; <a href="#installation">Installation</a> &nbsp; / &nbsp; <a href="#configuration">Configuration</a> &nbsp; / &nbsp; <a href="#recovery">Recovery</a></p>
 </div>
-
----
-
-<img src="docs/icons/overview.svg" width="24" height="24" alt="">  **A desktop shaped around the details**
-
-EvhOS is a personal Wayland desktop setup with a dark, restrained visual language. It brings a customized status bar, dock, launcher, settings panels, notifications, media controls, lock screen, and login theme together into one configuration. This repository captures the current CachyOS setup so it can be adapted to another machine.
-
-EvhOS is a **shell configuration and fork**, not a Linux distribution. It builds on [Serpantinum](https://github.com/ilyamiro/serpantinum), Hyprland, and Quickshell. Internal paths and commands still use `serpantinum` because the components rely on those names.
 
 ## Preview
 
-<img src="docs/icons/gallery.svg" width="24" height="24" alt=""> &nbsp; Four views of the setup
-
-| Desktop and settings | Welcome screen |
+| Desktop | Welcome screen |
 | :---: | :---: |
-| <img src="docs/images/desktop.png" alt="EvhOS desktop with its About settings panel, top bar, and dock" width="100%"> | <img src="docs/images/welcome.png" alt="EvhOS Welcome settings screen with ASCII avatar" width="100%"> |
-| The desktop, bar, dock, and settings panel. | The EvhOS welcome screen and branding. |
-| **Lock screen editor** | **SDDM login** |
-| <img src="docs/images/lockscreen-editor.png" alt="EvhOS lock screen layout shown in the editor" width="100%"> | <img src="docs/images/sddm.png" alt="Torii SDDM theme shown in test mode" width="100%"> |
-| The lock-screen layout shown in its editor. | Torii Minimal, shown in SDDM test mode. |
-
-The login preview uses test-mode session information; available sessions on a real machine depend on what is installed.
+| [![EvhOS desktop with the floating top bar, dock, and About panel](docs/images/desktop.png)](docs/images/desktop.png) | [![Welcome screen with the EvhOS wordmark and ASCII portrait](docs/images/welcome.png)](docs/images/welcome.png) |
+| Floating top bar, pinned apps, and the About panel. | The shell's settings home and ASCII portrait. |
+| **Lock-screen editor** | **Torii login** |
+| [![Lock-screen editor with a large clock and widget controls](docs/images/lockscreen-editor.png)](docs/images/lockscreen-editor.png) | [![Torii Minimal login with a gate on a misty lake](docs/images/sddm.png)](docs/images/sddm.png) |
+| Arrange the clock, media player, and other lock-screen widgets. | Earlier SDDM theme, captured in test mode. |
 
 ## Features
 
-| Component | Included in the snapshot |
-| :--- | :--- |
-| **Desktop shell** | A customized Quickshell interface, with a floating top bar, dock, launcher, and pop-up panels. |
-| **Workspace overview** | Rounded workspace cards, live compositor blur, and keyboard selection. Super+W or three fingers up opens the overview. Super+Left and Super+Right switch directly between workspaces. |
-| **Privacy mode** | A black screen overlay while the laptop and agents keep running, available in the notification menu in place of airplane mode. |
-| **Project and file search** | Search project folders in the launcher, choose an installed editor with the mouse or arrow keys, and open the folder there. Ordinary files open with their default application. |
-| **Wallpaper picker** | Larger rounded carousel with sliding/fading previews, cached thumbnails, live video wallpapers and automatic discovery of new, renamed or removed media. |
-| **Media player** | Custom cover/vinyl layouts, waveform controls and a saved artwork mode. |
-| **Calendar and audio** | ASCII weather/calendar panel, balanced notch, matching volume cards and a 12-hour clock. |
-| **Boot animation** | EvhOs dotted Plymouth animation; see the optional boot setup in the installation guide. |
-| **Controls** | Notifications, media, audio, networking, power controls, clipboard and quick actions. Some integrations require optional dependencies. |
-| **Appearance** | Saved desktop themes and their referenced wallpapers, eight EvhOS icon packs, fonts, and the EvhOS avatar. |
-| **Process Desk** | Right-click the top bar for CPU, memory, disk and temperature readings with history graphs. Available sensors depend on the device. |
-| **Rich notepad** | Quick Actions editor with rich text, formatting shortcuts, undo, and redo. The installer builds its native plugin for the destination's Qt. |
-| **Lock screen** | A customizable layout with clock, media and other widgets. |
-| **Boot menu and login** | Optional Obsidian GRUB theme and Obsidian Frame SDDM greeter with wallpaper and profile image. |
-| **Recovery** | A restore script that previews its actions and backs up files it replaces. |
+- **Navigate workspaces.** Press `Super+W` or swipe up with three fingers to open the overview. Use the arrow keys and Enter to select a workspace, or press `Super+←` and `Super+→` to switch directly.
+- **Launch apps, files, and projects.** Search from the launcher, open files in their default app, and choose which installed editor opens a project folder.
+- **Save complete desktop layouts.** Switch between named presets that capture wallpaper, the top bar, dock pins, and per-monitor widgets. [Desktop presets](#desktop-presets)
+- **Browse still and live wallpapers.** Preview images and videos in the carousel. The picker discovers new files in both wallpaper folders. [Wallpaper folders](#wallpaper-folders)
+- **Make the desktop your own.** Choose from eight EvhOS icon packs and customize the bar, dock, and lock-screen widget layout.
+- **Monitor your system.** Right-click the top bar to open Process Desk for CPU, GPU, RAM, storage, and temperature graphs, plus a sortable process list. Sensor availability depends on your hardware.
+- **Write formatted notes.** Open the rich notepad from Quick Actions. Format text with keyboard shortcuts and use undo and redo while editing.
+- **Play music your way.** Use the waveform controls and switch between cover art and a vinyl view. The player remembers your choice.
+- **Handle everyday controls from the bar.** Check notifications, the calendar, and ASCII weather. Adjust audio, Wi-Fi, Bluetooth, and power, or open the clipboard and Quick Actions.
+- **Blank the screen while work continues.** Enable Privacy Mode from the notification menu to cover the desktop while apps keep running.
+- **Theme boot and login.** The snapshot includes optional Obsidian GRUB and Obsidian Frame SDDM themes, plus an EvhOS Plymouth animation. [Installation guide](docs/INSTALL.md)
+
+The repository captures the CachyOS setup so it can be adapted to another Hyprland machine. The shell builds on [Serpantinum](https://github.com/ilyamiro/serpantinum) and keeps its internal `serpantinum` paths and commands.
 
 ## Installation
 
