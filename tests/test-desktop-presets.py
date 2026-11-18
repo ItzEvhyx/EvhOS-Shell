@@ -40,6 +40,7 @@ class DesktopPresetsTest(unittest.TestCase):
         self.run_cli('save', 'My desktop', ok=False)
         self.write(self.settings, {'theme': {}, 'bar': {}, 'dock': {}, 'general': {'language': 'fr'}})
         self.write(self.layout, [])
+        self.write(self.state/'desktop-preset-session.json', {'version': 1, 'activeName': '', 'session': None})
         self.run_cli('apply', 'My desktop', '--offline')
         settings = json.loads(self.settings.read_text())
         self.assertEqual(settings['general']['language'], 'fr')
@@ -51,12 +52,17 @@ class DesktopPresetsTest(unittest.TestCase):
         self.assertEqual(previous['widgets']['eDP-1'], [])
     def test_missing_wallpaper_and_invalid_monitor_do_not_modify(self):
         self.run_cli('save', 'Safe')
-        before = self.settings.read_bytes()
         self.wall.unlink()
-        self.run_cli('apply', 'Safe', '--offline', ok=False)
-        self.assertEqual(self.settings.read_bytes(), before)
+        self.run_cli('apply', 'Safe', '--offline')
         preset = self.state / 'desktop-presets/Safe.json'
         obj = json.loads(preset.read_text())
+        asset = Path(obj['wallpapers']['eDP-1'])
+        self.assertEqual(asset.read_bytes(), b'image')
+        asset.unlink()
+        before = self.settings.read_bytes()
+        self.run_cli('apply', 'Safe', '--offline', ok=False)
+        self.assertEqual(self.settings.read_bytes(), before)
+        asset.write_bytes(b'image')
         obj['widgets']['../escape'] = []
         self.write(preset, obj)
         self.run_cli('apply', 'Safe', '--offline', ok=False)
@@ -74,8 +80,10 @@ class DesktopPresetsTest(unittest.TestCase):
         def ipc(target, action, *arguments):
             if target == 'desktopPresetConfig' and action == 'apply':
                 settings = json.loads(self.settings.read_text())
-                settings.update(json.loads(arguments[0]))
-                self.write(self.settings, settings)
+                updates = json.loads(arguments[0])
+                visual = updates.pop('__visual')
+                settings.update(updates)
+                self.write(self.settings, module.apply_visual(settings, visual))
             return 'ok'
         def partially_failed_write(data, monitors):
             self.write(self.settings, dict(json.loads(before_settings), **data['settings']))
@@ -89,7 +97,7 @@ class DesktopPresetsTest(unittest.TestCase):
             data = json.loads((self.state/'desktop-presets/Safe.json').read_text())
             with self.assertRaisesRegex(RuntimeError, 'simulated compositor IPC failure'):
                 module.apply(data)
-        self.assertEqual(json.loads(self.settings.read_bytes()), json.loads(before_settings))
+        self.assertEqual(json.loads(self.settings.read_bytes()), module.apply_visual(json.loads(before_settings), module.capture_visual(json.loads(before_settings))))
         self.assertEqual(json.loads(self.layout.read_bytes()), json.loads(before_layout))
 
     def test_bad_name(self):

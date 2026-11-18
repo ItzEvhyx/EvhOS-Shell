@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 3,
   "settings": {
     "theme": {
       "fontFamily": "mtx",
@@ -31,7 +31,8 @@
         "yellow": "#ffffff"
       },
       "blurBackground": false,
-      "blurStyle": "blur"
+      "blurStyle": "blur",
+      "iconPack": "EvhOs-Facet"
     },
     "bar": {
       "workspacesStyle": "numbers",
@@ -82,7 +83,10 @@
       },
       "menuStyle": "icon",
       "menuShowSettings": true,
-      "menuShowLauncher": false
+      "menuShowLauncher": false,
+      "mediaWidth": 220,
+      "height": 40,
+      "centerByEdges": true
     },
     "dock": {
       "enabled": true,
@@ -101,43 +105,43 @@
           "name": "Cursor",
           "comment": "The AI Code Editor.",
           "desktop_id": "cursor",
-          "icon": "co.anysphere.cursor"
+          "icon": "/home/yhvhan/.local/share/icons/EvhOs-Satin/256x256/apps/evhos-satin-cursor.png"
         },
         {
           "name": "Files",
           "comment": "Access and organize files",
           "desktop_id": "ski",
-          "icon": "ski"
+          "icon": "/home/yhvhan/.local/share/icons/EvhOs-Satin/256x256/apps/evhos-satin-ski.png"
         },
         {
           "name": "Brave",
           "comment": "Access the Internet",
           "desktop_id": "brave-browser",
-          "icon": "brave-desktop"
+          "icon": "/home/yhvhan/.local/share/icons/EvhOs-Satin/256x256/apps/evhos-satin-brave.png"
         },
         {
           "name": "Microsoft Teams (PWA)",
           "comment": "",
           "desktop_id": "brave-cifhbcnohmdccbgoicgdjpfamggdegmo-Default",
-          "icon": "/home/yhvhan/.local/share/icons/hicolor/512x512/apps/brave-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.png"
+          "icon": "/home/yhvhan/.local/share/icons/EvhOs-Satin/256x256/apps/evhos-satin-teams.png"
         },
         {
           "name": "Resources",
           "comment": "Keep an eye on system resources",
           "desktop_id": "org.gnome.Resources",
-          "icon": "org.gnome.Resources"
+          "icon": "/home/yhvhan/.local/share/icons/EvhOs-Satin/256x256/apps/evhos-satin-resources.png"
         },
         {
           "name": "ChatGPT",
           "comment": "ChatGPT by OpenAI",
           "desktop_id": "chatgpt",
-          "icon": "chatgpt"
+          "icon": "/home/yhvhan/.local/share/icons/EvhOs-Satin/256x256/apps/evhos-satin-chatgpt.png"
         },
         {
           "name": "Slack",
           "comment": "Slack Desktop",
           "desktop_id": "slack",
-          "icon": "slack"
+          "icon": "/home/yhvhan/.local/share/icons/EvhOs-Satin/256x256/apps/evhos-satin-slack.png"
         }
       ],
       "overrideBoundsCorrection": false,
@@ -155,6 +159,38 @@
     "eDP-1": []
   },
   "wallpapers": {
-    "eDP-1": "/home/yhvhan/Pictures/Wallpapers/Pictures/wallpaper_imagepack5_13.png"
-  }
+    "eDP-1": "/home/yhvhan/.local/state/serpantinum/desktop-preset-assets/8d2a1eabd9ea8861b615af3dec28ed4526866abb48dc1c7e004123f8aad3baba/wallpaper_imagepack5_13.png"
+  },
+  "visual": {
+    "launcher": {
+      "position": "center",
+      "width": 800,
+      "itemCount": 7
+    },
+    "osd": {
+      "horizontalPosition": 50,
+      "verticalPosition": 90,
+      "orientation": "horizontal",
+      "showCapsLock": true,
+      "showNumLock": true,
+      "showAirplane": true,
+      "attachToBar": false
+    },
+    "notifications": {
+      "position": "top right",
+      "horizontalPosition": 88,
+      "verticalPosition": 15,
+      "showEmptyGraphic": true
+    },
+    "lockscreen": {
+      "backgroundMode": "follow",
+      "customBackground": ""
+    }
+  },
+  "wallpaperNames": {
+    "eDP-1": "wallpaper_imagepack5_13.png"
+  },
+  "id": "dd470ebb-1cb9-414a-bb28-b54d6bf7a641",
+  "createdAt": "2026-11-17T14:01:50.713817+00:00",
+  "updatedAt": "2026-11-18T04:09:46.025754+00:00"
 }

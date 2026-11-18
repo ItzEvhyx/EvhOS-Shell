@@ -30,6 +30,8 @@
       "bar": "Bar",
       "launcher": "Launcher",
       "theme": "Theme",
+      "preset_themes": "Presets Themes",
+      "icons": "Icons",
       "notifications": "Notifications",
       "idle": "Idle",
       "wellbeing": "Wellbeing",

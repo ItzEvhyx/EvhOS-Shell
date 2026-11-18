@@ -49,6 +49,8 @@ PanelWindow {
 
     function resolveMenuIcon(icon) {
         if (!icon) return "";
+        let themed = IconPacks.resolveIcon(icon, "", 32);
+        if (themed) return themed;
         let ic = String(icon);
         if (ic.startsWith("file://") || ic.startsWith("http://") || ic.startsWith("https://")) return ic;
         if (ic.startsWith("image://") && !ic.startsWith("image://icon/")) return ic;

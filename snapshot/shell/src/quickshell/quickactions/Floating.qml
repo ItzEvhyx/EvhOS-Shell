@@ -4,6 +4,7 @@ import QtQuick.Shapes
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import "../"
 import "../reusables"
 
@@ -37,12 +38,13 @@ Variants {
 
             Timer {
                 id: surfaceLingerTimer
-                interval: 2000
+                interval: 160
             }
 
-            readonly property bool shouldHaveKeyboardFocus: isSidebarVisible && (isExpanded || hasInputFocus)
+            readonly property bool shouldHaveKeyboardFocus: isSidebarVisible
 
             readonly property bool hasInputFocus: {
+                if (!isSidebarVisible || !isExpanded) return false;
                 let loader = (typeof moduleRepeater !== "undefined" && activeIndex >= 0 && activeIndex < moduleRepeater.count)
                     ? moduleRepeater.itemAt(activeIndex)
                     : null;
@@ -57,6 +59,8 @@ Variants {
                 if (hasInputFocus) {
                     hideTimer.stop();
                     floatingWidget.useGraceTimer = false;
+                } else {
+                    floatingWidget.kickTimer();
                 }
             }
 
@@ -95,6 +99,15 @@ Variants {
                 if (shouldHaveKeyboardFocus) {
                     grabKeyboardFocus();
                     Qt.callLater(grabKeyboardFocus);
+                }
+            }
+
+            // evhos-utility-behavior-v1
+            Connections {
+                target: Hyprland
+                function onRawEvent(event) {
+                    if (!floatingWidget.isPinned && (event.name === "workspacev2" || event.name === "activespecialv2"))
+                        floatingWidget.dismiss();
                 }
             }
 
@@ -276,6 +289,7 @@ Variants {
             }
 
             function handleEdgeEntered(edge, mousePos) {
+                if (reopenBlockTimer.running || isSidebarVisible || pendingMode === "sidebar") return;
                 SysData.prewarm();
                 peekHideTimer.stop();
                 if (floatingWidget.isSidebarVisible || floatingWidget.pendingMode === "sidebar") {
@@ -290,6 +304,7 @@ Variants {
             }
 
             function handleEdgePositionChanged(edge, mousePos) {
+                if (reopenBlockTimer.running || isSidebarVisible || pendingMode === "sidebar") return;
                 if (floatingWidget.isSidebarVisible || floatingWidget.pendingMode === "sidebar") {
                     floatingWidget.showSidebar(edge, mousePos);
                 } else if (floatingWidget.isPeekVisible) {
@@ -409,10 +424,80 @@ Variants {
             property bool useGraceTimer: false
 
             onIsPinnedChanged: {
-                if (!isPinned) kickTimer();
+                if (isPinned) hideTimer.stop();
+                else kickTimer();
             }
 
-            property int hoveredBars: 0
+            // A live hover state cannot accumulate missed enter/exit events.
+            readonly property bool interactionActive: isSidebarVisible && (
+                mainHoverTracker.hovered || sidebarDragArea.pressed ||
+                (isExpanded && gridMouseArea.containsMouse) ||
+                peekMouse.pressed || pinMouse.pressed || expandMouse.pressed ||
+                closeMouse.containsMouse || isPopupHovered)
+
+            onInteractionActiveChanged: kickTimer()
+
+            Timer {
+                id: reopenBlockTimer
+                interval: 450
+            }
+
+            // Recover if a child loses its exit event during an animation.
+            Timer {
+                id: dismissalWatchdog
+                interval: 250
+                repeat: true
+                running: floatingWidget.isSidebarVisible && !floatingWidget.isPinned
+                onTriggered: {
+                    if (!floatingWidget.interactionActive && !floatingWidget.hasInputFocus && !hideTimer.running)
+                        floatingWidget.kickTimer();
+                }
+            }
+
+            HyprlandFocusGrab {
+                id: utilityFocusGrab
+                windows: [floatingWidget]
+                active: floatingWidget.isSidebarVisible && !floatingWidget.isPinned
+                onCleared: {
+                    if (floatingWidget.isSidebarVisible && !floatingWidget.isPinned && floatingWidget.pendingMode === "")
+                        floatingWidget.dismiss();
+                }
+            }
+
+            function dismiss() {
+                // Cancel every pending reveal before changing visibility.
+                peekShowTimer.stop();
+                peekHideTimer.stop();
+                hideTimer.stop();
+                edgeHandoffTimer.stop();
+                edgeTransitionTimer.stop();
+                teleportTimer.stop();
+                pendingMode = "";
+                pendingEdge = "";
+                pendingWasExpanded = false;
+                reopenBlockTimer.restart();
+                for (let i = 0; i < moduleRepeater.count; i++) {
+                    let loader = moduleRepeater.itemAt(i);
+                    if (loader && loader.item && typeof loader.item.flushEdits === "function")
+                        loader.item.flushEdits();
+                }
+                unfocusAllInputs();
+                isExpanded = false;
+                isSidebarVisible = false;
+                isPeekVisible = false;
+                useGraceTimer = false;
+                isPinned = false;
+            }
+
+            function activateTab(index) {
+                if (activeIndex === index && isExpanded) {
+                    dismiss();
+                } else {
+                    setIndex(index);
+                    isExpanded = true;
+                    kickTimer();
+                }
+            }
 
             property var tabModules: [
                 "actions/DrawAction.qml",
@@ -460,6 +545,8 @@ Variants {
 
             Connections {
                 target: FloatingController
+
+                function onDismissRequested() { floatingWidget.dismiss(); }
 
                 function onSetIndexRequested(screen, index) {
                     if (floatingWidget.matchesScreen(screen)) {
@@ -539,19 +626,12 @@ Variants {
             }
 
             function kickTimer() {
-                if (!isPinned && !floatingWidget.hasInputFocus) {
-                    if ((typeof mainHoverTracker !== "undefined" && mainHoverTracker.hovered) ||
-                        (typeof sidebarDragArea !== "undefined" && (sidebarDragArea.containsMouse || sidebarDragArea.pressed)) ||
-                        (typeof gridMouseArea !== "undefined" && (gridMouseArea.containsMouse || gridMouseArea.pressed)) ||
-                        (typeof peekMouse !== "undefined" && (peekMouse.containsMouse || peekMouse.pressed)) ||
-                        (typeof pinMouse !== "undefined" && pinMouse.containsMouse) ||
-                        (typeof expandMouse !== "undefined" && expandMouse.containsMouse) ||
-                        floatingWidget.isPopupHovered ||
-                        floatingWidget.hoveredBars > 0) {
-                        return;
-                    }
-                    hideTimer.restart();
+                if (!isSidebarVisible || isPinned || hasInputFocus || interactionActive) {
+                    hideTimer.stop();
+                    return;
                 }
+                // Do not keep moving the deadline while the pointer is away.
+                if (!hideTimer.running) hideTimer.start();
             }
 
             Shortcut { enabled: floatingWidget.isSidebarVisible && !floatingWidget.hasInputFocus && !floatingWidget.childIntercepts("Tab"); sequence: "Tab"; onActivated: floatingWidget.cycleTab(1) }
@@ -604,20 +684,12 @@ Variants {
             Shortcut {
                 enabled: floatingWidget.isSidebarVisible && !floatingWidget.childIntercepts("Escape")
                 sequence: "Escape"
-                onActivated: {
-                    if (floatingWidget.hasInputFocus) {
-                        floatingWidget.unfocusAllInputs();
-                        return;
-                    }
-                    if (floatingWidget.isExpanded) {
-                        floatingWidget.isExpanded = false;
-                        floatingWidget.kickTimer();
-                    } else if (!floatingWidget.isPinned) {
-                        floatingWidget.isSidebarVisible = false;
-                        floatingWidget.isPeekVisible = true;
-                        peekHideTimer.restart();
-                    }
-                }
+                onActivated: floatingWidget.dismiss()
+            }
+            Shortcut {
+                enabled: floatingWidget.isSidebarVisible
+                sequence: "Ctrl+Escape"
+                onActivated: floatingWidget.dismiss()
             }
 
             function unfocusAllInputs() {
@@ -649,6 +721,9 @@ Variants {
                 if (isExpanded) {
                     grabKeyboardFocus();
                     Qt.callLater(grabKeyboardFocus);
+                } else {
+                    unfocusAllInputs();
+                    kickTimer();
                 }
             }
 
@@ -664,12 +739,8 @@ Variants {
                 if (delta > s(30) && !isExpanded) {
                     isExpanded = true;
                 } else if (delta < -s(30) && (isExpanded || isSidebarVisible)) {
-                    isExpanded = false;
-                    if (!isPinned) {
-                        isSidebarVisible = false;
-                        isPeekVisible = true;
-                        peekHideTimer.restart();
-                    }
+                    if (!isPinned) dismiss();
+                    else isExpanded = false;
                 }
             }
 
@@ -682,7 +753,7 @@ Variants {
             property real itemSpacing: s(7)
 
             property real buttonSize: s(20)
-            property real controlAreaHeight: buttonSize * 2 + s(10)
+            property real controlAreaHeight: buttonSize * 3 + s(16)
 
             property real barOffsetY: activeEdge === "left" ? (controlAreaHeight + itemSpacing) : 0
 
@@ -1050,34 +1121,20 @@ Variants {
 
             Timer {
                 id: peekHideTimer
-                interval: 50
+                interval: 220
                 onTriggered: {
-                    if (typeof peekMouse !== "undefined" && peekMouse.pressed) {
-                        peekHideTimer.restart();
-                        return;
-                    }
-                    if (!peekMouse.containsMouse && !floatingWidget.isAnyEdgeHovered) {
-                        floatingWidget.isPeekVisible = false;
-                    }
+                    if (peekMouse.pressed || peekMouse.containsMouse || floatingWidget.isAnyEdgeHovered) return;
+                    if (!floatingWidget.isSidebarVisible) floatingWidget.dismiss();
                 }
             }
 
             Timer {
                 id: hideTimer
-                interval: floatingWidget.useGraceTimer ? 3000 : 800
+                interval: floatingWidget.useGraceTimer ? 2500 : 650
                 onTriggered: {
-                    if (floatingWidget.isPinned || floatingWidget.hasInputFocus) return;
-
-                    if ((typeof sidebarDragArea !== "undefined" && sidebarDragArea.pressed) ||
-                        (typeof peekMouse !== "undefined" && peekMouse.pressed) ||
-                        (typeof gridMouseArea !== "undefined" && gridMouseArea.pressed)) {
-                        hideTimer.restart();
-                        return;
-                    }
-
-                    floatingWidget.isExpanded = false;
-                    floatingWidget.isSidebarVisible = false;
-                    floatingWidget.useGraceTimer = false;
+                    if (!floatingWidget.isSidebarVisible || floatingWidget.isPinned ||
+                        floatingWidget.hasInputFocus || floatingWidget.interactionActive) return;
+                    floatingWidget.dismiss();
                 }
             }
 
@@ -1208,6 +1265,7 @@ Variants {
 
             Rectangle {
                 id: peekBar
+                visible: floatingWidget.isPeekVisible
                 width: (floatingWidget.activeEdge === "bottom" || floatingWidget.activeEdge === "top") ? peekBarLength : floatingWidget.s(11)
                 height: (floatingWidget.activeEdge === "bottom" || floatingWidget.activeEdge === "top") ? floatingWidget.s(11) : peekBarLength
                 radius: Math.min(floatingWidget.containerRadius, Math.min(width, height) / 2)
@@ -1316,12 +1374,17 @@ Variants {
                         }
                     }
 
+                    onCanceled: {
+                        currentDragDelta = 0;
+                        floatingWidget.kickTimer();
+                        peekHideTimer.restart();
+                    }
                     onReleased: {
                         currentDragDelta = 0;
                         peekHideTimer.restart();
                     }
 
-                    onClicked: floatingWidget.showSidebar(floatingWidget.activeEdge, floatingWidget.currentPos)
+                    onClicked: floatingWidget.showSidebar(floatingWidget.activeEdge, floatingWidget.currentPos, true)
                 }
             }
 
@@ -1332,6 +1395,8 @@ Variants {
                 height: floatingWidget.baseSidebarH
 
                 visible: floatingWidget.isSidebarVisible || floatingWidget.visibleProgress > 0.001
+                enabled: floatingWidget.isSidebarVisible
+                opacity: floatingWidget.visibleProgress
 
                 transformOrigin: Item.Center
                 rotation: floatingWidget.targetRotation
@@ -1428,6 +1493,7 @@ Variants {
 
                         MouseArea {
                             id: sidebarDragArea
+                            onCanceled: floatingWidget.kickTimer()
                             anchors.fill: parent
                             anchors.margins: floatingWidget.isExpanded ? -floatingWidget.s(20) : -floatingWidget.s(4)
                             hoverEnabled: true
@@ -1710,8 +1776,8 @@ Variants {
                                         }
                                         onClicked: {
                                             if (!isDragging) {
-                                                floatingWidget.isExpanded = !floatingWidget.isExpanded;
-                                                floatingWidget.kickTimer();
+                                                if (floatingWidget.isExpanded) floatingWidget.dismiss();
+                                                else floatingWidget.isExpanded = true;
                                             }
                                         }
                                     }
@@ -1773,6 +1839,33 @@ Variants {
                                                 floatingWidget.isPinned = !floatingWidget.isPinned;
                                             }
                                         }
+                                    }
+                                }
+                                Rectangle {
+                                    id: closeButton
+                                    width: floatingWidget.buttonSize
+                                    height: floatingWidget.buttonSize
+                                    radius: width / 2
+                                    x: (parent.width - width) / 2
+                                    y: floatingWidget.activeEdge === "left"
+                                        ? pinButton.y + pinButton.height + floatingWidget.s(6)
+                                        : pinButton.y - height - floatingWidget.s(6)
+                                    color: closeMouse.containsMouse ? Qt.alpha(ThemeBackend.text, 0.16) : "transparent"
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: "×"
+                                        color: ThemeBackend.text
+                                        font.family: ThemeBackend.fontFamily
+                                        font.pixelSize: floatingWidget.s(19)
+                                    }
+                                    MouseArea {
+                                        id: closeMouse
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onEntered: hideTimer.stop()
+                                        onExited: floatingWidget.kickTimer()
+                                        onClicked: floatingWidget.dismiss()
                                     }
                                 }
                             }
@@ -1898,8 +1991,8 @@ Variants {
                                         property real startGlobalY: 0
                                         property bool isDragging: false
 
-                                        onEntered: { floatingWidget.hoveredBars++; hideTimer.stop(); }
-                                        onExited: { floatingWidget.hoveredBars = Math.max(0, floatingWidget.hoveredBars - 1); floatingWidget.kickTimer(); }
+                                        onEntered: hideTimer.stop()
+                                        onExited: floatingWidget.kickTimer()
 
                                         onPressed: mouse => {
                                             let gp = mapToItem(mainHitArea, mouse.x, mouse.y);
@@ -1917,8 +2010,7 @@ Variants {
                                         }
                                         onClicked: {
                                             if (!isDragging) {
-                                                if (!barPill.isActive) floatingWidget.activeIndex = index;
-                                                else floatingWidget.isExpanded = !floatingWidget.isExpanded;
+                                                floatingWidget.activateTab(index);
                                             }
                                         }
                                     }

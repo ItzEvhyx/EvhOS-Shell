@@ -2,13 +2,16 @@
 """Capture the allowlisted desktop into this repository; preview unless --apply is set."""
 import argparse
 from datetime import datetime, timezone
+import gzip
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
 import re
 import shutil
 import subprocess
+import tarfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = json.loads((ROOT/'tools/capture-spec.json').read_text())
@@ -16,7 +19,7 @@ BLOCKED = re.compile(r'(?:gh[pousr]_[A-Za-z0-9]{25,}|github_pat_[A-Za-z0-9_]{30,
 
 
 def excluded(path):
-    return any(part in ('.git', '__pycache__', 'node_modules') or 'backup-' in part or '.before' in part or part.endswith(('.bak', '.pyc', '.log', '~')) for part in path.parts)
+    return any(part in ('.git', '__pycache__', 'node_modules', 'icon-theme.cache') or 'backup-' in part or '.before' in part or part.endswith(('.bak', '.pyc', '.log', '.so', '~')) for part in path.parts)
 
 
 def entries(directory):
@@ -61,6 +64,30 @@ def manifest(repository=ROOT):
     return result
 
 
+def pack_icons(directory):
+    buffer = io.BytesIO()
+    with gzip.GzipFile(fileobj=buffer, mode='wb', filename='', mtime=0) as compressed:
+        with tarfile.open(fileobj=compressed, mode='w|') as archive:
+            aliases = {}
+            for path in sorted(entries(directory)):
+                if path.is_symlink():
+                    raise ValueError('Unexpected symlink in icon pack: '+str(path))
+                name = path.relative_to(directory.parent).as_posix()
+                data = path.read_bytes()
+                scan_text(data, Path('snapshot/assets/icon-packs')/name)
+                info = tarfile.TarInfo(name)
+                digest = hashlib.sha256(data).digest()
+                if digest in aliases:
+                    info.type = tarfile.LNKTYPE
+                    info.linkname = aliases[digest]
+                    archive.addfile(info)
+                else:
+                    info.size = len(data)
+                    archive.addfile(info, io.BytesIO(data))
+                    aliases[digest] = name
+    return buffer.getvalue()
+
+
 def capture(home, apply=False, system_root=Path("/")):
     shell = home/'.local/share/serpantinum'
     if not (shell/'src/quickshell/Shell.qml').is_file():
@@ -87,6 +114,12 @@ def capture(home, apply=False, system_root=Path("/")):
         for source in entries(home/directory):
             mapping[ROOT/'snapshot/home'/source.relative_to(home)] = source
 
+    packs = {}
+    for name in SPEC.get('icon_packs', []):
+        directory = home/'.local/share/icons'/name
+        if (directory/'index.theme').is_file():
+            packs[ROOT/'snapshot/icon-packs'/f'{name}.tar.gz'] = directory
+
     # Optional system appearance assets are versioned, never installed by home restore.
     captured_system = []
     for relative, destination in SPEC.get('system_directories', {}).items():
@@ -99,6 +132,7 @@ def capture(home, apply=False, system_root=Path("/")):
     # Capture media used by the saved desktop/presets, rather than the whole library.
     media = set()
     wallpaper_root = home/'Pictures/Wallpapers'
+    preset_assets = home/'.local/state/serpantinum/desktop-preset-assets'
     active_media = []
     for state in sorted((home/'.cache/serpantinum/wallpaper').glob('current_*')):
         if state.is_file() and state.stat().st_size < 4096 and state.suffix not in ('.json', '.png'):
@@ -107,6 +141,12 @@ def capture(home, apply=False, system_root=Path("/")):
                 active_media.append(candidate)
     fallbacks = {}
     def media_reference(value):
+        if isinstance(value, str) and value.startswith(str(preset_assets)+'/'):
+            asset = Path(value)
+            if not asset.is_file() or not asset.resolve().is_relative_to(preset_assets.resolve()):
+                raise ValueError('Missing or invalid preset wallpaper asset: '+value)
+            media.add(asset)
+            return value
         if isinstance(value, str) and value.startswith(str(wallpaper_root)+'/'):
             old = Path(value)
             if old.is_dir():
@@ -126,15 +166,38 @@ def capture(home, apply=False, system_root=Path("/")):
 
     replacements = {}
     for target, source in list(mapping.items()):
-        if source.suffix == '.json' and '.local/state/serpantinum/desktop-presets' in str(source):
+        if source == home/'.config/hypr/hyprland/gestures.lua':
+            replacements[target] = source.read_bytes().replace(b'/usr/bin/qs -p ', b'quickshell -p ')
+        elif source.suffix == '.json' and (source.parent == preset_assets.parent/'desktop-presets' or source.name == 'wallpaper-ring-favorites.json'):
             value = media_reference(json.loads(source.read_text()))
             replacements[target] = (json.dumps(value, indent=2)+'\n').encode()
         elif source.parent == home/'.cache/serpantinum/wallpaper' and source.name.startswith('current_') and source.stat().st_size < 4096 and source.suffix not in ('.json', '.png'):
             value = media_reference(source.read_text().strip())
             if value != source.read_text().strip():
                 replacements[target] = value.encode()
+    index = preset_assets/'sources.json'
+    if index.is_file():
+        selected = {source: details for source, details in json.loads(index.read_text()).items()
+                    if Path(details['asset']) in media}
+        if selected:
+            target = ROOT/'snapshot/home'/index.relative_to(home)
+            mapping[target] = index
+            replacements[target] = (json.dumps(selected, indent=2)+'\n').encode()
     for source in media:
         mapping[ROOT/'snapshot/home'/source.relative_to(home)] = source
+        if source.is_relative_to(preset_assets) and source.suffix.lower() in ('.mp4', '.mkv', '.mov', '.webm'):
+            preview = preset_assets.parent/'desktop-preset-asset-previews'/f'{source.parent.name}.png'
+            if preview.is_file():
+                mapping[ROOT/'snapshot/home'/preview.relative_to(home)] = preview
+
+    control = preset_assets.parent/'desktop-preset-session.json'
+    if control.is_file():
+        active = json.loads(control.read_text()).get('activeName', '')
+        if active and any(source.stem == active and source.parent == preset_assets.parent/'desktop-presets'
+                          for source in mapping.values()):
+            target = ROOT/'snapshot/home'/control.relative_to(home)
+            mapping[target] = control
+            replacements[target] = (json.dumps({'version': 1, 'activeName': active, 'session': None, 'undo': None}, indent=2)+'\n').encode()
 
     payloads = {}
     for target, source in mapping.items():
@@ -148,9 +211,11 @@ def capture(home, apply=False, system_root=Path("/")):
                 raise ValueError('Source changed during capture: '+str(source))
             scan_text(data, target.relative_to(ROOT))
             payloads[target] = ('file', data, source.stat().st_mode & 0o777)
-    print(('CAPTURE' if apply else 'PREVIEW')+f': {len(payloads)} files; {len(media)} referenced wallpaper assets')
+    print(('CAPTURE' if apply else 'PREVIEW')+f': {len(payloads)} files; {len(media)} referenced wallpaper assets; {len(packs)} icon packs')
     if not apply:
         return
+    for target, directory in packs.items():
+        payloads[target] = ('file', pack_icons(directory), 0o644)
     # Remove deleted files only from explicitly managed source/home locations.
     for relative in SPEC['home_files']:
         target = ROOT/'snapshot/home'/relative
@@ -164,6 +229,11 @@ def capture(home, apply=False, system_root=Path("/")):
         for target in entries(ROOT/'snapshot/shell'/directory):
             if target not in payloads:
                 target.unlink()
+    saved_state = ROOT/'snapshot/home'/preset_assets.parent.relative_to(home)
+    for target in [saved_state/control.name, *entries(saved_state/preset_assets.name),
+                   *entries(saved_state/'desktop-preset-asset-previews')]:
+        if target not in payloads and (target.is_file() or target.is_symlink()):
+            target.unlink()
     for target, (kind, data, mode) in payloads.items():
         target.parent.mkdir(parents=True, exist_ok=True)
         if target.is_symlink():

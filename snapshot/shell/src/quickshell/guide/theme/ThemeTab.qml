@@ -14,8 +14,10 @@ ThemeTabState {
 
     onVisibleChanged: {
         if (!visible) {
-            if (fontDropdown.isOpen) fontDropdown.closePopup();
-            if (wpDirDropdown.isOpen) wpDirDropdown.closePopup();
+            if (fontDropdown.isOpen)
+                fontDropdown.closePopup();
+            if (wpDirDropdown.isOpen)
+                wpDirDropdown.closePopup();
             themeEditorPopup.close();
         }
     }
@@ -24,7 +26,7 @@ ThemeTabState {
         id: themeEditorPopup
         rootObj: themeTabRoot.rootObj
         tileWidth: themeTabRoot.tileWidth
-        onSaveRequested: function(themeObj) {
+        onSaveRequested: function (themeObj) {
             themeTabRoot.saveCustomTheme(themeObj);
             themeTabRoot.applyPreset(themeObj);
         }
@@ -48,15 +50,23 @@ ThemeTabState {
             width: parent.width
             spacing: rootObj.s(6)
 
-            DesktopPresetsSection { tab: themeTabRoot }
+            ThemeWallpaperPreview {
+                tab: themeTabRoot
+            }
 
-            ThemeWallpaperPreview { tab: themeTabRoot }
+            ThemeWallpaperDirRow {
+                id: wallpaperDirRow
+                tab: themeTabRoot
+            }
 
-            ThemeWallpaperDirRow { id: wallpaperDirRow; tab: themeTabRoot }
+            ThemeAppearanceSection {
+                id: appearanceSection
+                tab: themeTabRoot
+            }
 
-            ThemeAppearanceSection { id: appearanceSection; tab: themeTabRoot }
-
-            ThemePresetsSection { tab: themeTabRoot }
+            ThemePresetsSection {
+                tab: themeTabRoot
+            }
         }
     }
 }

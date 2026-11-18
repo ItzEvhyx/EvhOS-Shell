@@ -131,7 +131,9 @@ FocusScope {
                             Image {
                                 id: appIcon
                                 anchors.fill: parent; anchors.margins: root.s(4)
-                                source: editorRow.modelData.icon ? Quickshell.iconPath(editorRow.modelData.icon, true) : ""
+                                source: IconPacks.resolveIcon(editorRow.modelData.icon || "", editorRow.modelData.id || "", 64)
+                                smooth: !IconPacks.pixelated
+                                mipmap: !IconPacks.pixelated
                                 asynchronous: true
                                 fillMode: Image.PreserveAspectFit
                             }

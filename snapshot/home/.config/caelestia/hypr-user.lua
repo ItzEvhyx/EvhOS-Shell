@@ -47,6 +47,7 @@ hl.bind("XF86MonBrightnessUp",
 hl.layer_rule({ name = "serp-glass-bar", match = { namespace = "^qs-custom-bar$" }, blur = true, ignore_alpha = 0.05 })
 hl.layer_rule({ name = "serp-glass-dock", match = { namespace = "^qs-dock$" }, blur = true, ignore_alpha = 0.05 })
 hl.layer_rule({ name = "serp-glass-widgets", match = { namespace = "^qs-master$" }, blur = true, ignore_alpha = 0.05 })
+hl.layer_rule({ name = "serp-glass-process-desk", match = { namespace = "^evhos-process-desk$" }, blur = true, ignore_alpha = 0.05 })
 hl.layer_rule({ name = "serp-glass-tray-menu", match = { namespace = "^traymenu$" }, blur = true, ignore_alpha = 0.05 })
 hl.layer_rule({ name = "serp-glass-osd", match = { namespace = "^osd$" }, blur = true, ignore_alpha = 0.05 })
 hl.layer_rule({ name = "serp-glass-launcher", match = { namespace = "^qs-applauncher$" }, blur = true, ignore_alpha = 0.05 })
@@ -93,3 +94,9 @@ hl.bind("SUPER + I", hl.dsp.exec_cmd("serpantinum settings"))
 -- Wallpaper selector: Super+S
 hl.unbind("SUPER + S")
 hl.bind("SUPER + S", hl.dsp.exec_cmd("quickshell -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call main handleCommand toggle wallpaper \"\""))
+
+-- Super + arrow workspace switching
+hl.unbind("SUPER + Left")
+hl.unbind("SUPER + Right")
+hl.bind("SUPER + Left", hl.dsp.focus({ workspace = "-1" }))
+hl.bind("SUPER + Right", hl.dsp.focus({ workspace = "+1" }))

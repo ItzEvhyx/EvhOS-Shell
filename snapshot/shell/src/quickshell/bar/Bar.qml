@@ -202,7 +202,8 @@ Variants {
                 function onHoveredChanged() { barWindowRoot.checkHideTimer(); }
             }
 
-            readonly property bool localPanelOpen: isNotifOpen || isSysOpen || BarGeometry.holdsOpen(screen ? screen.name : "") || (TrayMenuController.isVisible && TrayMenuController.screen === barWindowRoot.screen)
+            property bool statsPanelOpen: false // evhos-process-desk-v1
+            readonly property bool localPanelOpen: statsPanelOpen || isNotifOpen || isSysOpen || BarGeometry.holdsOpen(screen ? screen.name : "") || (TrayMenuController.isVisible && TrayMenuController.screen === barWindowRoot.screen)
             onLocalPanelOpenChanged: checkHideTimer()
 
             // Only the hidden panel's thin input strip catches the double-click.

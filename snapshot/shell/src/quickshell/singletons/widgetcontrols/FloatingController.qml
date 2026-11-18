@@ -7,6 +7,7 @@ import "../../"
 Item {
     id: controller
 
+    signal dismissRequested()
     signal setIndexRequested(var screen, string index)
     signal showSystemUsageRequested(var screen)
     signal showNotesRequested(var screen)
@@ -55,6 +56,10 @@ Item {
 
         function showClipboard() {
             controller.showClipboard(null);
+        }
+
+        function close() {
+            controller.dismissRequested();
         }
 
         function forceReload() {

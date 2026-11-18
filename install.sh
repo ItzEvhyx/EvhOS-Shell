@@ -9,7 +9,7 @@ Usage: ./install.sh [--plan] [--yes] [--enable-services] [--sddm]
   --plan             Show the plan without installing or modifying anything.
   --yes              Skip the installer's confirmation (package manager may still prompt).
   --enable-services  Enable EvhOS user services after restoring (systemd user session needed).
-  --sddm             Install the Torii theme and configure SDDM using sudo.
+  --sddm             Install the Obsidian Frame theme for SDDM using sudo.
   --os FAMILY        With --plan only: simulate arch, fedora, nixos, or unsupported.
   --help             Show this help.
 Run as the desktop user, not root. Hyprland should already be installed.
@@ -36,10 +36,10 @@ elif [[ -r /etc/os-release ]]; then
     *' arch '*) family=arch;;
   esac
 fi
-arch_core=(python python-pillow xdg-utils git quickshell qt6-base qt6-declarative qt6-svg qt6-wayland qt6-5compat qt6-multimedia qt6-websockets pipewire pipewire-pulse wireplumber jq socat inotify-tools wl-clipboard cliphist imagemagick ffmpeg fontconfig cmatrix)
-arch_optional=(kitty cava zbar tesseract tesseract-data-eng pavucontrol alsa-utils fd ripgrep pamixer brightnessctl ddcutil acpi iw bluez bluez-utils libnotify networkmanager lm_sensors bc matugen pipewire-alsa libpulse wget file psmisc fastfetch unzip python-websockets python-jeepney python-dbus grim playerctl satty xdg-desktop-portal-gtk xdg-desktop-portal-hyprland slurp wmctrl power-profiles-daemon easyeffects calf lsp-plugins-lv2 qt5-wayland qt5-quickcontrols qt5-quickcontrols2 qt5-graphicaleffects qt6ct adwaita-icon-theme gpu-screen-recorder wf-recorder adw-gtk-theme wl-gammarelay-rs gammastep fish starship)
-fedora_core=(python3 python3-pillow xdg-utils git quickshell qt6-qtbase qt6-qtdeclarative qt6-qtsvg qt6-qtwayland qt6-qt5compat qt6-qtmultimedia qt6-qtwebsockets pipewire pipewire-pulseaudio wireplumber jq socat inotify-tools wl-clipboard cliphist ImageMagick ffmpeg-free fontconfig cmatrix)
-fedora_optional=(kitty cava zbar tesseract tesseract-langpack-eng pavucontrol alsa-utils fd-find ripgrep pamixer brightnessctl ddcutil acpi iw bluez libnotify NetworkManager lm_sensors bc matugen pipewire-alsa pulseaudio-libs wget file psmisc fastfetch unzip python3-websockets python3-jeepney python3-dbus grim playerctl satty xdg-desktop-portal-gtk xdg-desktop-portal-hyprland slurp wmctrl ppd-service easyeffects calf-plugins qt6ct adwaita-icon-theme wf-recorder adw-gtk3-theme gammastep fish starship)
+arch_core=(python python-pillow cmake gcc make xdg-utils git quickshell qt6-base qt6-declarative qt6-svg qt6-wayland qt6-5compat qt6-multimedia qt6-websockets pipewire pipewire-pulse wireplumber jq socat inotify-tools wl-clipboard cliphist imagemagick ffmpeg fontconfig cmatrix)
+arch_optional=(kitty foot cava zbar tesseract tesseract-data-eng pavucontrol alsa-utils fd ripgrep pamixer brightnessctl ddcutil acpi iw bluez bluez-utils libnotify networkmanager lm_sensors bc matugen pipewire-alsa libpulse wget file psmisc fastfetch unzip python-websockets python-jeepney python-dbus grim playerctl satty xdg-desktop-portal-gtk xdg-desktop-portal-hyprland slurp wmctrl power-profiles-daemon easyeffects calf lsp-plugins-lv2 qt5-wayland qt5-quickcontrols qt5-quickcontrols2 qt5-graphicaleffects qt6ct adwaita-icon-theme gpu-screen-recorder wf-recorder adw-gtk-theme wl-gammarelay-rs gammastep fish starship)
+fedora_core=(python3 python3-pillow cmake gcc-c++ make qt6-qtdeclarative-devel xdg-utils git quickshell qt6-qtbase qt6-qtdeclarative qt6-qtsvg qt6-qtwayland qt6-qt5compat qt6-qtmultimedia qt6-qtwebsockets pipewire pipewire-pulseaudio wireplumber jq socat inotify-tools wl-clipboard cliphist ImageMagick ffmpeg-free fontconfig cmatrix)
+fedora_optional=(kitty foot cava zbar tesseract tesseract-langpack-eng pavucontrol alsa-utils fd-find ripgrep pamixer brightnessctl ddcutil acpi iw bluez libnotify NetworkManager lm_sensors bc matugen pipewire-alsa pulseaudio-libs wget file psmisc fastfetch unzip python3-websockets python3-jeepney python3-dbus grim playerctl satty xdg-desktop-portal-gtk xdg-desktop-portal-hyprland slurp wmctrl ppd-service easyeffects calf-plugins qt6ct adwaita-icon-theme wf-recorder adw-gtk3-theme gammastep fish starship)
 case "$family" in
   arch) manager=pacman; core=("${arch_core[@]}"); optional=("${arch_optional[@]}");;
   fedora) manager=dnf; core=("${fedora_core[@]}"); optional=("${fedora_optional[@]}");;
@@ -48,7 +48,7 @@ case "$family" in
 esac
 printf 'EvhOS installer: %s\n' "$family"
 printf 'Target home: %s\n' "$HOME"
-printf 'Included: customized shell, Hyprland config, assets and appearance state.\n'
+printf 'Included: customized shell, Hyprland config, icon packs, appearance state and a local rich notepad build.\n'
 printf 'Existing replaced files are backed up by restore.py.\n'
 printf 'Hyprland must already be installed; its Lua config is version-sensitive.\n'
 if [[ $family == nixos ]]; then
@@ -86,7 +86,7 @@ if [[ $family != nixos ]]; then
   else echo "All requested repository packages are already present."; fi
 fi
 for cmd in python3 quickshell; do command -v "$cmd" >/dev/null || { echo "Required executable missing after install: $cmd" >&2; exit 1; }; done
-python3 "$ROOT/restore.py" --apply
+python3 "$ROOT/restore.py" --apply --build-rich-notes
 if command -v fc-cache >/dev/null; then fc-cache -f "$HOME/.local/share/fonts" 2>/dev/null || true; fi
 if (( enable_services )); then
   if command -v systemctl >/dev/null && systemctl --user show-environment >/dev/null 2>&1; then
@@ -96,18 +96,23 @@ if (( enable_services )); then
 fi
 if (( install_sddm )); then
   command -v sddm >/dev/null || { echo 'SDDM is not installed; install it before using --sddm.' >&2; exit 1; }
+  theme=evhos-obsidian-frame
+  destination="/usr/share/sddm/themes/$theme"
   sudo install -d -m 755 /usr/share/sddm/themes /etc/sddm.conf.d
-  if sudo test -e /usr/share/sddm/themes/evhos-torii; then
+  if sudo test -e "$destination"; then
     suffix=$(date +%Y%m%d%H%M%S)
-    sudo cp -a /usr/share/sddm/themes/evhos-torii "/usr/share/sddm/themes/evhos-torii-backup-$suffix"
+    sudo cp -a "$destination" "$destination-backup-$suffix"
   fi
-  sudo install -d -m 755 /usr/share/sddm/themes/evhos-torii
-  sudo cp -a "$ROOT/snapshot/system/sddm-theme/." /usr/share/sddm/themes/evhos-torii/
-  sudo chmod -R a+rX /usr/share/sddm/themes/evhos-torii
+  sudo install -d -m 755 "$destination"
+  sudo cp -a "$ROOT/snapshot/system/sddm-obsidian-frame/." "$destination/"
+  sudo chmod -R a+rX "$destination"
   if sudo test -e /etc/sddm.conf.d/zzzzzzz-evhos.conf; then
     suffix=$(date +%Y%m%d%H%M%S); sudo cp -p /etc/sddm.conf.d/zzzzzzz-evhos.conf "/etc/sddm.conf.d/zzzzzzz-evhos.conf.backup-$suffix"
   fi
-  printf '[Theme]\nCurrent=evhos-torii\n' | sudo tee /etc/sddm.conf.d/zzzzzzz-evhos.conf >/dev/null
-  echo 'SDDM theme configured. Test mode is not a substitute for a real login.'
+  printf '[Theme]\nCurrent=%s\n' "$theme" | sudo tee /etc/sddm.conf.d/zzzzzzz-evhos.conf >/dev/null
+  if [[ -r /etc/sddm.conf ]] && grep -Eq '^[[:space:]]*Current[[:space:]]*=' /etc/sddm.conf; then
+    echo 'Review Current in /etc/sddm.conf, which can override the new SDDM theme drop-in.'
+  fi
+  echo 'SDDM theme installed. Review docs/INSTALL.md before logging out.'
 fi
 echo 'EvhOS files restored. Review docs/INSTALL.md, monitor names, session compatibility, and missing integrations before logging out.'

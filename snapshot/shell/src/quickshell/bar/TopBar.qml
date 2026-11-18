@@ -7,6 +7,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Services.SystemTray
+import "../systemstats"
 import "../reusables"
 import "../"
 import "."
@@ -620,6 +621,24 @@ Item {
     Behavior on opacity {
         enabled: barWindow ? (!barWindow.positionChanging && barWindow.startupCascadeFinished) : true
         NumberAnimation { duration: 80; easing.type: Easing.OutCubic }
+    }
+
+    // evhos-process-desk-v1: right click only; left clicks and wheel pass through.
+    StatsPopup {
+        id: processDeskPopup
+        hostWindow: contentWrapper.barWindow
+        anchorItem: solidBackground
+    }
+    MouseArea {
+        x: solidBackground.x
+        y: solidBackground.y
+        width: solidBackground.width
+        height: solidBackground.height
+        z: 100000
+        enabled: contentWrapper.visible && (!barWindow || barWindow.isRevealed)
+        acceptedButtons: Qt.RightButton
+        onClicked: processDeskPopup.toggle()
+        onWheel: wheel => { wheel.accepted = false; }
     }
 
     Rectangle {

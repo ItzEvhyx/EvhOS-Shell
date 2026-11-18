@@ -31,7 +31,7 @@ The login preview uses test-mode session information; available sessions on a re
 | Component | Included in the snapshot |
 | :--- | :--- |
 | **Desktop shell** | A customized Quickshell interface, with a floating top bar, dock, launcher, and pop-up panels. |
-| **Workspace overview** | Rounded workspace cards with app icons, an extra empty workspace, live compositor blur, mouse/arrow-key selection, and Enter to switch. Super+W or three fingers up opens it; three fingers down closes it. Horizontal workspace gestures stay available. |
+| **Workspace overview** | Rounded workspace cards, live compositor blur, and keyboard selection. Super+W or three fingers up opens the overview. Super+Left and Super+Right switch directly between workspaces. |
 | **Privacy mode** | A black screen overlay while the laptop and agents keep running, available in the notification menu in place of airplane mode. |
 | **Project and file search** | Search project folders in the launcher, choose an installed editor with the mouse or arrow keys, and open the folder there. Ordinary files open with their default application. |
 | **Wallpaper picker** | Larger rounded carousel with sliding/fading previews, cached thumbnails, live video wallpapers and automatic discovery of new, renamed or removed media. |
@@ -39,9 +39,11 @@ The login preview uses test-mode session information; available sessions on a re
 | **Calendar and audio** | ASCII weather/calendar panel, balanced notch, matching volume cards and a 12-hour clock. |
 | **Boot animation** | EvhOs dotted Plymouth animation; see the optional boot setup in the installation guide. |
 | **Controls** | Notifications, media, audio, networking, power controls, clipboard and quick actions. Some integrations require optional dependencies. |
-| **Appearance** | A monochrome theme, wallpapers, fonts, icons, and the EvhOS avatar and branding. |
+| **Appearance** | Saved desktop themes and their referenced wallpapers, eight EvhOS icon packs, fonts, and the EvhOS avatar. |
+| **Process Desk** | Right-click the top bar for CPU, memory, disk and temperature readings with history graphs. Available sensors depend on the device. |
+| **Rich notepad** | Quick Actions editor with rich text, formatting shortcuts, undo, and redo. The installer builds its native plugin for the destination's Qt. |
 | **Lock screen** | A customizable layout with clock, media and other widgets. |
-| **Login screen** | A separate Torii-themed SDDM greeter, including wallpaper and profile image. |
+| **Boot menu and login** | Optional Obsidian GRUB theme and Obsidian Frame SDDM greeter with wallpaper and profile image. |
 | **Recovery** | A restore script that previews its actions and backs up files it replaces. |
 
 ## Installation
@@ -83,7 +85,7 @@ The installer reports optional packages it cannot find; the corresponding featur
 | :--- | :--- |
 | `--plan` | Preview the selected distro and package lists without making changes. |
 | `--enable-services` | Enable the included EvhOS user services after restoration. |
-| `--sddm` | Install and configure the Torii SDDM theme on supported mutable systems. |
+| `--sddm` | Install the Obsidian Frame SDDM theme on supported mutable systems. |
 | `--yes` | Skip the installer confirmation; the package manager may still prompt. |
 | `--help` | Show all installer options. |
 
@@ -117,7 +119,9 @@ For distro details, service behavior, and SDDM recovery, see the [installation g
 | `snapshot/home/.config/hypr/` | Hyprland configuration, shortcuts, and local scripts. |
 | `snapshot/home/.config/serpantinum/` | Shell settings and EvhOS branding assets. |
 | `snapshot/home/.local/state/serpantinum/` | Selected theme, widget, and lock-screen layout state. |
-| `snapshot/system/sddm-theme/` | Torii SDDM greeter and its assets. |
+| `snapshot/icon-packs/` | Compressed icon packs, expanded into the user's icon directory by the restore. |
+| `snapshot/system/sddm-obsidian-frame/` | Current SDDM greeter and profile artwork. |
+| `snapshot/system/grub-obsidian/` | Obsidian GRUB menu, fonts and artwork. |
 | `snapshot/system/plymouth-theme/` | EvhOs Plymouth script and all animation frames. |
 | `install.sh` / `restore.py` | Dependency setup and backup-aware home restoration. |
 
@@ -156,18 +160,18 @@ Install Pillow, FFmpeg and Lua 5.4 for the full portable suite. Checks cover sna
 If dependencies are already installed and you only want the saved files:
 
 ```sh
-python3 restore.py          # preview
-python3 restore.py --apply  # restore with backups
+python3 restore.py --build-rich-notes          # preview
+python3 restore.py --apply --build-rich-notes  # restore with backups
 ```
 
-The restore rewrites the captured home path in UTF-8 configuration files and symlink targets and saves replaced files under `~/.local/state/evhos-backups/`. It does not remove unrelated files or restart the session. You can test it in a disposable directory with `python3 restore.py --home /tmp/evhos-test --apply`.
+The restore rewrites the captured home path in UTF-8 configuration files and symlink targets and saves replaced files under `~/.local/state/evhos-backups/`. You can test it in a disposable directory with `python3 restore.py --home /tmp/evhos-test --apply --build-rich-notes`.
 
 ## Recovery
 
 If a new desktop or login screen doesn't work, use your existing alternate session or a TTY to inspect the configuration. User-file backups are in `~/.local/state/evhos-backups/`. The optional SDDM installer keeps a backup when replacing its own existing theme or configuration; other SDDM configuration files may still take precedence. Preview the greeter before enabling it:
 
 ```sh
-sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-theme"
+sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-obsidian-frame"
 ```
 
 Preview mode checks appearance; it does not prove a real login will succeed.

@@ -25,6 +25,16 @@ class RestoreTest(unittest.TestCase):
             self.assertTrue(Path(current.read_text().strip()).is_file())
             self.assertTrue(current.read_text().startswith(str(home)))
             config = home/'.config/serpantinum/settings.json'
+            packs = home/'.local/share/icons'
+            for bundle in (ROOT/'snapshot/icon-packs').glob('*.tar.gz'):
+                theme = packs/bundle.name.removesuffix('.tar.gz')
+                self.assertTrue((theme/'index.theme').is_file())
+                self.assertEqual((theme/'256x256/apps/brave.png').read_bytes(), (theme/'256x256/apps/brave-browser.png').read_bytes())
+            state = home/'.local/state/serpantinum'
+            for preset in (state/'desktop-presets').glob('*.json'):
+                for wallpaper in json.loads(preset.read_text())['wallpapers'].values():
+                    if wallpaper:
+                        self.assertTrue(Path(wallpaper).is_file(), wallpaper)
             config.write_text('{"restore_test": true}\n')
             subprocess.run(command+['--apply'], check=True, capture_output=True)
             backups = list((home/'.local/state/evhos-backups').glob('*/.config/serpantinum/settings.json'))

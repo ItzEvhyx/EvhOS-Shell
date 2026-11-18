@@ -1,0 +1,435 @@
+diff --git a/src/app.rs b/src/app.rs
+index 4558f3157bffae069bd4dfc7121bfeadd287c27b..0088283daf4bf55d4a27161f8429fea0a8cf76d0 100644
+--- a/src/app.rs
++++ b/src/app.rs
+@@ -1242,6 +1242,8 @@ impl SkiApp {
+             .filter_map(|p| FileItem::from_path(&p).filter(|_| p.symlink_metadata().is_ok()))
+             .filter(|i| self.type_filter.accepts(i))
+             .take(LIMIT)
++            .filter(|i| self.current_path.as_os_str() != RECENT_PATH || self.search_query.trim().is_empty()
++                || glob::matches(self.search_query.trim(), &i.name, self.settings.search_case))
+             .collect()
+     }
+ 
+@@ -1680,6 +1682,7 @@ impl SkiApp {
+         if self.settings.theme == "system" {
+             let accent = self.settings.accent.as_deref().and_then(crate::ui::theme::parse_hex);
+             theme = self.system_theme;
++            theme.ski_dark_surfaces();
+             if let Some(a) = accent {
+                 theme.mauve = a;
+                 theme.blue = a;
+@@ -1907,7 +1910,12 @@ impl SkiApp {
+ 
+     /// Search the whole home folder; results replace the folder listing until the query is cleared.
+     pub(super) fn on_query_changed(&mut self, ctx: &egui::Context) {
+-        if self.search_query.trim().is_empty() {
++        if self.current_path.as_os_str() == RECENT_PATH {
++            self.search_root = None;
++            self.search.cancel();
++            self.search_unconfirmed.clear();
++            self.reread_items();
++        } else if self.search_query.trim().is_empty() {
+             self.search_root = None;
+             self.search.cancel();
+             self.reread_items();
+@@ -2587,7 +2595,7 @@ impl eframe::App for SkiApp {
+         self.sync_settings(&ctx);
+         let shown_px = match self.view_mode {
+             ViewMode::Grid => self.settings.grid_size.picture_size(),
+-            ViewMode::List => 32.0,
++            ViewMode::List => 44.0,
+         };
+         self.thumbs.want_pixels(shown_px * ctx.pixels_per_point());
+         self.thumbs.poll(&ctx);
+@@ -2868,6 +2876,10 @@ impl SkiApp {
+                 let (title_rect, title_resp) =
+                     ui.allocate_exact_size(egui::vec2(title_width, CONTROL_HEIGHT), egui::Sense::click_and_drag());
+                 // The window has no title bar of its own, so the header carries it: drag to move, double-click to maximize
++                if title_resp.clicked() && self.current_path.as_os_str() == RECENT_PATH && !self.show_search && !self.is_editing_path {
++                    self.show_search = true;
++                    self.focus_search = true;
++                }
+                 if title_resp.drag_started_by(egui::PointerButton::Primary) {
+                     ui.ctx().send_viewport_cmd(egui::ViewportCommand::StartDrag);
+                 }
+@@ -2990,7 +3002,7 @@ impl SkiApp {
+                 .frame(egui::Frame::NONE)
+                 .align(egui::Align2::LEFT_CENTER)
+                 .font(egui::FontId::proportional(material::FONT_BODY))
+-                .hint_text(tr("Search files")),
++                .hint_text(if self.current_path.as_os_str() == RECENT_PATH { tr("Recent") } else { tr("Search files") }),
+         );
+         if self.focus_search {
+             resp.request_focus();
+@@ -3271,7 +3283,7 @@ impl SkiApp {
+             }
+         });
+         let mut options_changed = false;
+-        if !self.search_query.trim().is_empty() {
++        if !self.search_query.trim().is_empty() && self.current_path.as_os_str() != RECENT_PATH {
+             ui.horizontal_wrapped(|ui| {
+                 ui.spacing_mut().item_spacing = egui::vec2(6.0, 6.0);
+                 ui.add_space(HEADER_INSET);
+@@ -3340,7 +3352,7 @@ impl SkiApp {
+         // The search row is followed by the usual item spacing, which counts towards the 8px
+         ui.add_space(8.0 - ui.spacing().item_spacing.y);
+ 
+-        let browsing = self.search_query.trim().is_empty();
++        let browsing = self.search_query.trim().is_empty() || self.current_path.as_os_str() == RECENT_PATH;
+         let mut destination: Option<PathBuf> = None;
+         let mut new_tab_at: Option<PathBuf> = None;
+         let mut mount: Option<(String, String)> = None;
+@@ -3357,7 +3369,7 @@ impl SkiApp {
+         let mut place_shown: Option<(SidebarPlace, bool)> = None;
+         let mut done_editing = false;
+         egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
+-            ui.spacing_mut().item_spacing.y = 2.0;
++            ui.spacing_mut().item_spacing.y = 6.0;
+             let mut first = true;
+             // Sections: Main, user folders, pinned folders, devices; a divider sits between them
+             for section in 0..4 {
+diff --git a/src/app/watching.rs b/src/app/watching.rs
+index 5bb958e6db95fcc44f030427b0278b65ffd6366d..1b97b4d83c690d4f8ab2f1a7fcf7f758d12af90b 100644
+--- a/src/app/watching.rs
++++ b/src/app/watching.rs
+@@ -86,15 +86,20 @@ impl SkiApp {
+             // Recent also follows the lists it is made from, so another window's or app's use shows up
+             if self.showing_recent_list() {
+                 dirs.extend(recent::sources().iter().filter_map(|f| f.parent().map(Path::to_path_buf)));
++                if let Some(downloads) = dirs::download_dir() {
++                    dirs.extend(recent::download_folders(&downloads));
++                }
+                 dirs.dedup();
+             }
+-            let mut seen = HashSet::new();
++            let mut seen: HashSet<PathBuf> = dirs.iter().cloned().collect();
++            let mut item_folders = 0;
+             for parent in self.items.iter().filter_map(|i| i.path.parent()) {
+-                if dirs.len() >= MIXED_FOLDERS {
++                if item_folders >= MIXED_FOLDERS {
+                     break;
+                 }
+-                if seen.insert(parent) {
++                if seen.insert(parent.to_path_buf()) {
+                     dirs.push(parent.to_path_buf());
++                    item_folders += 1;
+                 }
+             }
+             return dirs;
+@@ -108,7 +113,7 @@ impl SkiApp {
+ 
+     /// The Recent view itself (not Bookmarks, and not a search in it).
+     fn showing_recent_list(&self) -> bool {
+-        self.current_path.as_os_str() == RECENT_PATH && self.search_query.trim().is_empty()
++        self.current_path.as_os_str() == RECENT_PATH
+     }
+ 
+     /// Point the monitors at what is on show: the open listing and every parked tab's folder.
+@@ -168,6 +173,12 @@ impl SkiApp {
+         let inside: Vec<&PathBuf> = changed.keys().filter(|p| watch::is_inside(p, &self.watching.active)).collect();
+         self.forget_sizes(inside);
+         if self.is_mixed_listing() {
++            if self.showing_recent_list() && (overflow || !gone.is_empty()) {
++                self.keep_selection_through_reload();
++                self.reload_items();
++                self.resync_watch();
++                return;
++            }
+             self.patch_mixed(&changed);
+             return;
+         }
+@@ -226,8 +237,18 @@ impl SkiApp {
+             if !recent::written_here_lately() {
+                 self.keep_selection_through_reload();
+                 self.reload_items();
++                return;
++            }
++        }
++        if self.showing_recent_list() {
++            let downloads = dirs::download_dir();
++            if changed.keys().any(|path| downloads.as_ref().is_some_and(|root| path.starts_with(root))
++                || self.items.iter().any(|item| item.path == *path)) {
++                self.keep_selection_through_reload();
++                self.reload_items();
++                self.resync_watch();
++                return;
+             }
+-            return;
+         }
+         let listed: HashSet<&Path> = self.items.iter().map(|i| i.path.as_path()).collect();
+         let mine: Vec<&PathBuf> = changed.keys().filter(|p| listed.contains(p.as_path())).collect();
+diff --git a/src/fs/recent.rs b/src/fs/recent.rs
+index 491f19a6adbf4b82116469c0909154a845b2ce23..24e794d7544b0a81c7e88726546a22ddbe46a678 100644
+--- a/src/fs/recent.rs
++++ b/src/fs/recent.rs
+@@ -75,18 +75,75 @@ pub fn record(path: &std::path::Path) {
+     }
+ }
+ 
+-/// Most recently used first, by when each path was last used in Ski or any other app.
++/// Files ordered by their latest creation or modification time.
+ pub fn load() -> Vec<PathBuf> {
+-    let history = load_history().into_iter().map(|e| (e.at, e.path)).collect();
++    let mut history: Vec<_> = load_history().into_iter().map(|e| (e.at, e.path)).collect();
+     let shared = dirs::data_dir()
+         .and_then(|_| shared_file())
+         .and_then(|f| std::fs::read_to_string(f).ok())
+         .map(|xml| parse_xbel(&xml))
+         .unwrap_or_default();
+-    merge(history, shared)
++    if let Some(downloads) = dirs::download_dir() {
++        history.extend(download_files(&downloads).into_iter().map(|path| (0, path)));
++    }
++    activity_order(history, shared)
++}
++
++fn download_files(downloads: &std::path::Path) -> Vec<PathBuf> {
++    let mut files = Vec::new();
++    for dir in download_folders(downloads) {
++        if let Ok(entries) = std::fs::read_dir(dir) {
++            files.extend(entries.flatten().filter_map(|entry| {
++                let path = entry.path();
++                let name = entry.file_name();
++                let name = name.to_string_lossy();
++                if name.starts_with('.') || name.ends_with(".part") || name.ends_with(".crdownload") || !entry.file_type().ok()?.is_file() { return None; }
++                Some(path)
++            }));
++        }
++    }
++    files
++}
++
++/// Follow real folders in Downloads without crossing symlinks or walking hidden trees.
++pub fn download_folders(root: &std::path::Path) -> Vec<PathBuf> {
++    let mut folders = vec![root.to_path_buf()];
++    let mut index = 0;
++    while index < folders.len() && folders.len() < 2048 {
++        if let Ok(entries) = std::fs::read_dir(&folders[index]) {
++            for entry in entries.flatten() {
++                if folders.len() >= 2048 { break; }
++                if !entry.file_name().to_string_lossy().starts_with('.') && entry.file_type().is_ok_and(|t| t.is_dir()) {
++                    folders.push(entry.path());
++                }
++            }
++        }
++        index += 1;
++    }
++    folders
++}
++
++fn activity_order(mut entries: Vec<(u64, PathBuf)>, shared: Vec<(u64, PathBuf)>) -> Vec<PathBuf> {
++    entries.extend(shared);
++    let mut times = std::collections::HashMap::<PathBuf, std::time::SystemTime>::new();
++    for (_, path) in entries {
++        let Ok(meta) = std::fs::metadata(&path) else { continue };
++        if !meta.is_file() { continue; }
++        let Some(name) = path.file_name() else { continue };
++        let name = name.to_string_lossy();
++        if name.starts_with('.') || name.ends_with(".part") || name.ends_with(".crdownload") { continue; }
++        let disk = [meta.created().ok(), meta.modified().ok()].into_iter().flatten()
++            .max().unwrap_or(std::time::UNIX_EPOCH);
++        let time = disk;
++        times.entry(path).and_modify(|old| *old = (*old).max(time)).or_insert(time);
++    }
++    let mut paths: Vec<_> = times.into_iter().collect();
++    paths.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
++    paths.into_iter().map(|(path, _)| path).collect()
+ }
+ 
+ /// Both sources newest first (Ski's wins a tie), each path once.
++#[cfg(test)]
+ fn merge(mut all: Vec<(u64, PathBuf)>, shared: Vec<(u64, PathBuf)>) -> Vec<PathBuf> {
+     all.extend(shared);
+     all.sort_by_key(|e| std::cmp::Reverse(e.0));
+@@ -152,6 +209,34 @@ fn percent_decode(s: &str) -> String {
+ mod tests {
+     use super::*;
+ 
++    #[test]
++    fn activity_orders_files_by_disk_time_and_finds_nested_download_folders() {
++        let root = std::env::temp_dir().join(format!("ski-recent-test-{}", std::process::id()));
++        std::fs::create_dir_all(root.join("extracted")).unwrap();
++        std::fs::create_dir_all(root.join(".hidden")).unwrap();
++        let older = root.join("older.txt");
++        let newer = root.join("extracted/newer.txt");
++        std::fs::write(&older, "old").unwrap();
++        std::fs::write(&newer, "new").unwrap();
++        let folders = download_folders(&root);
++        assert!(folders.contains(&root.join("extracted")));
++        assert!(!folders.contains(&root.join(".hidden")));
++        std::fs::write(root.join("partial.crdownload"), "partial").unwrap();
++        let files = download_files(&root);
++        assert!(files.contains(&newer));
++        assert!(!files.contains(&root.join("partial.crdownload")));
++        let future = now() + 86400;
++        let sorted = activity_order(vec![(0, newer.clone()), (future, older.clone()), (future, root.clone())], vec![(0, older.clone())]);
++        assert_eq!(sorted.len(), 2);
++        assert!(!sorted.contains(&root));
++        assert!(sorted.contains(&older));
++        assert!(sorted.contains(&newer));
++        let file = std::fs::OpenOptions::new().write(true).open(&newer).unwrap();
++        file.set_times(std::fs::FileTimes::new().set_modified(std::time::UNIX_EPOCH + std::time::Duration::from_secs(future + 60))).unwrap();
++        assert_eq!(activity_order(vec![(future + 120, older.clone()), (0, newer.clone())], vec![]), vec![newer, older]);
++        std::fs::remove_dir_all(root).unwrap();
++    }
++
+     #[test]
+     fn stamps_become_epoch_seconds() {
+         assert_eq!(iso_seconds("1970-01-02T00:00:01.5Z"), 86401);
+diff --git a/src/settings.rs b/src/settings.rs
+index 6496580556b1eb7fdc85d6fa0ac0b221be64c083..5e37677c73c1580bc16a1e772759a6b1848ffa44 100644
+--- a/src/settings.rs
++++ b/src/settings.rs
+@@ -486,9 +486,9 @@ impl Density {
+ 
+     pub fn row_height(self) -> f32 {
+         match self {
+-            Density::Compact => 30.0,
+-            Density::Comfortable => 38.0,
+-            Density::Spacious => 48.0,
++            Density::Compact => 38.0,
++            Density::Comfortable => 52.0,
++            Density::Spacious => 62.0,
+         }
+     }
+ }
+diff --git a/src/ui/icons.rs b/src/ui/icons.rs
+index e9c1439ef2fc7b651da3dc312437a64dfc7465f3..728911002cfc463843940f3bc3c2b3b6a8796fa6 100644
+--- a/src/ui/icons.rs
++++ b/src/ui/icons.rs
+@@ -17,21 +17,21 @@ pub fn font(size: f32) -> FontId {
+ }
+ 
+ pub const FOLDER: &str = "\u{f024b}";
+-pub const FILE: &str = "\u{f0224}";
++pub const FILE: &str = "\u{f0214}";
+ pub const DOCUMENT: &str = "\u{f09ee}";
+ pub const CODE: &str = "\u{f0174}";
+-pub const IMAGE: &str = "\u{f0976}";
+-pub const AUDIO: &str = "\u{f0f74}";
+-pub const VIDEO: &str = "\u{f0bdc}";
++pub const IMAGE: &str = "\u{f02e9}";
++pub const AUDIO: &str = "\u{f075a}";
++pub const VIDEO: &str = "\u{f0567}";
+ pub const ARCHIVE: &str = "\u{f07b9}";
+ pub const EXECUTABLE: &str = "\u{f018d}";
+ pub const SYMLINK: &str = "\u{f0339}";
+ 
+ pub const MOUSE: &str = "\u{f037d}";
+-pub const HOME: &str = "\u{f06a1}";
+-pub const DESKTOP: &str = "\u{f07c0}";
+-pub const DOWNLOAD: &str = "\u{f0b8f}";
+-pub const DOCUMENTS: &str = "\u{f0c83}";
++pub const HOME: &str = "\u{f02dc}";
++pub const DESKTOP: &str = "\u{f0379}";
++pub const DOWNLOAD: &str = "\u{f024d}";
++pub const DOCUMENTS: &str = "\u{f0219}";
+ pub const STORAGE: &str = "\u{f02ca}";
+ 
+ pub const ARROW_BACK: &str = "\u{f004d}";
+@@ -86,8 +86,8 @@ pub const SELECT_ALL: &str = "\u{f0486}";
+ pub const COMPRESS: &str = "\u{f06eb}";
+ pub const EXTRACT: &str = "\u{f1259}";
+ 
+-pub const RECENT: &str = "\u{f02da}";
+-pub const TRASH: &str = "\u{f09e7}";
++pub const RECENT: &str = "\u{f0954}";
++pub const TRASH: &str = "\u{f01b4}";
+ pub const DELETE_FOREVER: &str = "\u{f05e8}";
+ pub const RESTORE: &str = "\u{f099b}";
+ pub const RENAME: &str = "\u{f03eb}";
+diff --git a/src/ui/material.rs b/src/ui/material.rs
+index 613fc73c909677094bb5bb5f60d51ff3ab042925..e0ebac23840367fa6229cfc0268d2c39501c9c86 100644
+--- a/src/ui/material.rs
++++ b/src/ui/material.rs
+@@ -64,8 +64,8 @@ pub const INSET_ICON: f32 = 22.0;
+ pub const INSET_LABEL: f32 = 46.0;
+ 
+ /// Shared State Layer / Tonal Fill Alphas
+-pub const ALPHA_HOVER: u8 = 14;
+-pub const ALPHA_PRESS: u8 = 26;
++pub const ALPHA_HOVER: u8 = 30;
++pub const ALPHA_PRESS: u8 = 45;
+ pub const ALPHA_SEL_BG: u8 = 38;
+ pub const ALPHA_SEL_HOVER: u8 = 50;
+ pub const ALPHA_DIVIDER: u8 = 24;
+@@ -1158,9 +1158,9 @@ fn paint_thumb(ui: &egui::Ui, tex: &egui::TextureHandle, rect: Rect, radius: u8)
+ }
+ 
+ /// Left edge of the name in a list row; the header lines its first label up with it.
+-pub const ROW_NAME_X: f32 = 48.0;
++pub const ROW_NAME_X: f32 = 62.0;
+ /// Center of a list row's icon, from the row's left edge.
+-const ROW_ICON_X: f32 = 24.0;
++const ROW_ICON_X: f32 = 30.0;
+ const ROW_PAD_RIGHT: f32 = 20.0;
+ /// Narrowest the name may get before detail columns start dropping out.
+ const ROW_NAME_MIN: f32 = 160.0;
+@@ -1392,7 +1392,7 @@ pub fn file_row(
+ 
+     let fade = lerp(1.0, 0.58, cut_t);
+     // The icon grows with the row, so a tight list is not full of oversized glyphs
+-    let icon_size = (row_height * 0.52).round().clamp(16.0, 24.0);
++    let icon_size = (row_height * 0.58).round().clamp(20.0, 34.0);
+     let k = icon_size / 24.0;
+     let icon_center = Pos2::new(r.left() + ROW_ICON_X, r.center().y);
+     if thumb_t < 0.99 {
+@@ -1402,7 +1402,7 @@ pub fn file_row(
+     if let Some(tex) = thumb {
+         ui.scope(|ui| {
+             ui.set_opacity(ui.opacity() * fade * thumb_t);
+-            paint_thumb(ui, tex, Rect::from_center_size(icon_center, Vec2::splat((row_height - 6.0).clamp(20.0, 32.0))), radius_sm());
++            paint_thumb(ui, tex, Rect::from_center_size(icon_center, Vec2::splat((row_height - 8.0).clamp(28.0, 48.0))), radius_sm());
+         });
+     }
+     if cut_t > 0.01 {
+@@ -1415,7 +1415,7 @@ pub fn file_row(
+     let fitting = fitting_columns(columns, widths, r.width());
+     for (column, edge) in column_edges(&fitting, widths, r) {
+         let width = column.width(widths);
+-        paint_label(ui, edge - width + 10.0, r.center().y, &column.value(item), FONT_BODY - 0.5, subtext_color, width - 14.0);
++        paint_label(ui, edge - width + 10.0, r.center().y, &column.value(item), FONT_BODY + 0.5, subtext_color, width - 14.0);
+     }
+     right -= fitting.iter().map(|c| c.width(widths)).sum::<f32>();
+     // A search result also says which folder it is in, between its name and the columns
+@@ -1438,7 +1438,7 @@ pub fn file_row(
+         right -= (pill_w + 10.0) * cut_t;
+     }
+ 
+-    paint_label(ui, r.left() + ROW_NAME_X, r.center().y, item.display_name(), FONT_SUBTITLE, theme.text.gamma_multiply(fade), right - r.left() - ROW_NAME_X - 6.0);
++    paint_label(ui, r.left() + ROW_NAME_X, r.center().y, item.display_name(), FONT_SUBTITLE + 1.0, theme.text.gamma_multiply(fade), right - r.left() - ROW_NAME_X - 6.0);
+ 
+     if selected && should_scroll {
+         response.scroll_to_me(Some(egui::Align::Center));
+diff --git a/src/ui/theme.rs b/src/ui/theme.rs
+index a700e8ca63535fe07a5e1eb417346a4a66bb7969..3fffe84b778b10b1da525e4a0e4a03db559e35a0 100644
+--- a/src/ui/theme.rs
++++ b/src/ui/theme.rs
+@@ -379,6 +379,18 @@ pub fn preset(id: &str) -> Option<&'static Preset> {
+ pub const ACCENTS: [&str; 9] = ["#ccbeff", "#8ab4f8", "#88c0d0", "#a3d9a5", "#f5d76e", "#ffb784", "#ff9aa2", "#e0a3ff", "#f28b82"];
+ 
+ impl SerpantinumTheme {
++    /// A neutral charcoal surface for the system theme.
++    pub fn ski_dark_surfaces(&mut self) {
++        if !self.light {
++            self.base = Color32::from_rgb(24, 24, 24);
++            self.mantle = Color32::from_rgb(30, 30, 30);
++            self.crust = Color32::from_rgb(24, 24, 24);
++            self.surface0 = Color32::from_rgb(39, 39, 39);
++            self.surface1 = Color32::from_rgb(48, 48, 48);
++            self.surface2 = Color32::from_rgb(58, 58, 58);
++        }
++    }
++
+     /// The same palette with every surface one step down, for controls that sit straight on a
+     /// popup instead of on a card.
+     pub fn lowered(&self) -> Self {
+@@ -395,6 +407,7 @@ impl SerpantinumTheme {
+         } else {
+             Self::load()
+         };
++        if settings.theme == "system" { theme.ski_dark_surfaces(); }
+         if let Some(accent) = settings.accent.as_deref().and_then(parse_hex) {
+             theme.mauve = accent;
+             theme.blue = accent;

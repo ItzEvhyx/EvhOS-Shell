@@ -197,18 +197,13 @@ Item {
                 anchors.margins: dockWindow.s(Math.round(dockWindow.dockElementSize * 0.14))
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
-                smooth: true
-                mipmap: true
+                smooth: !IconPacks.pixelated
+                mipmap: !IconPacks.pixelated
                 property bool failedLoad: false
 
                 visible: source !== "" && status === Image.Ready && !failedLoad
 
-                source: {
-                    let ic = model.icon || "";
-                    if (!ic) return "";
-                    if (ic.startsWith("file://") || ic.startsWith("image://") || ic.startsWith("http://") || ic.startsWith("https://")) return ic;
-                    return ic.startsWith("/") ? "file://" + ic : Quickshell.iconPath(ic, true); // local checked icons
-                }
+                source: IconPacks.resolveIcon(model.icon || "", model.desktop_id || "", 64)
 
                 onSourceChanged: failedLoad = false // local recycled icon reset
                 onStatusChanged: failedLoad = status === Image.Error

@@ -28,6 +28,9 @@ Item {
 
     property bool showLayout: false
 
+    // Prefer the selected icon pack for known apps; keep native controls and menus.
+    function satinIconFor(item) { return IconPacks.trayIcon(item); }
+
     readonly property real iconSize: barWindow ? barWindow.cs(isCompact ? 17 : 19) : (isCompact ? 17 : 19)
     readonly property real itemSpacing: barWindow ? barWindow.cs(isCompact ? 10 : 12) : (isCompact ? 10 : 12)
     readonly property real iconPadding: barWindow ? barWindow.cs(isCompact ? 10 : 12) : (isCompact ? 10 : 12)
@@ -124,7 +127,15 @@ Item {
 
             delegate: Image {
                 id: trayIcon
-                source: modelData.icon || ""
+                property string satinSource: root.satinIconFor(modelData)
+                property bool satinFailed: false
+                source: satinSource && !satinFailed ? satinSource : (modelData.icon || "")
+                smooth: !IconPacks.pixelated
+                mipmap: !IconPacks.pixelated
+                onSatinSourceChanged: satinFailed = false
+                onStatusChanged: {
+                    if (status === Image.Error && satinSource && !satinFailed) satinFailed = true;
+                }
                 fillMode: Image.PreserveAspectFit
 
                 sourceSize: Qt.size(root.iconSize, root.iconSize)

@@ -10,6 +10,8 @@
     ".config/fastfetch/config.jsonc",
     ".config/fastfetch/gen-greeting.py",
     ".config/fastfetch/greeting.jsonc",
+    ".config/cava/config",
+    ".config/foot/foot.ini",
     ".config/fish/conf.d/rustup.fish",
     ".config/fish/conf.d/uv.env.fish",
     ".config/fish/config.fish",
@@ -121,7 +123,19 @@
     "src/assets/fonts/SFMono-Regular.otf",
     "src/assets/fonts/TTCommonsPro_regular.otf"
   ],
+  "icon_packs": [
+    "EvhOs-Facet",
+    "EvhOs-Mono-Soft",
+    "EvhOs-Mono-Soft-Light",
+    "EvhOs-Pixel-Arcade",
+    "EvhOs-Satin",
+    "EvhOs-Sticker-Pals",
+    "EvhOs-Type-Density",
+    "EvhOs-Type-Density-Light"
+  ],
   "system_directories": {
-    "/usr/share/plymouth/themes/evhos": "plymouth-theme"
+    "/usr/share/plymouth/themes/evhos": "plymouth-theme",
+    "/usr/share/sddm/themes/evhos-obsidian-frame": "sddm-obsidian-frame",
+    "/boot/grub/themes/evhos-obsidian": "grub-obsidian"
   }
 }

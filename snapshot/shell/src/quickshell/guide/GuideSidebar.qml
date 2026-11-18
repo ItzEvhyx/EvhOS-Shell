@@ -226,7 +226,7 @@ Rectangle {
 
                                 Text {
                                     visible: !popup.compact
-                                    text: I18n.t("guide.tabs." + (tabDelegate.modelData.key || tabDelegate.modelData.id).toLowerCase(), tabDelegate.modelData.name || tabDelegate.modelData.id)
+                                    text: popup.resolveTabTitle(tabDelegate.modelData.key || tabDelegate.modelData.id)
                                     font.family: ThemeBackend.fontFamily
                                     font.weight: header.active ? Font.Bold : Font.Medium
                                     font.pixelSize: popup.s(13)

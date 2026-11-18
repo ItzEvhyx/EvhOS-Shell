@@ -1956,29 +1956,13 @@ PanelWindow {
 
                                                 visible: (!model.fontIcon || model.fontIcon === "") && source !== "" && status === Image.Ready && !failedLoad
 
-                                                source: {
-                                                    if (model.fontIcon && model.fontIcon !== "") return "";
-                                                    let ic = model.icon || "";
-                                                    if (!ic) return "";
-                                                    if (ic.startsWith("file://") || ic.startsWith("image://") || ic.startsWith("http://") || ic.startsWith("https://")) return ic;
-                                                    if (ic.startsWith("/")) return "file://" + ic;
-
-                                                    let baseName = ic.replace(/\.(png|svg|xpm|ico)$/i, "");
-                                                    if (typeof Quickshell !== "undefined" && typeof Quickshell.iconPath === "function") {
-                                                        let resolved = Quickshell.iconPath(ic, true) || Quickshell.iconPath(baseName, true); // local checked icons
-                                                        if (resolved && resolved.length > 0) {
-                                                            return resolved.startsWith("/") ? ("file://" + resolved) : resolved;
-                                                        }
-                                                    }
-
-                                                    return ""; // local checked icons
-                                                }
+                                                source: model.fontIcon ? "" : IconPacks.resolveIcon(model.icon || "", model.desktop_id || model.id || "", 64)
 
                                                 sourceSize: Qt.size(64, 64)
                                                 fillMode: Image.PreserveAspectFit
                                                 asynchronous: true
-                                                smooth: true
-                                                mipmap: true
+                                                smooth: !IconPacks.pixelated
+                                                mipmap: !IconPacks.pixelated
 
                                                 onSourceChanged: failedLoad = false // local recycled icon reset
                                                 onStatusChanged: failedLoad = status === Image.Error

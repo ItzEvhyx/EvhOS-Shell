@@ -3,8 +3,8 @@
 # been verified against every nixpkgs release.
 { config, lib, pkgs, ... }:
 let
-  required = [ "quickshell" "xdg-utils" "git" "jq" "socat" "inotify-tools" "wl-clipboard" "cliphist" "imagemagick" "ffmpeg" "fontconfig" "cmatrix" "pipewire" "wireplumber" ];
-  optional = [ "kitty" "cava" "zbar" "tesseract" "pavucontrol" "alsa-utils" "fd" "ripgrep" "pamixer" "brightnessctl" "ddcutil" "acpi" "iw" "bluez" "libnotify" "networkmanager" "lm_sensors" "bc" "matugen" "fastfetch" "unzip" "grim" "playerctl" "satty" "xdg-desktop-portal-gtk" "xdg-desktop-portal-hyprland" "slurp" "wmctrl" "power-profiles-daemon" "easyeffects" "wf-recorder" "gammastep" "fish" "starship" ];
+  required = [ "cmake" "gcc" "gnumake" "quickshell" "xdg-utils" "git" "jq" "socat" "inotify-tools" "wl-clipboard" "cliphist" "imagemagick" "ffmpeg" "fontconfig" "cmatrix" "pipewire" "wireplumber" ];
+  optional = [ "kitty" "foot" "cava" "zbar" "tesseract" "pavucontrol" "alsa-utils" "fd" "ripgrep" "pamixer" "brightnessctl" "ddcutil" "acpi" "iw" "bluez" "libnotify" "networkmanager" "lm_sensors" "bc" "matugen" "fastfetch" "unzip" "grim" "playerctl" "satty" "xdg-desktop-portal-gtk" "xdg-desktop-portal-hyprland" "slurp" "wmctrl" "power-profiles-daemon" "easyeffects" "wf-recorder" "gammastep" "fish" "starship" ];
   missing = builtins.filter (name: !(builtins.hasAttr name pkgs)) required;
   available = builtins.filter (name: builtins.hasAttr name pkgs) (required ++ optional);
 in {

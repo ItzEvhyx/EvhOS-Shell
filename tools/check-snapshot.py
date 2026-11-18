@@ -23,7 +23,7 @@ def check(update=False):
     metadata = json.loads((ROOT/'snapshot/metadata.json').read_text())
     prefix = metadata['source_home'].rstrip('/')+'/'
     def media(value):
-        if isinstance(value, str) and value.startswith(prefix+'Pictures/Wallpapers/'):
+        if isinstance(value, str) and value.startswith((prefix+'Pictures/Wallpapers/', prefix+'.local/state/serpantinum/desktop-preset-assets/')):
             if not (ROOT/'snapshot/home'/value[len(prefix):]).exists():
                 raise ValueError('Unbundled wallpaper reference: '+value)
         elif isinstance(value, dict):
@@ -34,6 +34,10 @@ def check(update=False):
                 media(item)
     for path in (ROOT/'snapshot/home/.local/state/serpantinum/desktop-presets').glob('*.json'):
         media(json.loads(path.read_text()))
+    for name in ('desktop-preset-assets/sources.json', 'wallpaper-ring-favorites.json'):
+        path = ROOT/'snapshot/home/.local/state/serpantinum'/name
+        if path.is_file():
+            media(json.loads(path.read_text()))
     for path in (ROOT/'snapshot/home/.cache/serpantinum/wallpaper').glob('current_*'):
         if path.is_file() and path.stat().st_size < 4096 and path.suffix not in ('.json', '.png'):
             media(path.read_text().strip())

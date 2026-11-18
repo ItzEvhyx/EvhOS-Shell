@@ -232,7 +232,27 @@ Item {
                 for (let key of ["theme", "bar", "dock"]) {
                     if (!data[key] || typeof data[key] !== "object" || Array.isArray(data[key])) return "Invalid " + key;
                 }
-                config.updateJsonBulk({ theme: data.theme, bar: data.bar, dock: data.dock });
+                let updates = {theme: data.theme, bar: data.bar, dock: data.dock};
+                // Theme-owned visual preferences. Security, device configuration,
+                // notification sounds and application commands remain untouched.
+                let visualKeys = {
+                    launcher: ["position", "width", "itemCount"],
+                    osd: ["horizontalPosition", "verticalPosition", "orientation", "showCapsLock", "showNumLock", "showAirplane", "attachToBar"],
+                    notifications: ["position", "horizontalPosition", "verticalPosition", "showEmptyGraphic"],
+                    lockscreen: ["backgroundMode", "customBackground"]
+                };
+                let visual = data.__visual || {};
+                for (let section of Object.keys(visual)) {
+                    if (!visualKeys[section] || !visual[section] || typeof visual[section] !== "object") return "Invalid visual section";
+                    let current = JSON.parse(JSON.stringify(config.rawSettings[section] || {}));
+                    for (let field of Object.keys(visual[section])) {
+                        if (!visualKeys[section].includes(field)) return "Invalid visual field";
+                        if (visual[section][field] === null) delete current[field];
+                        else current[field] = visual[section][field];
+                    }
+                    updates[section] = current;
+                }
+                config.updateJsonBulk(updates);
                 return "ok";
             } catch (e) {
                 return "Invalid settings: " + e;

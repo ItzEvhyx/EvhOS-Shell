@@ -20,7 +20,7 @@ hl.gesture({
     disable_inhibit = true,
     action = {
         start = function()
-            hl.exec_cmd("/usr/bin/qs -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call workspaceOverview openOverview")
+            hl.exec_cmd("quickshell -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call workspaceOverview openOverview")
         end,
     },
 })
@@ -30,7 +30,7 @@ hl.gesture({
     disable_inhibit = true,
     action = {
         start = function()
-            hl.exec_cmd("/usr/bin/qs -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call workspaceOverview closeOverview")
+            hl.exec_cmd("quickshell -p /home/yhvhan/.local/share/serpantinum/src/quickshell/Shell.qml ipc call workspaceOverview closeOverview")
         end,
     },
 })

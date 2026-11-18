@@ -2,14 +2,35 @@
 """Restore a reviewed EvhOS snapshot into a user's home; backups are mandatory."""
 import argparse, datetime, json, os, shutil, subprocess, sys
 from pathlib import Path
+import tarfile
+import tempfile
 
 ROOT = Path(__file__).resolve().parent
 SOURCE_HOME = json.loads((ROOT/'snapshot/metadata.json').read_text()).get('source_home', '/home/yhvhan') if (ROOT/'snapshot/metadata.json').exists() else '/home/yhvhan'
+NOTES_PLUGIN = Path('src/quickshell/quickactions/actions/RichNotes')
+
+
+def icon_member(member, destination):
+    if not (member.isfile() or member.islnk()):
+        raise ValueError('Unexpected icon archive entry: '+member.name)
+    return tarfile.data_filter(member, destination)
+
+
+def build_notes_plugin(directory):
+    source = ROOT/'snapshot/shell'/NOTES_PLUGIN/'source/native'
+    for command in ('cmake', 'ctest'):
+        if not shutil.which(command):
+            raise SystemExit(f'Missing {command}. See docs/INSTALL.md for rich notepad build dependencies.')
+    subprocess.run(['cmake', '-S', str(source), '-B', str(directory), '-DCMAKE_BUILD_TYPE=Release'], check=True)
+    subprocess.run(['cmake', '--build', str(directory), '--parallel', '2'], check=True)
+    subprocess.run(['ctest', '--test-dir', str(directory), '--output-on-failure'], check=True)
+    return directory/'RichNotes/libevhnotesplugin.so'
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--home', type=Path, default=Path.home(), help='target home (use a temporary directory for testing)')
     ap.add_argument('--apply', action='store_true', help='write files; without this flag only preview')
+    ap.add_argument('--build-rich-notes', action='store_true', help='compile and test the rich notepad Qt plugin before restoring')
     args=ap.parse_args()
     home=args.home.expanduser().resolve()
     if os.geteuid()==0:
@@ -18,8 +39,18 @@ def main():
         ap.error('Snapshot is incomplete; extract all repository files first.')
     if (ROOT/'tools/check-snapshot.py').is_file():
         subprocess.run([sys.executable, str(ROOT/'tools/check-snapshot.py')], check=True)
+    with tempfile.TemporaryDirectory(prefix='evhos-restore-') as directory:
+        restore(home, Path(directory), args.apply, args.build_rich_notes)
+
+
+def restore(home, staging, apply, build_rich_notes):
     backup=home/'.local/state/evhos-backups'/datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f')
-    mappings=[(ROOT/'snapshot/shell',home/'.local/share/serpantinum'),(ROOT/'snapshot/home',home)]
+    icons = staging/'icons'
+    for bundle in sorted((ROOT/'snapshot/icon-packs').glob('*.tar.gz')):
+        with tarfile.open(bundle, 'r:gz') as archive:
+            archive.extractall(icons, filter=icon_member)
+    shell = home/'.local/share/serpantinum'
+    mappings=[(ROOT/'snapshot/shell', shell), (ROOT/'snapshot/home', home), (icons, home/'.local/share/icons')]
     items=[]
     for src,dest in mappings:
         for path in sorted(src.rglob('*')):
@@ -28,9 +59,17 @@ def main():
                 if not target.parent.resolve().is_relative_to(home):
                     raise SystemExit('Target escapes home: '+str(target))
                 items.append((path,target))
-    print(('RESTORE' if args.apply else 'PREVIEW')+f': {len(items)} files into {home}')
+    if build_rich_notes:
+        plugin = shell/NOTES_PLUGIN/'libevhnotesplugin.so'
+        if not plugin.parent.resolve().is_relative_to(home):
+            raise SystemExit('Target escapes home: '+str(plugin))
+        if apply:
+            items.append((build_notes_plugin(staging/'notes-build'), plugin))
+        else:
+            print('A native rich notepad plugin will be built before restoring.')
+    print(('RESTORE' if apply else 'PREVIEW')+f': {len(items)} files into {home}')
     print('Existing files will be backed up to:',backup)
-    if not args.apply: return
+    if not apply: return
     if not home.exists(): home.mkdir(parents=True)
     for source,target in items:
         target.parent.mkdir(parents=True,exist_ok=True)

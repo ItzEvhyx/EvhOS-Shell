@@ -76,18 +76,13 @@ Rectangle {
                 anchors.margins: dockWindow.s(3)
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
-                smooth: true
-                mipmap: true
+                smooth: !IconPacks.pixelated
+                mipmap: !IconPacks.pixelated
                 property bool failedLoad: false
 
                 visible: source !== "" && status === Image.Ready && !failedLoad
 
-                source: {
-                    let ic = pickerDelegate.resolvedItem.icon || "";
-                    if (!ic) return "";
-                    if (ic.startsWith("file://") || ic.startsWith("image://") || ic.startsWith("http://") || ic.startsWith("https://")) return ic;
-                    return ic.startsWith("/") ? "file://" + ic : "image://icon/" + ic;
-                }
+                source: IconPacks.resolveIcon(pickerDelegate.resolvedItem.icon || "", pickerDelegate.resolvedItem.id || "", 64)
 
                 onStatusChanged: {
                     if (status === Image.Error) failedLoad = true;

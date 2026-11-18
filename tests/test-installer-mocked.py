@@ -51,8 +51,9 @@ exit 0
     assert 'wl-gammarelay-rs' in result.stdout
     calls=log.read_text();assert 'sudo pacman -S --needed' in calls
     assert ' quickshell ' not in calls, 'existing quickshell provider must not be replaced'
-    assert 'restore.py --apply' in calls and 'systemctl --user enable --now' in calls
+    assert 'restore.py --apply --build-rich-notes' in calls and 'systemctl --user enable --now' in calls
     assert 'sudo tee /etc/sddm.conf.d/zzzzzzz-evhos.conf' in calls
+    assert '/snapshot/system/sddm-obsidian-frame/.' in calls
     log.unlink();env['EVHOS_MISSING']='qt6-svg'
     result=subprocess.run([str(installer),'--yes'],env=env,text=True,capture_output=True)
     assert result.returncode!=0 and 'qt6-svg' in result.stderr

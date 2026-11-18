@@ -1,0 +1,95 @@
+# EvhOs Obsidian — native GRUB theme
+title-text: ""
+desktop-image: "background.png"
+desktop-image-scale-method: "stretch"
+desktop-color: "#050505"
+terminal-font: "DejaVu Sans Regular 20"
+terminal-box: "terminal_box_*.png"
+
++ image {
+  left = 32%
+  top = 18%
+  width = 36%
+  height = 10%
+  file = "wordmark.png"
+}
+
++ image {
+  left = 47%
+  top = 29%
+  width = 6%
+  height = 1
+  file = "rule.png"
+}
+
++ label {
+  left = 0
+  top = 31%
+  width = 100%
+  height = 26
+  text = "A  S P A C E  O F  Y O U R  O W N"
+  align = "center"
+  color = "#b8b8b8"
+  font = "DejaVu Sans Regular 16"
+}
+
++ boot_menu {
+  left = 25%
+  top = 38%
+  width = 50%
+  height = 32%+40
+  item_font = "DejaVu Sans Regular 26"
+  selected_item_font = "DejaVu Sans Bold 26"
+  item_color = "#cccccc"
+  selected_item_color = "#ffffff"
+  item_height = 36
+  item_spacing = 8
+  item_padding = 4
+  icon_width = 0
+  icon_height = 0
+  item_icon_space = 0
+  selected_item_pixmap_style = "selected_*.png"
+  scrollbar = true
+  scrollbar_width = 4
+  scrollbar_left_pad = 12
+  scrollbar_right_pad = 0
+  scrollbar_top_pad = 4
+  scrollbar_bottom_pad = 4
+  scrollbar_frame = "scrollbar_frame_*.png"
+  scrollbar_thumb = "scrollbar_thumb_*.png"
+}
+
++ progress_bar {
+  id = "__timeout__"
+  left = 46%
+  top = 70%+52
+  width = 8%
+  height = 4
+  fg_color = "#b8b8b8"
+  bg_color = "#252525"
+  border_color = "#252525"
+  text = ""
+}
+
++ label {
+  id = "__timeout__"
+  left = 0
+  top = 70%+72
+  width = 100%
+  height = 25
+  align = "center"
+  text = "Starting in %d s"
+  color = "#b8b8b8"
+  font = "DejaVu Sans Regular 16"
+}
+
++ label {
+  left = 0
+  top = 91%
+  width = 100%
+  height = 24
+  align = "center"
+  text = "↑ ↓ Select       Enter Boot       e Edit       c Console"
+  color = "#a0a0a0"
+  font = "DejaVu Sans Regular 16"
+}

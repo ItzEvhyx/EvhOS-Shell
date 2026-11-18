@@ -26,21 +26,47 @@ Import `nix/evhos-dependencies.nix` into your existing NixOS system configuratio
 
 On NixOS the shell script doesn't install system packages imperatively. The home-directory snapshot remains imperative, so it may conflict with files managed by Home Manager: review the preview and adapt the files into your declarative configuration when appropriate.
 
+## Rich notepad and icon packs
+
+The installer builds the rich notepad with CMake, a C++ compiler, and Qt 6.7 or newer with Qt Quick private headers. The headers must match the Qt build that runs Quickshell. To restore directly, run `python3 restore.py --apply --build-rich-notes` with these dependencies available. Rebuild after updating the Quickshell Qt runtime. On NixOS, build in a package or development shell with the same `qt6.qtbase` and `qt6.qtdeclarative` development outputs used by Quickshell.
+
+The restore includes all eight icon packs and their aliases. The shell syncs the chosen pack with the destination's installed applications at startup.
+
+## Optional Ski file manager
+
+The file manager shortcuts use `ski`. Install Ski using its [upstream instructions](https://github.com/ilyamiro/Ski/wiki/Installation). To reproduce the source machine's Recent sorting and theme changes, build the patched version. From the EvhOS repository root, run:
+
+```sh
+evhos_root="$PWD"
+git clone https://github.com/ilyamiro/Ski.git /tmp/evhos-ski-source
+cd /tmp/evhos-ski-source
+git checkout 035ecbc914c9542a46708264d4a524422cc23a4a
+git apply "$evhos_root/integrations/ski/evhos.patch"
+cargo build --release --locked
+install -Dm755 target/release/ski "$HOME/.local/bin/ski"
+```
+
+Ensure `~/.local/bin` comes before the system binary in your session's `PATH`. Follow Ski's desktop integration instructions if you also use its file chooser or default file-manager registration.
+
 ## SDDM and recovery
 
 First preview the included login theme:
 
 ```sh
-sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-theme"
+sddm-greeter-qt6 --test-mode --theme "$PWD/snapshot/system/sddm-obsidian-frame"
 ```
 
-On mutable Arch or Fedora systems with SDDM already installed, `./install.sh --enable-services --sddm` also installs the theme under `/usr/share/sddm/themes/evhos-torii` and creates `/etc/sddm.conf.d/zzzzzzz-evhos.conf`; an existing file with that exact name and any existing `evhos-torii` theme are backed up. This does not enable or restart SDDM and does not validate real authentication. Other SDDM settings, including `/etc/sddm.conf`, may take precedence. On NixOS install and select the theme declaratively instead; do not use `--sddm` against its read-only system paths.
+On mutable Arch or Fedora systems with SDDM already installed, `./install.sh --enable-services --sddm` installs the theme under `/usr/share/sddm/themes/evhos-obsidian-frame` and selects it in `/etc/sddm.conf.d/zzzzzzz-evhos.conf`. The installer backs up existing copies of those paths. If `/etc/sddm.conf` already sets `Current` under `[Theme]`, back up that file and set `Current=evhos-obsidian-frame` there too. On NixOS, package and select the theme declaratively. The older Torii theme is still available in `snapshot/system/sddm-theme/`.
 
 Existing user files are backed up under `~/.local/state/evhos-backups/`. Keep a separate working graphical session and a TTY recovery route. Review `~/.config/hypr/` and the included user services; the 30-second customization timer can reapply patches to shell files. The wallpaper and widget state reference `eDP-1`; adjust for other output names. Calendar, clipboard, notes and credentials are excluded from the snapshot.
 
 ## Verification before restoring
 
 Run `python3 tools/run-checks.py` after installing Python Pillow, FFmpeg and Lua 5.4. The installer now requires Pillow (`python-pillow` on Arch, `python3-pillow` on Fedora) and `xdg-utils`; the Nix module supplies a Python environment with Pillow. Restoration checks snapshot hashes and wallpaper references before copying files. Review `snapshot/metadata.json` for the source versions and captured media. Images go in `~/Pictures/Wallpapers/Pictures/`, and live wallpapers in `~/Pictures/Wallpapers/Videos/`.
+
+## Optional Obsidian GRUB menu
+
+Install this theme on a machine already using GRUB. On Arch or CachyOS, copy `snapshot/system/grub-obsidian/` to `/boot/grub/themes/evhos-obsidian/` and back up `/etc/default/grub` before setting `GRUB_THEME="/boot/grub/themes/evhos-obsidian/theme.txt"` there. Keep the destination's working graphics mode initially. Use `1920x1080,auto` only if the destination firmware supports that mode and it fits the display. Regenerate the existing GRUB configuration with `sudo grub-mkconfig -o /boot/grub/grub.cfg` and validate it with `sudo grub-script-check /boot/grub/grub.cfg` before rebooting. Use the distro's documented configuration path on other systems, or the declarative bootloader settings on NixOS. To revert, restore the backed-up defaults and regenerate the configuration.
 
 ## Optional EvhOs boot animation
 

@@ -1,12 +1,11 @@
 {
-  "captured_at": "2026-11-17T02:57:01.788311+00:00",
+  "captured_at": "2026-11-18T04:11:20.157211+00:00",
   "source_home": "/home/yhvhan",
   "wallpaper_assets": [
-    "Pictures/Wallpapers/Pictures/wallpaper_imagepack5_13.png"
+    ".local/state/serpantinum/desktop-preset-assets/6811e9898488cd7ad08531973a8ee233d9a729b9d2d593a93683231ad162d782/livewallpaper_lwpack1_7.mp4",
+    ".local/state/serpantinum/desktop-preset-assets/8d2a1eabd9ea8861b615af3dec28ed4526866abb48dc1c7e004123f8aad3baba/wallpaper_imagepack5_13.png"
   ],
-  "missing_wallpaper_fallbacks": {
-    "/home/yhvhan/Pictures/Wallpapers/tyler-lastovich-ddLiNMqWAOM-unsplash.jpg": "/home/yhvhan/Pictures/Wallpapers/Pictures/wallpaper_imagepack5_13.png"
-  },
+  "missing_wallpaper_fallbacks": {},
   "packages": {
     "hyprland": "0.57.2-1.1",
     "noctalia-qs": "0.0.12-2",
@@ -18,6 +17,8 @@
     "ffmpeg": "2:9.0.2-3.1"
   },
   "system_asset_sources": [
-    "/usr/share/plymouth/themes/evhos"
+    "/usr/share/plymouth/themes/evhos",
+    "/usr/share/sddm/themes/evhos-obsidian-frame",
+    "/boot/grub/themes/evhos-obsidian"
   ]
 }

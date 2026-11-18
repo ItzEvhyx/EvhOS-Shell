@@ -31,6 +31,7 @@ Item {
     property string viewingNoteId: ""
     property string viewingTitle: ""
     property string viewingContent: ""
+    property string viewingContentHtml: ""
     property real viewingUpdatedAt: 0
     property real expandProgress: 0.0
     property bool isDraggingV: false
@@ -101,6 +102,7 @@ Item {
         root.viewingNoteId = noteItem.id;
         root.viewingTitle = noteItem.title || "";
         root.viewingContent = noteItem.content || "";
+        root.viewingContentHtml = noteItem.editorFormat === "richtext-html-v1" ? (noteItem.contentHtml || "") : "";
         root.viewingUpdatedAt = noteItem.updatedAt || Date.now();
         root.isViewing = true;
     }
@@ -644,7 +646,7 @@ Item {
                                 id: previewText
                                 width: previewFlickable.width
                                 textFormat: Text.RichText
-                                text: NotesFormat.markdownToHtml(root.viewingContent)
+                                text: root.viewingContentHtml || NotesFormat.markdownToHtml(root.viewingContent)
                                 color: ThemeBackend.text
                                 font.family: ThemeBackend.fontFamily
                                 font.pixelSize: Scaler.s(12)

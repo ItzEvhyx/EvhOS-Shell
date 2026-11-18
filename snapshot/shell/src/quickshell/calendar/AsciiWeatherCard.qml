@@ -27,15 +27,18 @@ Rectangle {
         if (icon === "") return "storm";
         return "cloud";
     }
-    readonly property string condition: conditionFor(icon)
+    readonly property string condition: (root.weatherView === 0 ? root.weatherData.current_condition : day.condition) || conditionFor(icon)
     readonly property string conditionText: {
         if (offline) return I18n.t("weather.desc.offline");
         if (!ready) return I18n.t("calendar.loading");
         if (root.weatherView !== 0) return day.desc || I18n.t("weather.desc.unknown");
+        if (root.weatherData.current_desc) return root.weatherData.current_desc;
         let keys = {sun:"sunny",moon:"clear",cloud:"cloudy",fog:"mist",rain:"rainy",snow:"snow",storm:"storm"};
         return I18n.t("weather.desc." + keys[condition]);
     }
     readonly property var hours: {
+        if (ready && root.weatherView === 0 && Array.isArray(root.weatherData.upcoming_hourly))
+            return root.weatherData.upcoming_hourly.slice(0,4);
         let source = ready && Array.isArray(day.hourly) ? day.hourly : [];
         let start = root.weatherView===0 ? Math.max(0,root.activeHourIndex) : 3;
         start = Math.max(0, Math.min(start, source.length-4));
@@ -203,7 +206,7 @@ Rectangle {
             Layout.maximumHeight: card.root.s(21)
             Text {
                 Layout.fillWidth: true
-                text: (card.root.weatherData.city || "") + (card.ready ? ((card.root.weatherData.city ? " · " : "") + "H " + card.temperature(card.day.max) + "  L " + card.temperature(card.day.min)) : "")
+                text: (card.root.weatherData.city || "") + (card.ready ? ((card.root.weatherData.city ? " · " : "") + (card.day.partial_day ? "Ahead H " : "H ") + card.temperature(card.day.max) + "  L " + card.temperature(card.day.min)) : "")
                 color: ThemeBackend.subtext0
                 font.family: ThemeBackend.fontFamily
                 font.pixelSize: card.root.s(10)

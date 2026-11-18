@@ -30,6 +30,12 @@ Item {
 
     Shortcut {
         enabled: root.isActiveTab && root.isEditing
+        sequence: "Ctrl+S"
+        onActivated: root.flushEdits()
+    }
+
+    Shortcut {
+        enabled: root.isActiveTab && root.isEditing
         sequence: "Escape"
         onActivated: root.saveCurrentNote()
     }
@@ -68,45 +74,10 @@ Item {
     property bool isMarkdownPreview: false
     property bool editorLoading: false
     property bool editorDirty: false
-    property var editHistory: []
-    property int historyIndex: -1
-    property bool restoringHistory: false
+    property string saveError: ""
 
-    Timer { id: historyTimer; interval: 400; onTriggered: root.recordHistory() }
-    function resetHistory() {
-        historyTimer.stop();
-        editHistory = [contentInput.text];
-        historyIndex = 0;
-    }
-    function recordHistory() {
-        historyTimer.stop();
-        if (!isEditing || editorLoading || restoringHistory) return;
-        let text = contentInput.text;
-        if (historyIndex >= 0 && editHistory[historyIndex] === text) return;
-        let history = editHistory.slice(0, historyIndex + 1);
-        history.push(text);
-        if (history.length > 100) history.shift();
-        editHistory = history;
-        historyIndex = history.length - 1;
-    }
-    function contentEdited() {
-        if (isEditing && !editorLoading && !restoringHistory) historyTimer.restart();
-        scheduleSave();
-    }
-    function moveHistory(direction) {
-        recordHistory();
-        let next = historyIndex + direction;
-        if (next < 0 || next >= editHistory.length) return;
-        let edit = contentInput.multilineEditor;
-        let cursor = edit.cursorPosition;
-        restoringHistory = true;
-        historyIndex = next;
-        contentInput.text = editHistory[next];
-        edit.cursorPosition = Math.min(cursor, edit.length);
-        restoringHistory = false;
-        contentInput.forceInputFocus();
-        scheduleSave();
-    }
+    function resetHistory() {} // Native document owns undo/redo.
+    function contentEdited() { scheduleSave(); }
 
     onIsActiveTabChanged: if (!isActiveTab) flushEdits()
     Component.onDestruction: flushEdits()
@@ -206,7 +177,12 @@ Item {
         path: root.getStorageDir() + "/notes.json"
         blockWrites: true
         atomicWrites: true
-        onSaveFailed: error => console.warn("Notes could not be saved:", error)
+        onSaved: { root.editorDirty = false; root.saveError = ""; }
+        onSaveFailed: error => {
+            root.saveError = "Could not save — try Ctrl+S";
+            root.editorDirty = true;
+            console.warn("Notes could not be saved:", error);
+        }
     }
 
     Process {
@@ -329,13 +305,14 @@ Item {
 
     function saveCurrentNote() {
         flushEdits();
-        root.expandProgress = 0.0;
+        if (!root.saveError) root.expandProgress = 0.0;
     }
 
     function persistCurrentNote() {
         if (!root.isEditing || !root.stateLoaded || !root.editingNoteId) return;
         let t = nameInput.text.trim();
-        let c = contentInput.text;
+        let c = contentInput.plainText();
+        let html = contentInput.html();
         let id = root.editingNoteId;
         let list = root.notesList.slice();
         let idx = list.findIndex(n => n.id === id);
@@ -350,74 +327,29 @@ Item {
         }
         let now = Date.now();
         let note = Object.assign({}, idx >= 0 ? list[idx] : {}, {
-            id: id, title: t, content: c, pinned: root.editingNotePinned, editorFormat: "markdown-visual-v1",
+            id: id, title: t, content: c, pinned: root.editingNotePinned, editorFormat: "richtext-html-v1", contentHtml: html,
             updatedAt: now, createdAt: idx >= 0 ? (list[idx].createdAt || now) : now
         });
         if (idx >= 0) list[idx] = note; else list.unshift(note);
         root.notesList = list;
         root.saveNotes();
-        root.editorDirty = false;
         root.editingUpdatedAt = now;
     }
 
     function prepareNoteForEditor(note) {
+        if (note.editorFormat === "richtext-html-v1" && typeof note.contentHtml === "string") return note.contentHtml;
         let content = note.content || "";
-        if (note.editorFormat === "markdown-visual-v1") return content;
-        // Legacy notes treated every newline as a visible line break.
-        return content.replace(/\r\n/g, "\n").split("\n").map(line =>
-            line.trim() && !/^(\s*#{1,6} |\s*[-*+] |\s*\d+\. |\s*!\[)/.test(line) ? line + "  " : line
-        ).join("\n");
-    }
-
-    // Qt serializes each selected fragment as a complete Markdown paragraph.
-    function markdownFragment(edit, start, end) {
-        if (start >= end) return "";
-        let result = edit.getFormattedText(start, end).replace(/\n+$/, "");
-        let plain = edit.getText(start, end);
-        return result + (/[\u2028\u2029\n]$/.test(plain) ? "\n\n" : "");
-    }
-
-    function replaceFormattedRange(edit, start, end, replacement) {
-        let before = markdownFragment(edit, 0, start);
-        let separator = end < edit.length && /[\u2028\u2029\n]/.test(edit.getText(end, end + 1));
-        let after = markdownFragment(edit, end + (separator ? 1 : 0), edit.length);
-        edit.text = before + replacement + (separator ? "\n\n" : "") + after;
+        if (note.editorFormat !== "markdown-visual-v1") {
+            // Older notes displayed every newline, including single newlines.
+            content = content.replace(/\r\n/g, "\n").split("\n").map(line =>
+                line.trim() && !/^(\s*#{1,6} |\s*[-*+] |\s*\d+\. |\s*!\[)/.test(line) ? line + "  " : line
+            ).join("\n");
+        }
+        return contentInput.fromMarkdown(content);
     }
 
     function applyFormat(kind) {
-        if (kind === "undo" || kind === "redo") {
-            moveHistory(kind === "undo" ? -1 : 1);
-            return;
-        }
-        recordHistory();
-        let edit = contentInput.multilineEditor;
-        let start = edit.selectionStart, end = edit.selectionEnd;
-        let selected = markdownFragment(edit, start, end);
-        let cursor = start;
-        if (kind === "bold" || kind === "italic") {
-            let mark = kind === "bold" ? "**" : "*";
-            if (!selected) {
-                selected = kind === "bold" ? "bold text" : "italic text";
-            }
-            let formatted = selected.startsWith(mark) && selected.endsWith(mark) && selected.length > mark.length * 2
-                ? selected.substring(mark.length, selected.length - mark.length) : mark + selected + mark;
-            replaceFormattedRange(edit, start, end, formatted);
-            cursor = start + (end > start ? end - start : selected.length);
-        } else {
-            let plain = edit.getText(0, edit.length).replace(/[\u2028\u2029]/g, "\n");
-            let lineStart = plain.lastIndexOf("\n", start - 1) + 1;
-            let lineEnd = plain.indexOf("\n", end);
-            if (lineEnd < 0) lineEnd = plain.length;
-            start = lineStart; end = lineEnd;
-            let body = markdownFragment(edit, start, end).replace(/^(#{1,3} |[-*+] )/, "");
-            let prefix = kind === "bullet" ? "- " : "#".repeat(Number(kind)) + " ";
-            replaceFormattedRange(edit, start, end, prefix + body);
-            cursor = start + (end - start);
-        }
-        edit.cursorPosition = Math.min(cursor, edit.length);
-        if (kind === "bold" || kind === "italic") edit.select(start, edit.cursorPosition);
-        contentInput.forceInputFocus();
-        root.recordHistory();
+        contentInput.format(kind);
         root.scheduleSave();
     }
 
@@ -444,14 +376,8 @@ Item {
                 if (result.startsWith("IMAGE:")) {
                     let position = Math.min(pasteProc.position, edit.length);
                     if (contentInput.text !== pasteProc.originalText) position = edit.cursorPosition;
-                    else if (pasteProc.endPosition > position) edit.remove(position, pasteProc.endPosition);
-                    let plainBefore = edit.getText(0, position);
-                    let plainAfter = edit.getText(position, edit.length);
-                    let imageText = (plainBefore && !/[\u2029\n]$/.test(plainBefore) ? "\n\n" : "") +
-                                    "![Image](" + result.substring(6) + ")" +
-                                    (plainAfter && !/^[\u2029\n]/.test(plainAfter) ? "\n\n" : "");
-                    root.replaceFormattedRange(edit, position, position, imageText);
-                    edit.cursorPosition = Math.min(position + 2, edit.length);
+                    let end = contentInput.text === pasteProc.originalText ? pasteProc.endPosition : position;
+                    contentInput.insertImage(result.substring(6), position, end);
                     root.scheduleSave();
                 } else if (result === "TEXT") {
                     edit.paste();
@@ -933,7 +859,7 @@ Item {
                                         spacing: 0
 
                                         Text {
-                                            text: root.isMarkdownPreview ? I18n.t("quickactions.notes.preview_note") : I18n.t("quickactions.notes.edit_note")
+                                            text: root.isMarkdownPreview ? "Reading view" : "Notepad"
                                             color: ThemeBackend.text
                                             font.family: ThemeBackend.fontFamily
                                             font.pixelSize: root.s(12.5)
@@ -943,7 +869,7 @@ Item {
                                         }
 
                                         Text {
-                                            text: root.formatPreciseTime(root.editingUpdatedAt)
+                                            text: root.saveError || (root.editorDirty ? "Saving…" : "All changes saved")
                                             color: ThemeBackend.subtext0
                                             font.family: ThemeBackend.fontFamily
                                             font.pixelSize: root.s(9.5)
@@ -1023,7 +949,7 @@ Item {
                                 }
 
                                 IconButton {
-                                    id: markdownPreviewBtn
+                                    id: readingViewBtn
                                     size: root.s(32)
                                     cornerRadius: root.s(8)
                                     iconFont: root.nerdFont
@@ -1033,6 +959,8 @@ Item {
                                     accentColor: root.isMarkdownPreview ? root.alpha(ThemeBackend.mauve, 0.2) : ThemeBackend.surface2
                                     bgOpacity: ThemeBackend.elementOpacity
                                     Layout.alignment: Qt.AlignVCenter
+                                    ToolTip.visible: readingViewBtn.isHoveredOrHighlighted
+                                    ToolTip.text: "Reading view"
                                     onClicked: root.isMarkdownPreview = !root.isMarkdownPreview
                                 }
 
@@ -1097,42 +1025,146 @@ Item {
                             }
                         }
 
-                        RowLayout {
+                        Rectangle {
                             Layout.fillWidth: true
-                            spacing: root.s(4)
+                            Layout.preferredHeight: root.s(38)
+                            color: Qt.alpha(ThemeBackend.surface0, ThemeBackend.elementOpacity)
+                            radius: root.s(8)
                             visible: !root.isMarkdownPreview
-                            Repeater {
-                                model: [
-                                    { label: "B", kind: "bold", tip: "Bold" },
-                                    { label: "I", kind: "italic", tip: "Italic" },
-                                    { label: "H1", kind: "1", tip: "Large heading" },
-                                    { label: "H2", kind: "2", tip: "Medium heading" },
-                                    { label: "H3", kind: "3", tip: "Small heading" },
-                                    { label: "•", kind: "bullet", tip: "Bullet list" }
-                                ]
-                                delegate: Button {
-                                    required property var modelData
-                                    Layout.fillWidth: true
-                                    Layout.preferredHeight: root.s(30)
-                                    text: modelData.label
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: root.s(4)
+                                spacing: root.s(2)
+                                ComboBox {
+                                    id: paragraphStylePicker
+                                    objectName: "notepad-heading-picker"
+                                    Layout.preferredWidth: Math.max(root.s(130), headingLabelMetrics.width + root.s(40))
+                                    Layout.minimumWidth: implicitWidth
+                                    Layout.fillHeight: true
+                                    focusPolicy: Qt.NoFocus
+                                    model: ["Normal", "Heading 1", "Heading 2", "Heading 3"]
+                                    currentIndex: contentInput.paragraphStyle.heading || 0
+                                    onActivated: index => root.applyFormat(String(index))
                                     font.family: ThemeBackend.fontFamily
-                                    font.pixelSize: root.s(11)
-                                    font.bold: modelData.kind === "bold"
-                                    font.italic: modelData.kind === "italic"
+                                    font.pixelSize: root.s(10)
+                                    palette.text: ThemeBackend.text
+                                    palette.buttonText: ThemeBackend.text
+                                    palette.button: ThemeBackend.surface1
+                                    palette.base: ThemeBackend.surface0
+                                    palette.window: ThemeBackend.surface0
+                                    palette.highlight: ThemeBackend.mauve
                                     ToolTip.visible: hovered
-                                    ToolTip.text: modelData.tip
-                                    background: Rectangle {
-                                        radius: root.s(7)
-                                        color: parent.down ? ThemeBackend.surface2 : (parent.hovered ? ThemeBackend.surface1 : ThemeBackend.surface0)
+                                    ToolTip.text: "Paragraph style"
+                                    TextMetrics {
+                                        id: headingLabelMetrics
+                                        font: paragraphStylePicker.font
+                                        text: "Heading 3"
                                     }
+                                    leftPadding: root.s(10)
+                                    rightPadding: root.s(28)
                                     contentItem: Text {
-                                        text: parent.text
-                                        font: parent.font
+                                        text: paragraphStylePicker.displayText
+                                        font: paragraphStylePicker.font
                                         color: ThemeBackend.text
-                                        horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
+                                        elide: Text.ElideRight
                                     }
-                                    onClicked: root.applyFormat(modelData.kind)
+                                    indicator: Text {
+                                        x: paragraphStylePicker.width - width - root.s(9)
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: "▾"
+                                        color: ThemeBackend.subtext0
+                                        font.pixelSize: root.s(11)
+                                    }
+                                    background: Rectangle {
+                                        radius: root.s(5)
+                                        color: paragraphStylePicker.hovered || paragraphStylePicker.down
+                                            ? ThemeBackend.surface2 : ThemeBackend.surface1
+                                    }
+                                    delegate: ItemDelegate {
+                                        required property var modelData
+                                        required property int index
+                                        width: paragraphStylePicker.popup.availableWidth
+                                        height: root.s(34)
+                                        leftPadding: root.s(12)
+                                        rightPadding: root.s(12)
+                                        highlighted: paragraphStylePicker.highlightedIndex === index
+                                        hoverEnabled: true
+                                        contentItem: Text {
+                                            text: modelData
+                                            font: paragraphStylePicker.font
+                                            color: parent.highlighted ? ThemeBackend.mauve : ThemeBackend.text
+                                            verticalAlignment: Text.AlignVCenter
+                                        }
+                                        background: Rectangle {
+                                            radius: root.s(5)
+                                            color: parent.highlighted ? Qt.alpha(ThemeBackend.mauve, 0.18)
+                                                : parent.hovered ? ThemeBackend.surface1 : "transparent"
+                                        }
+                                    }
+                                    popup: Popup {
+                                        y: paragraphStylePicker.height + root.s(5)
+                                        width: Math.max(paragraphStylePicker.width, root.s(164), headingLabelMetrics.width + root.s(40))
+                                        padding: root.s(5)
+                                        implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
+                                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                                        contentItem: ListView {
+                                            clip: true
+                                            implicitHeight: contentHeight
+                                            model: paragraphStylePicker.popup.visible ? paragraphStylePicker.delegateModel : null
+                                            currentIndex: paragraphStylePicker.highlightedIndex
+                                            boundsBehavior: Flickable.StopAtBounds
+                                        }
+                                        background: Rectangle {
+                                            radius: root.s(8)
+                                            color: ThemeBackend.surface0
+                                            border.width: 1
+                                            border.color: ThemeBackend.surface2
+                                        }
+                                    }
+                                }
+                                Repeater {
+                                    model: [
+                                        { label: "B", kind: "bold", tip: "Bold · Ctrl+B" },
+                                        { label: "I", kind: "italic", tip: "Italic · Ctrl+I" },
+                                        { label: "U", kind: "underline", tip: "Underline · Ctrl+U" },
+                                        { label: "•", kind: "bullet", tip: "Bulleted list · Ctrl+Shift+L" },
+                                        { label: "1.", kind: "number", tip: "Numbered list" }
+                                    ]
+                                    delegate: Button {
+                                        required property var modelData
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        Layout.minimumWidth: root.s(22)
+                                        focusPolicy: Qt.NoFocus
+                                        readonly property bool formatActive: modelData.kind === "bold" ? contentInput.isBold
+                                            : modelData.kind === "italic" ? contentInput.isItalic
+                                            : modelData.kind === "underline" ? contentInput.isUnderline
+                                            : modelData.kind === "bullet" ? contentInput.paragraphStyle.bullet === true
+                                            : modelData.kind === "number" ? contentInput.paragraphStyle.number === true : false
+                                        text: modelData.label
+                                        font.family: ThemeBackend.fontFamily
+                                        font.pixelSize: root.s(12)
+                                        font.bold: modelData.kind === "bold"
+                                        font.italic: modelData.kind === "italic"
+                                        font.underline: modelData.kind === "underline"
+                                        ToolTip.visible: hovered
+                                        ToolTip.text: modelData.tip
+                                        background: Rectangle {
+                                            radius: root.s(5)
+                                            color: parent.formatActive ? Qt.alpha(ThemeBackend.mauve, 0.24)
+                                                : parent.down || parent.hovered ? ThemeBackend.surface1 : "transparent"
+                                        }
+                                        contentItem: Text {
+                                            text: parent.text
+                                            font: parent.font
+                                            opacity: parent.enabled ? 1 : 0.35
+                                            color: parent.formatActive ? ThemeBackend.mauve : ThemeBackend.text
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
+                                        }
+                                        onClicked: root.applyFormat(modelData.kind)
+                                    }
                                 }
                             }
                         }
@@ -1142,35 +1174,19 @@ Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
 
-                            TapHandler {
-                                enabled: !root.isMarkdownPreview
-                                onPressedChanged: {
-                                    if (pressed) {
-                                        contentInput.forceInputFocus();
-                                    }
-                                }
-                                onTapped: {
-                                    contentInput.forceInputFocus();
-                                }
-                            }
-
-                            Input {
+                            RichNoteEditor {
                                 id: contentInput
+                                objectName: "rich-note-editor"
                                 anchors.fill: parent
                                 baseColor: ThemeBackend.surface0
                                 bgOpacity: ThemeBackend.elementOpacity
                                 textColor: ThemeBackend.text
                                 placeholderText: I18n.t("quickactions.notes.content_placeholder")
                                 cornerRadius: root.s(8)
-                                fontPixelSize: root.s(12)
-                                multiLine: true
-                                markdownMode: true
-                                interceptFormatting: true
+                                fontPixelSize: root.s(14)
                                 onFormatRequested: kind => root.applyFormat(kind)
-                                interceptPaste: true
                                 onPasteRequested: root.pasteIntoNote()
                                 onTextEdited: root.contentEdited()
-                                leadingIcon: ""
                                 visible: !root.isMarkdownPreview
                             }
 
@@ -1206,7 +1222,7 @@ Item {
                                         width: previewFlickable.width
                                         visible: root.isMarkdownPreview
                                         textFormat: Text.RichText
-                                        text: root.markdownToHtml(contentInput.text)
+                                        text: contentInput.text
                                         color: ThemeBackend.text
                                         font.family: ThemeBackend.fontFamily
                                         font.pixelSize: root.s(12)
@@ -1214,6 +1230,19 @@ Item {
                                     }
                                 }
                             }
+                        }
+                        Text {
+                            Layout.fillWidth: true
+                            visible: !root.isMarkdownPreview
+                            text: {
+                                let content = contentInput.text; // track document edits
+                                let plain = contentInput.plainText().trim();
+                                return (plain ? plain.split(/\s+/).length : 0) + " words  ·  Rich text  ·  Autosave on";
+                            }
+                            color: ThemeBackend.subtext0
+                            font.family: ThemeBackend.fontFamily
+                            font.pixelSize: root.s(9)
+                            leftPadding: root.s(4)
                         }
                     }
                 }

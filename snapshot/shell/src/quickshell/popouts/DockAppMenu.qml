@@ -271,7 +271,9 @@ PanelWindow {
                             anchors.verticalCenter: parent.verticalCenter
                             width: dockAppMenuWindow.s(20)
                             height: dockAppMenuWindow.s(20)
-                            source: DockAppMenuController.appIcon ? (DockAppMenuController.appIcon.indexOf("/") !== -1 || DockAppMenuController.appIcon.startsWith("image://") ? DockAppMenuController.appIcon : ("image://icon/" + DockAppMenuController.appIcon)) : ""
+                            source: IconPacks.resolveIcon(DockAppMenuController.appIcon || "", DockAppMenuController.desktopId || "", 64)
+                            smooth: !IconPacks.pixelated
+                            mipmap: !IconPacks.pixelated
                             sourceSize.width: width
                             sourceSize.height: height
                             fillMode: Image.PreserveAspectFit
